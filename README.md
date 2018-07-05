@@ -1,5 +1,8 @@
 # it_roadmap_2025
 
+![](http://strate.co.za/sites/default/files/state-logo-dark.svg)
+powered by: http://www.strate.co.za
+
 This POC aims to reimagine what post trade services could look like with all participants on a DLT with much of the functionality baken into Solidity Contracts.
 
 # Features!
