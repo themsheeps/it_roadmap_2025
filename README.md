@@ -18,9 +18,14 @@ This POC aims to reimagine what post trade services could look like with all par
 ### Tech
 
 * [TruffleFramework] - Framework for creating Solidity Contracts and DAPPs!
-* NPM
-* Node
-* HTML5
+* [Ethereum] - Ethereum
+* [NPM] - NPM
+* [Node] - Node
+* [HTML5] - HTML5
 
 
 [TruffleFramework]: <http://truffleframework.com/>
+[Ethereum]: <https://ethereum.org/>
+[NPM]: <https://www.npmjs.com/>
+[Node]: <https://nodejs.org/en/>
+[HTML5] <https://en.wikipedia.org/wiki/HTML5>
