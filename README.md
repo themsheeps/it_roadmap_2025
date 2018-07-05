@@ -7,9 +7,10 @@ This POC aims to reimagine what post trade services could look like with all par
 
 # Features!
 
-* Multi Securities Issuance
-* Tokenised Cash to enable pure DvP
-* Free of Payment sending of securities
+* Multi securities issuance
+* Issuer top-up
+* Tokenised cash to enable pure DvP
+* Free of payment sending of securities
 
 # TODOs
 
