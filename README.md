@@ -30,7 +30,6 @@ This POC aims to reimagine what post trade services could look like with all par
 # Truffle Console Helper Commands
 
 ```sh
----
     ==========================================================================
     Helper Console Scripts:
     ==========================================================================
@@ -56,7 +55,6 @@ This POC aims to reimagine what post trade services could look like with all par
     ==========================================================================
     *** END TRIAL CODE ***
     ==========================================================================
----
 ```
 
 
