@@ -9,6 +9,9 @@ This POC aims to reimagine what post trade services could look like with all par
 ### Tech
 
 * [TruffleFramework] - Framework for creating Solidity Contracts and DAPPs!
+* NPM
+* Node
+* HTML5
 
 
 [TruffleFramework]: <http://truffleframework.com/>
