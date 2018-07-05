@@ -1,7 +1,8 @@
 pragma solidity ^0.4.23;
 
-// @@Author: Johan Pretorius
-// @@Date: 2018-06-06
+/** @title Post Trade Contract. */
+/** @author Johan Pretorius */
+/** @date 2018-06-06 */
 
 contract PostTrade {
 
