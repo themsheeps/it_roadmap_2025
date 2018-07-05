@@ -14,6 +14,9 @@ This POC aims to reimagine what post trade services could look like with all par
 # TODOs
 
 * Back to back linking of transactions
+* Corporate Action processing
+* DvP
+* Test cases
 
 ### Tech
 
