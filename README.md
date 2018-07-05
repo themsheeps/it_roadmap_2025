@@ -18,7 +18,7 @@ This POC aims to reimagine what post trade services could look like with all par
 * DvP
 * Test cases
 
-### Tech
+# Tech
 
 * [TruffleFramework] - Framework for creating Solidity Contracts and DAPPs!
 * [Ethereum] - Ethereum
