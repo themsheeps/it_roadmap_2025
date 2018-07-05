@@ -3,7 +3,7 @@
 ![](http://strate.co.za/sites/default/files/state-logo-dark.svg)
 powered by: http://www.strate.co.za
 
-This POC aims to reimagine what post trade services could look like with all participants on a DLT with much of the functionality baken into Solidity Contracts.
+This POC aims to reimagine what post trade services could look like with all participants on a DLT with much of the functionality baked into Solidity Contracts.
 
 # Features!
 
@@ -18,6 +18,15 @@ This POC aims to reimagine what post trade services could look like with all par
 * Corporate Action processing
 * DvP
 * Test cases
+
+# Scrum Board
+
+|BACKLOG|IN DEV|IN TEST|COMPLETED|
+|---|---|---|---|
+|B2B Links|Confirmations||Multi Securities Issuance|
+|CA Processing|||Issuer Top Up|
+|DvP|||Tokenised Cash|
+|Test Scenarios|||FoP Sending of Securities|
 
 # Tech
 
