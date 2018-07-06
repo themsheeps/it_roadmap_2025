@@ -1,8 +1,8 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.24;
 
 /** @title Post Trade Contract. */
 /** @author Johan Pretorius */
-/** @date 2018-06-06 */
+/** startDate 2018-06-06 */
 
 contract PostTrade {
 
@@ -31,8 +31,8 @@ contract PostTrade {
     string[] securitiesList;
 
     function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyOwner {
-        require (securities[keccak256(_ISIN)].active == false);
-        bytes32 keccakIsin = keccak256(_ISIN);
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == false);
+        bytes32 keccakIsin = keccak256(abi.encodePacked(_ISIN));
         securities[keccakIsin].ISIN = _ISIN;
         securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
         securities[keccakIsin].longName = _longName;
@@ -41,22 +41,22 @@ contract PostTrade {
 
         securitiesList.push(_ISIN);
 
-        balances[keccak256(_ISIN)][owner] += _totalIssuedShareCap;
+        balances[keccak256(abi.encodePacked(_ISIN))][owner] += _totalIssuedShareCap;
     }
 
     function topUp (string _ISIN, uint _amount) public onlyOwner {
-        require (securities[keccak256(_ISIN)].active == true);
-        securities[keccak256(_ISIN)].totalIssuedShareCap += _amount;
-        balances[keccak256(_ISIN)][owner] += _amount;
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true);
+        securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap += _amount;
+        balances[keccak256(abi.encodePacked(_ISIN))][owner] += _amount;
     }
 
     function getSecurityDetails (string _ISIN) public view returns (string, uint, string, string, bool) {
         return (
-            securities[keccak256(_ISIN)].ISIN,
-            securities[keccak256(_ISIN)].totalIssuedShareCap,
-            securities[keccak256(_ISIN)].longName,
-            securities[keccak256(_ISIN)].ticker,
-            securities[keccak256(_ISIN)].active
+            securities[keccak256(abi.encodePacked(_ISIN))].ISIN,
+            securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap,
+            securities[keccak256(abi.encodePacked(_ISIN))].longName,
+            securities[keccak256(abi.encodePacked(_ISIN))].ticker,
+            securities[keccak256(abi.encodePacked(_ISIN))].active
         );
     }
 
@@ -65,13 +65,13 @@ contract PostTrade {
     }
 
     function getBalanceOfSecAndAccount (string _ISIN, address _accountHolder) public view returns (uint) {
-        return balances[keccak256(_ISIN)][_accountHolder];
+        return balances[keccak256(abi.encodePacked(_ISIN))][_accountHolder];
     }
 
     function sendSecurity (string _ISIN, uint _amount, address _receiverAddress) public {
-        require (balances[keccak256(_ISIN)][msg.sender] >= _amount);
-        balances[keccak256(_ISIN)][msg.sender] -= _amount;
-        balances[keccak256(_ISIN)][_receiverAddress] += _amount;
+        require (balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] >= _amount);
+        balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] -= _amount;
+        balances[keccak256(abi.encodePacked(_ISIN))][_receiverAddress] += _amount;
     }
 
     // ==========================================================================
