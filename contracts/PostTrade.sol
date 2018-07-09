@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.23;
 
 /** @title Post Trade Contract. */
 /** @author Johan Pretorius */
@@ -6,8 +6,54 @@ pragma solidity ^0.4.24;
 
 contract PostTrade {
 
+    // ==========================================================================
+    // Actors: Trade Reporting Party x2, ETME, SAMOS, CSD
+    // ==========================================================================
+    // Role Management for addresses
+    // ==========================================================================
+    mapping(address => bool) internal Admins;
+    mapping(address => bool) internal CSDs;
+    mapping(address => bool) internal Custodians;
+    mapping(address => bool) internal ETMEs;
+    mapping(address => bool) internal Exchanges;
+    mapping(address => bool) internal SAMOSs;
+    mapping(address => bool) internal TradeReportingParties;
+
+    // ==========================================================================
+    // Modifiers
+    // ==========================================================================
     modifier onlyOwner{
         require(msg.sender == owner);
+        _;
+    }
+
+    modifier onlyOwnerOrAdmin{
+        require(msg.sender == owner || Admins[msg.sender] == true);
+        _;
+    }
+
+    modifier onlyCSD{
+        require(CSDs[msg.sender] == true);
+        _;
+    }
+
+    modifier onlyCustodian{
+        require(Custodians[msg.sender] == true);
+        _;
+    }
+
+    modifier onlyETME{
+        require(ETMEs[msg.sender] == true);
+        _;
+    }
+
+    modifier onlySAMOS{
+        require(SAMOSs[msg.sender] == true);
+        _;
+    }
+
+    modifier onlyTradeReportingParty{
+        require(TradeReportingParties[msg.sender] == true);
         _;
     }
 
@@ -21,8 +67,19 @@ contract PostTrade {
         bool active;
     }
 
+    // ==========================================================================
+    // Constructor: Prepper for development, will need to be revised for Prod
+    // ==========================================================================
     constructor () public {
         owner = msg.sender;
+        Admins[0x51e63a2E221C782Bfc95f42Cd469D3780a479C15] = true;
+        CSDs[0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8] = true;
+        Custodians[0x1c6B96De685481c2d9915b606D4AB1277949b4Bc] = true;
+        Custodians[0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06] = true;
+        ETMEs[0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0] = true;
+        SAMOSs[0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D] = true;
+        TradeReportingParties[0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4] = true;
+        TradeReportingParties[0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721] = true;
     }
 
     mapping(bytes32 => mapping (address => uint)) public balances;
@@ -44,10 +101,30 @@ contract PostTrade {
         balances[keccak256(abi.encodePacked(_ISIN))][owner] += _totalIssuedShareCap;
     }
 
+    function issueCash (uint _totalIssuedShareCap) public onlySAMOS {
+        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false);
+        bytes32 keccakIsin = keccak256(abi.encodePacked("eZAR"));
+        securities[keccakIsin].ISIN = "eZAR";
+        securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
+        securities[keccakIsin].longName = "Sourth African eRand";
+        securities[keccakIsin].ticker = "ZAR";
+        securities[keccakIsin].active = true;
+
+        securitiesList.push("eZAR");
+
+        balances[keccak256(abi.encodePacked("eZAR"))][owner] += _totalIssuedShareCap;
+    }
+
     function topUp (string _ISIN, uint _amount) public onlyOwner {
         require (securities[keccak256(abi.encodePacked(_ISIN))].active == true);
         securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap += _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][owner] += _amount;
+    }
+
+    function topUpCash (uint _amount) public onlySAMOS {
+        require (securities[keccak256(abi.encodePacked("eZAR"))].active == true);
+        securities[keccak256(abi.encodePacked("eZAR"))].totalIssuedShareCap += _amount;
+        balances[keccak256(abi.encodePacked("eZAR"))][owner] += _amount;
     }
 
     function getSecurityDetails (string _ISIN) public view returns (string, uint, string, string, bool) {
@@ -87,11 +164,11 @@ contract PostTrade {
     // 
     // ==========================================================================
     // TRUFFLE MNEMONIC: latin bonus invest museum gate buffalo fever demand neglect entire session rail
-    // [ '0x51e63a2e221c782bfc95f42cd469d3780a479c15',      <<< OWNER and default recipient of initial issue
-    //   '0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b',      <<< Rudi
-    //   '0x8ea823e5951243bfa7f1daad4703396260071fb9',      <<< Ganesh
-    //   '0xed646f6b0cf23c2bfc0dc4117da42eb5ccf15ee4',      <<< Tanya
-    //   '0xa1ff8ee897ed92e62ae9f30061ba5f012e804721',      <<< Johan
+    // [ '0x51e63a2e221c782bfc95f42cd469d3780a479c15',
+    //   '0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b',
+    //   '0x8ea823e5951243bfa7f1daad4703396260071fb9',
+    //   '0xed646f6b0cf23c2bfc0dc4117da42eb5ccf15ee4',
+    //   '0xa1ff8ee897ed92e62ae9f30061ba5f012e804721',
     //   '0x1c6b96de685481c2d9915b606d4ab1277949b4bc',
     //   '0x2d14d5ae5e54a22043b1eccd420494daa9513e06',
     //   '0x0ef2f9c8845da4c9c34bef02c3213e0da1306da0',
