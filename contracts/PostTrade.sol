@@ -82,6 +82,89 @@ contract PostTrade {
         TradeReportingParties[0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721] = true;
     }
 
+    // ==========================================================================
+    // Mapping Table: Addresses <=> Roles
+    // ==========================================================================
+    // 0x51e63a2E221C782Bfc95f42Cd469D3780a479C15 --- Admin / Contract Owner
+    // 0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B --- BUYER
+    // 0x8eA823e5951243bFA7f1Daad4703396260071fB9 --- SELLER
+    // 0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4 --- BUYER TRP
+    // 0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721 --- SELLER TRP
+    // 0x1c6B96De685481c2d9915b606D4AB1277949b4Bc --- BUYER CUSTODIAN
+    // 0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06 --- SELLER CUSTODIAN
+    // 0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0 --- ETME
+    // 0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D --- SAMOS
+    // 0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8 --- CSD
+    // ==========================================================================
+    // Ganache Mnemonic: latin bonus invest museum gate buffalo fever demand neglect entire session rail
+    // ==========================================================================
+
+    // ==========================================================================
+    // State transitions ( [Pre-State] => [Post-State] --- [Responsible Party] ):
+    // ==========================================================================
+    // 101 (Accepted) => 201 (Matched) --- N.A.
+    // 201 (Matched) => 201 AFFI (Confirmed) --- TRP
+    // 201 AFFI => 401 (Cancelled) --- TRP
+    // 201 AFFI => 251 (Matched Ready For Settlement) --- N.A.
+    // 251 => 301 (Overdue) --- CSD
+    // 301 => 601 (Settled) --- SAMOS
+    // 301 => 801 (Failed) --- CSD
+    // 251 => 512 (Ready for funding) --- N.A.
+    // 512 => 601 (Settled) --- SAMOS
+    // ==========================================================================
+    enum Statuses {
+        Acceped,                    // 0
+        Matched,                    // 1
+        Confirmed,                  // 2
+        Cancelled,                  // 3
+        MatchedReadyForSettlement,  // 4
+        Overdue,                    // 5
+        Settled,                    // 6
+        Failed,                     // 7
+        ReadyForFunding             // 8
+    }
+
+    // ==========================================================================
+    // Structs
+    // ==========================================================================
+    struct Security {
+        string isin;
+        uint issuedShareCap;
+        uint issuedDate;
+        address issuerAddress;
+        string issuerName;
+    }
+
+    struct Trade {
+        uint tradeId;
+        uint buyLegId;
+        uint sellLegId;
+        uint tradeDate;
+        uint settlementDeadlineDate;
+    }
+
+    struct buyLeg {
+        uint buyLegId;
+        address investorAddress;
+        address tradeReportingPartyAddress;
+        address custodianId;
+        uint amount;
+        uint buyPrice;
+        Statuses status;
+        uint timestamp;
+    }
+
+    struct saleLeg {
+        uint saleLegId;
+        address investorAddress;
+        address tradeReportingPartyAddress;
+        address custodianId;
+        uint amount;
+        uint salePrice;
+        Statuses status;
+        uint timestamp;
+    }
+
     mapping(bytes32 => mapping (address => uint)) public balances;
     mapping(bytes32 => Security) public securities;
     
