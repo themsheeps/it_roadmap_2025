@@ -23,7 +23,7 @@ This POC aims to reimagine what post trade services could look like with all par
 
 |BACKLOG|IN DEV|IN TEST|COMPLETED|
 |---|---|---|---|
-|B2B Links|Confirmations [JP]||Multi Securities Issuance [JP]|
+|B2B Links [JP]|Confirmations [JP]||Multi Securities Issuance [JP]|
 |CA Processing [JP]|||Issuer Top Up [JP]|
 |DvP [JP]|||Tokenised Cash [JP]|
 |Test Scenarios [JP]|||FoP Sending of Securities [JP]|
