@@ -59,14 +59,6 @@ contract PostTrade {
 
     address owner;
 
-    struct Security {
-        string ISIN;
-        uint totalIssuedShareCap;
-        string longName;
-        string ticker;
-        bool active;
-    }
-
     // ==========================================================================
     // Constructor: Prepper for development, will need to be revised for Prod
     // ==========================================================================
@@ -127,12 +119,20 @@ contract PostTrade {
     // ==========================================================================
     // Structs
     // ==========================================================================
-    struct Security {
+    struct SecurityOld {
         string isin;
         uint issuedShareCap;
         uint issuedDate;
         address issuerAddress;
         string issuerName;
+    }
+
+    struct Security {
+        string ISIN;
+        uint totalIssuedShareCap;
+        string longName;
+        string ticker;
+        bool active;
     }
 
     struct Trade {
