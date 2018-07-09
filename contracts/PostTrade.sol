@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma experimental ABIEncoderV2;
 
 /** @title Post Trade Contract. */
 /** @author Johan Pretorius */
@@ -84,7 +84,7 @@ contract PostTrade {
     // 0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721 --- SELLER TRP
     // 0x1c6B96De685481c2d9915b606D4AB1277949b4Bc --- BUYER CUSTODIAN
     // 0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06 --- SELLER CUSTODIAN
-    // 0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0 --- ETME
+    // 0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0 --- ETME (Or other matching engine)
     // 0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D --- SAMOS
     // 0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8 --- CSD
     // ==========================================================================
@@ -141,9 +141,11 @@ contract PostTrade {
         uint sellLegId;
         uint tradeDate;
         uint settlementDeadlineDate;
+        uint buyConfirmationDateTime;
+        uint saleConfirmationDateTime;
     }
 
-    struct buyLeg {
+    struct BuyLeg {
         uint buyLegId;
         address investorAddress;
         address tradeReportingPartyAddress;
@@ -154,7 +156,7 @@ contract PostTrade {
         uint timestamp;
     }
 
-    struct saleLeg {
+    struct SaleLeg {
         uint saleLegId;
         address investorAddress;
         address tradeReportingPartyAddress;
@@ -165,10 +167,22 @@ contract PostTrade {
         uint timestamp;
     }
 
+    // ==========================================================================
+    // Variables
+    // ==========================================================================
+
     mapping(bytes32 => mapping (address => uint)) public balances;
     mapping(bytes32 => Security) public securities;
     
+    // Mappings for trades per ISIN
+    mapping(string => BuyLeg[]) buysForISIN;
+    mapping(string => SaleLeg[]) salesForISIN;
+
     string[] securitiesList;
+
+    // ==========================================================================
+    // Functions
+    // ==========================================================================
 
     function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyOwner {
         require (securities[keccak256(abi.encodePacked(_ISIN))].active == false);
@@ -222,6 +236,10 @@ contract PostTrade {
 
     function getSecuritiesListById (uint _index) public view returns (string, uint) {
         return (securitiesList[_index], securitiesList.length);
+    }
+
+    function getSecuritiesList () public view returns (string[]) {
+        return (securitiesList);
     }
 
     function getBalanceOfSecAndAccount (string _ISIN, address _accountHolder) public view returns (uint) {
