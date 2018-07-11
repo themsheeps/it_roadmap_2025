@@ -1,4 +1,4 @@
-pragma experimental ABIEncoderV2;
+pragma solidity ^0.4.23;
 
 /** @title Post Trade Contract. */
 /** @author Johan Pretorius */
@@ -47,6 +47,11 @@ contract PostTrade {
         _;
     }
 
+    modifier onlyExchanges{
+        require(SAMOSs[msg.sender] == true);
+        _;
+    }
+
     modifier onlySAMOS{
         require(SAMOSs[msg.sender] == true);
         _;
@@ -69,6 +74,7 @@ contract PostTrade {
         Custodians[0x1c6B96De685481c2d9915b606D4AB1277949b4Bc] = true;
         Custodians[0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06] = true;
         ETMEs[0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0] = true;
+        Exchanges[0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0] = true;
         SAMOSs[0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D] = true;
         TradeReportingParties[0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4] = true;
         TradeReportingParties[0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721] = true;
@@ -147,6 +153,7 @@ contract PostTrade {
 
     struct BuyLeg {
         uint buyLegId;
+        uint tradeId;
         address investorAddress;
         address tradeReportingPartyAddress;
         address custodianId;
@@ -158,6 +165,7 @@ contract PostTrade {
 
     struct SaleLeg {
         uint saleLegId;
+        uint tradeId;
         address investorAddress;
         address tradeReportingPartyAddress;
         address custodianId;
@@ -174,9 +182,14 @@ contract PostTrade {
     mapping(bytes32 => mapping (address => uint)) public balances;
     mapping(bytes32 => Security) public securities;
     
-    // Mappings for trades per ISIN
-    mapping(string => BuyLeg[]) buysForISIN;
-    mapping(string => SaleLeg[]) salesForISIN;
+    // Mappings for trades and trade legs
+    mapping(bytes32 => uint[]) matchedBuysIdListForISIN;
+    mapping(bytes32 => mapping(uint => BuyLeg)) buyLegForISINAndId;
+
+    mapping(bytes32 => uint[]) matchedSalesIdListForISIN;
+    mapping(bytes32 => mapping(uint => SaleLeg)) saleLegForISINAndId;
+
+    mapping(bytes32 => Trade[]) matchedTradesForISIN;
 
     string[] securitiesList;
 
@@ -238,9 +251,11 @@ contract PostTrade {
         return (securitiesList[_index], securitiesList.length);
     }
 
-    function getSecuritiesList () public view returns (string[]) {
-        return (securitiesList);
-    }
+    // THIS FUNCTION NEEDS AN EXPERIMENTAL ABI ENCODER
+    // -----------------------------------------------
+    // function getSecuritiesList () public view returns (string[]) {
+    //     return (securitiesList);
+    // }
 
     function getBalanceOfSecAndAccount (string _ISIN, address _accountHolder) public view returns (uint) {
         return balances[keccak256(abi.encodePacked(_ISIN))][_accountHolder];
@@ -250,6 +265,72 @@ contract PostTrade {
         require (balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] >= _amount);
         balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] -= _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][_receiverAddress] += _amount;
+    }
+
+    // For On Markets the trade will come in already pre matched
+    function addPreMatchedTrade (
+        string _ISIN,
+        uint _buyLegId,
+        uint _saleLegId,
+        uint _tradeId,
+        address _buyerAddress,
+        address _sellerAddress,
+        address _buyerTradeReportingPartyAddress,
+        address _sellerTradeReportingPartyAddress,
+        address _buyerCustodianId,
+        address _sellerCustodianId,
+        uint _amount,
+        uint _salePrice ) public onlyExchanges {
+        
+        bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
+
+        matchedBuysIdListForISIN[_hash].push(_buyLegId);
+        matchedSalesIdListForISIN[_hash].push(_saleLegId);
+
+        buyLegForISINAndId[_hash][_buyLegId] = BuyLeg({
+            buyLegId: _buyLegId,
+            tradeId: _tradeId,
+            investorAddress: _buyerAddress,
+            tradeReportingPartyAddress: _buyerTradeReportingPartyAddress,
+            custodianId: _buyerCustodianId,
+            amount: _amount,
+            buyPrice: _salePrice,
+            status: Statuses.Matched,
+            timestamp: block.timestamp
+        });
+
+        saleLegForISINAndId[_hash][_saleLegId] = SaleLeg({
+            saleLegId: _saleLegId,
+            tradeId: _tradeId,
+            investorAddress: _sellerAddress,
+            tradeReportingPartyAddress: _sellerTradeReportingPartyAddress,
+            custodianId: _sellerCustodianId,
+            amount: _amount,
+            salePrice: _salePrice,
+            status: Statuses.Matched,
+            timestamp: block.timestamp
+        });
+
+        matchedTradesForISIN[_hash].push(Trade({
+            tradeId: _tradeId,
+            buyLegId: _buyLegId,
+            sellLegId: _saleLegId,
+            tradeDate: block.timestamp,
+            settlementDeadlineDate: block.timestamp + 3 days,
+            buyConfirmationDateTime: 0,
+            saleConfirmationDateTime: 0
+        }));
+
+    // struct Trade {
+    //     uint tradeId;
+    //     uint buyLegId;
+    //     uint sellLegId;
+    //     uint tradeDate;
+    //     uint settlementDeadlineDate;
+    //     uint buyConfirmationDateTime;
+    //     uint saleConfirmationDateTime;
+    // }
+
     }
 
     // ==========================================================================
