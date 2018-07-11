@@ -7,19 +7,6 @@ pragma solidity ^0.4.23;
 contract PostTrade {
 
     // ==========================================================================
-    // Actors: Trade Reporting Party x2, ETME, SAMOS, CSD
-    // ==========================================================================
-    // Role Management for addresses
-    // ==========================================================================
-    mapping(address => bool) internal Admins;
-    mapping(address => bool) internal CSDs;
-    mapping(address => bool) internal Custodians;
-    mapping(address => bool) internal ETMEs;
-    mapping(address => bool) internal Exchanges;
-    mapping(address => bool) internal SAMOSs;
-    mapping(address => bool) internal TradeReportingParties;
-
-    // ==========================================================================
     // Modifiers
     // ==========================================================================
     modifier onlyOwner{
@@ -194,6 +181,19 @@ contract PostTrade {
     string[] public securitiesList;
 
     // ==========================================================================
+    // Actors: Trade Reporting Party x2, ETME, SAMOS, CSD
+    // ==========================================================================
+    // Role Management for addresses
+    // ==========================================================================
+    mapping(address => bool) internal Admins;
+    mapping(address => bool) internal CSDs;
+    mapping(address => bool) internal Custodians;
+    mapping(address => bool) internal ETMEs;
+    mapping(address => bool) internal Exchanges;
+    mapping(address => bool) internal SAMOSs;
+    mapping(address => bool) internal TradeReportingParties;
+
+    // ==========================================================================
     // Functions
     // ==========================================================================
 
@@ -281,6 +281,9 @@ contract PostTrade {
         address _sellerCustodianId,
         uint _amount,
         uint _salePrice ) public onlyExchanges {
+
+        // Require that the ISIN is valid on the system
+        require(securities[keccak256(abi.encodePacked(_ISIN))].active);
         
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
 
