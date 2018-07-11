@@ -48,7 +48,7 @@ contract PostTrade {
     }
 
     modifier onlyExchanges{
-        require(SAMOSs[msg.sender] == true);
+        require(Exchanges[msg.sender] == true);
         _;
     }
 
@@ -183,15 +183,15 @@ contract PostTrade {
     mapping(bytes32 => Security) public securities;
     
     // Mappings for trades and trade legs
-    mapping(bytes32 => uint[]) matchedBuysIdListForISIN;
-    mapping(bytes32 => mapping(uint => BuyLeg)) buyLegForISINAndId;
+    mapping(bytes32 => uint[]) public matchedBuysIdListForISIN;
+    mapping(bytes32 => mapping(uint => BuyLeg)) public buyLegForISINAndId;
 
-    mapping(bytes32 => uint[]) matchedSalesIdListForISIN;
-    mapping(bytes32 => mapping(uint => SaleLeg)) saleLegForISINAndId;
+    mapping(bytes32 => uint[]) public matchedSalesIdListForISIN;
+    mapping(bytes32 => mapping(uint => SaleLeg)) public saleLegForISINAndId;
 
-    mapping(bytes32 => Trade[]) matchedTradesForISIN;
+    mapping(bytes32 => Trade[]) public matchedTradesForISIN;
 
-    string[] securitiesList;
+    string[] public securitiesList;
 
     // ==========================================================================
     // Functions
@@ -321,29 +321,20 @@ contract PostTrade {
             saleConfirmationDateTime: 0
         }));
 
-    // struct Trade {
-    //     uint tradeId;
-    //     uint buyLegId;
-    //     uint sellLegId;
-    //     uint tradeDate;
-    //     uint settlementDeadlineDate;
-    //     uint buyConfirmationDateTime;
-    //     uint saleConfirmationDateTime;
-    // }
-
     }
 
     // ==========================================================================
     // Helper Console Scripts:
     // ==========================================================================
-    //
-    // PostTrade.deployed().then(function(instance){return instance.issueSecurity("ZAE001",1000,"Anglo American PLC","ANG")});
-    // PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndAccount("ZAE001","0x51e63a2E221C782Bfc95f42Cd469D3780a479C15")});
-    // PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",600,"0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8")});
-    // PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",500,"0x8ea823e5951243bfa7f1daad4703396260071fb9", {from: "0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8"})});
-    // PostTrade.deployed().then(function(instance){return instance.getSecurityDetails("ZAE001")});
-    // PostTrade.deployed().then(function(instance){return instance.getSecuritiesListById(0)});
-    // 
+    /* 
+        PostTrade.deployed().then(function(instance){return instance.issueSecurity("ZAE001",1000,"Anglo American PLC","ANG")});
+        PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndAccount("ZAE001","0x51e63a2E221C782Bfc95f42Cd469D3780a479C15")});
+        PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",600,"0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8")});
+        PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",500,"0x8ea823e5951243bfa7f1daad4703396260071fb9", {from: "0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8"})});
+        PostTrade.deployed().then(function(instance){return instance.getSecurityDetails("ZAE001")});
+        PostTrade.deployed().then(function(instance){return instance.getSecuritiesListById(0)});
+        PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade("ZAE001",1234,4321,11223344,"0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B","0x8eA823e5951243bFA7f1Daad4703396260071fB9","0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4","0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721","0x1c6B96De685481c2d9915b606D4AB1277949b4Bc","0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06",100,4444,{from:"0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0"})});
+    */ 
     // ==========================================================================
     // TRUFFLE MNEMONIC: latin bonus invest museum gate buffalo fever demand neglect entire session rail
     // [ '0x51e63a2e221c782bfc95f42cd469d3780a479c15',
