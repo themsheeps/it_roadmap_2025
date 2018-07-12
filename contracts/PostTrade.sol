@@ -29,6 +29,11 @@ contract PostTrade {
         _;
     }
 
+    modifier onlyCustodianOrTradeReportingParty {
+        require(Custodians[msg.sender] == true || TradeReportingParties[msg.sender] == true);
+        _;
+    }
+
     modifier onlyETME{
         require(ETMEs[msg.sender] == true);
         _;
@@ -176,7 +181,9 @@ contract PostTrade {
     mapping(bytes32 => uint[]) public matchedSalesIdListForISIN;
     mapping(bytes32 => mapping(uint => SaleLeg)) public saleLegForISINAndId;
 
-    mapping(bytes32 => Trade[]) public matchedTradesForISIN;
+    mapping(bytes32 => uint[]) public matchedTradesIdListForISIN;
+    mapping(bytes32 => mapping(uint => Trade)) public matchedTradesForISINandId;
+    mapping(bytes32 => mapping(bytes32 => Trade)) public confirmedTradesForISINandId;
 
     string[] public securitiesList;
 
@@ -282,13 +289,14 @@ contract PostTrade {
         uint _amount,
         uint _salePrice ) public onlyExchanges {
 
-        // Require that the ISIN is valid on the system
-        require(securities[keccak256(abi.encodePacked(_ISIN))].active);
-        
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
+
+        // Require that the ISIN is valid on the system
+        require(securities[_hash].active);
 
         matchedBuysIdListForISIN[_hash].push(_buyLegId);
         matchedSalesIdListForISIN[_hash].push(_saleLegId);
+        matchedTradesIdListForISIN[_hash].push(_tradeId);
 
         buyLegForISINAndId[_hash][_buyLegId] = BuyLeg({
             buyLegId: _buyLegId,
@@ -314,7 +322,7 @@ contract PostTrade {
             timestamp: block.timestamp
         });
 
-        matchedTradesForISIN[_hash].push(Trade({
+        matchedTradesForISINandId[_hash][_tradeId] = Trade({
             tradeId: _tradeId,
             buyLegId: _buyLegId,
             sellLegId: _saleLegId,
@@ -322,8 +330,37 @@ contract PostTrade {
             settlementDeadlineDate: block.timestamp + 3 days,
             buyConfirmationDateTime: 0,
             saleConfirmationDateTime: 0
-        }));
+        });
 
+    }
+
+    // _buyOrSaleIndicator { 0: BUY Leg, 1: SALE Leg }
+    function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN) public onlyCustodianOrTradeReportingParty {
+        
+        bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
+        uint _tradeId;
+        // Require that the ISIN is valid on the system
+        require(securities[_hash].active);
+        require(
+            msg.sender == buyLegForISINAndId[_hash][_legId].custodianId ||
+            msg.sender == buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress);
+
+        if (_buyOrSaleIndicator == 0) {
+            _tradeId = buyLegForISINAndId[_hash][_legId].tradeId;
+            matchedTradesForISINandId[_hash][_tradeId].buyConfirmationDateTime = block.timestamp;
+        } else if (_buyOrSaleIndicator == 1) {
+            _tradeId = saleLegForISINAndId[_hash][_legId].tradeId;
+            matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime = block.timestamp;
+        } else {
+            revert();
+        }
+
+        if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
+            if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
+                // FIX DATE FOR SECOND MEMBER
+                confirmedTradesForISINandId[_hash][_hash] = matchedTradesForISINandId[_hash][_tradeId];
+            }
+        }
     }
 
     // ==========================================================================
