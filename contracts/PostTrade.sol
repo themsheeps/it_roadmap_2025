@@ -351,6 +351,49 @@ contract PostTrade {
 
     }
 
+    // Due to stack overflow errors the returns for buys and sales must be split into seperate functions as there are too many fields to return
+    function getBuysPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address, address) {  
+        bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
+        return (
+            buyLegForISINAndId[_hash][_legId].buyLegId,
+            buyLegForISINAndId[_hash][_legId].investorAddress,
+            buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
+            buyLegForISINAndId[_hash][_legId].custodianId
+        );
+    }
+
+    function getBuysForIsin(string _ISIN, uint _legId) public view returns (uint, uint, uint, Statuses, uint) {  
+        bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
+        return (
+            buyLegForISINAndId[_hash][_legId].amount,
+            buyLegForISINAndId[_hash][_legId].buyPrice,
+            buyLegForISINAndId[_hash][_legId].timestamp,
+            buyLegForISINAndId[_hash][_legId].status,
+            buyLegForISINAndId[_hash][_legId].buyLegId
+        );
+    }
+
+    function getSalesPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address, address) {  
+        bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
+        return (
+            saleLegForISINAndId[_hash][_legId].saleLegId,
+            saleLegForISINAndId[_hash][_legId].investorAddress,
+            saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
+            saleLegForISINAndId[_hash][_legId].custodianId
+        );
+    }
+
+    function getSalesForIsin(string _ISIN, uint _index) public view returns (uint, uint, uint, Statuses, uint) {  
+        bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
+        return (
+            saleLegForISINAndId[_hash][_index].amount,
+            saleLegForISINAndId[_hash][_index].salePrice,
+            saleLegForISINAndId[_hash][_index].timestamp,
+            saleLegForISINAndId[_hash][_index].status,
+            saleLegForISINAndId[_hash][_index].saleLegId
+        );
+    }
+
     // _buyOrSaleIndicator { 0: BUY Leg, 1: SALE Leg }
     function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN) public onlyCustodianOrTradeReportingParty {
         
