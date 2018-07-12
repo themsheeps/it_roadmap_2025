@@ -183,7 +183,7 @@ contract PostTrade {
 
     mapping(bytes32 => uint[]) public matchedTradesIdListForISIN;
     mapping(bytes32 => mapping(uint => Trade)) public matchedTradesForISINandId;
-    mapping(bytes32 => mapping(bytes32 => Trade)) public confirmedTradesForISINandId;
+    mapping(bytes32 => mapping(uint => Trade)) public confirmedTradesForISINandId;
 
     string[] public securitiesList;
 
@@ -199,6 +199,18 @@ contract PostTrade {
     mapping(address => bool) internal Exchanges;
     mapping(address => bool) internal SAMOSs;
     mapping(address => bool) internal TradeReportingParties;
+
+    // ==========================================================================
+    // Date stuff: Taken from Piper's library - https://github.com/pipermerriam/ethereum-datetime
+    // ==========================================================================
+    uint constant DAY_IN_SECONDS = 86400;
+    // uint constant YEAR_IN_SECONDS = 31536000;
+    // uint constant LEAP_YEAR_IN_SECONDS = 31622400;
+
+    // uint constant HOUR_IN_SECONDS = 3600;
+    // uint constant MINUTE_IN_SECONDS = 60;
+
+    // uint16 constant ORIGIN_YEAR = 1970;
 
     // ==========================================================================
     // Functions
@@ -290,9 +302,14 @@ contract PostTrade {
         uint _salePrice ) public onlyExchanges {
 
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
+        uint lastMidnightTime;
 
         // Require that the ISIN is valid on the system
         require(securities[_hash].active);
+
+        // Find midnigth time from block.timestamp
+        lastMidnightTime = block.timestamp;
+        lastMidnightTime -= (lastMidnightTime % DAY_IN_SECONDS);
 
         matchedBuysIdListForISIN[_hash].push(_buyLegId);
         matchedSalesIdListForISIN[_hash].push(_saleLegId);
@@ -326,8 +343,8 @@ contract PostTrade {
             tradeId: _tradeId,
             buyLegId: _buyLegId,
             sellLegId: _saleLegId,
-            tradeDate: block.timestamp,
-            settlementDeadlineDate: block.timestamp + 3 days,
+            tradeDate: lastMidnightTime,
+            settlementDeadlineDate: lastMidnightTime + 3 days,
             buyConfirmationDateTime: 0,
             saleConfirmationDateTime: 0
         });
@@ -341,14 +358,21 @@ contract PostTrade {
         uint _tradeId;
         // Require that the ISIN is valid on the system
         require(securities[_hash].active);
-        require(
-            msg.sender == buyLegForISINAndId[_hash][_legId].custodianId ||
-            msg.sender == buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress);
 
         if (_buyOrSaleIndicator == 0) {
+            // check that sender is authorised       
+            require(
+                msg.sender == buyLegForISINAndId[_hash][_legId].custodianId ||
+                msg.sender == buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress);
+
             _tradeId = buyLegForISINAndId[_hash][_legId].tradeId;
             matchedTradesForISINandId[_hash][_tradeId].buyConfirmationDateTime = block.timestamp;
         } else if (_buyOrSaleIndicator == 1) {
+            // check that sender is authorised       
+            require(
+                msg.sender == saleLegForISINAndId[_hash][_legId].custodianId ||
+                msg.sender == saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress);
+
             _tradeId = saleLegForISINAndId[_hash][_legId].tradeId;
             matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime = block.timestamp;
         } else {
@@ -357,10 +381,72 @@ contract PostTrade {
 
         if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
             if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
-                // FIX DATE FOR SECOND MEMBER
-                confirmedTradesForISINandId[_hash][_hash] = matchedTradesForISINandId[_hash][_tradeId];
+                confirmedTradesForISINandId[_hash][matchedTradesForISINandId[_hash][_tradeId].settlementDeadlineDate] = matchedTradesForISINandId[_hash][_tradeId];
             }
         }
+    }
+
+    // ==========================================================================
+    // Add/Remove Authorised Roles:
+    // ==========================================================================    
+    // Administrators will have elevated contract permissions, at present this 
+    // will be crude, but in productionising the contract this will become
+    // a vital role.
+    // ==========================================================================
+    function addAdmin(address _adminAddress) public onlyOwnerOrAdmin {
+        Admins[_adminAddress] = true;
+    }
+
+    function removeAdmin(address _adminAddress) public onlyOwnerOrAdmin {
+        Admins[_adminAddress] = false;
+    }
+
+    function addCSD(address _CSDAddress) public onlyOwnerOrAdmin {
+        CSDs[_CSDAddress] = true;
+    }
+
+    function removeCSD(address _CSDAddress) public onlyOwnerOrAdmin {
+        CSDs[_CSDAddress] = false;
+    }
+
+    function addCustodian(address _CustodianAddress) public onlyOwnerOrAdmin {
+        Custodians[_CustodianAddress] = true;
+    }
+
+    function removeCustodian(address _CustodianAddress) public onlyOwnerOrAdmin {
+        Custodians[_CustodianAddress] = false;
+    }
+
+    function addETME(address _ETMEAddress) public onlyOwnerOrAdmin {
+        ETMEs[_ETMEAddress] = true;
+    }
+
+    function removeETME(address _ETMEAddress) public onlyOwnerOrAdmin {
+        ETMEs[_ETMEAddress] = false;
+    }
+
+    function addExchange(address _ExchangeAddress) public onlyOwnerOrAdmin {
+        Exchanges[_ExchangeAddress] = true;
+    }
+
+    function removeExchange(address _ExchangeAddress) public onlyOwnerOrAdmin {
+        ETMEs[_ExchangeAddress] = false;
+    }
+
+    function addSAMOS(address _SAMOSAddress) public onlyOwnerOrAdmin {
+        SAMOSs[_SAMOSAddress] = true;
+    }
+
+    function removeSAMOS(address _SAMOSAddress) public onlyOwnerOrAdmin {
+        SAMOSs[_SAMOSAddress] = false;
+    }
+
+    function addTradeReportingParty(address _TradeReportingPartyAddress) public onlyOwnerOrAdmin {
+        TradeReportingParties[_TradeReportingPartyAddress] = true;
+    }
+
+    function removeTradeReportingParty(address _TradeReportingPartyAddress) public onlyOwnerOrAdmin {
+        TradeReportingParties[_TradeReportingPartyAddress] = false;
     }
 
     // ==========================================================================
