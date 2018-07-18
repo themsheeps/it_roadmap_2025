@@ -146,7 +146,7 @@ contract PostTrade {
     struct BuyLeg {
         uint buyLegId;
         uint tradeId;
-        address investorAddress;
+        // address investorAddress;
         address tradeReportingPartyAddress;
         address custodianId;
         uint amount;
@@ -158,7 +158,7 @@ contract PostTrade {
     struct SaleLeg {
         uint saleLegId;
         uint tradeId;
-        address investorAddress;
+        // address investorAddress;
         address tradeReportingPartyAddress;
         address custodianId;
         uint amount;
@@ -183,7 +183,7 @@ contract PostTrade {
 
     mapping(bytes32 => uint[]) public matchedTradesIdListForISIN;
     mapping(bytes32 => mapping(uint => Trade)) public matchedTradesForISINandId;
-    mapping(bytes32 => mapping(uint => Trade)) public confirmedTradesForISINandId;
+    mapping(bytes32 => mapping(uint => Trade[])) public confirmedTradesForISINandSettlementDate;
 
     string[] public securitiesList;
 
@@ -216,6 +216,7 @@ contract PostTrade {
     // Functions
     // ==========================================================================
 
+    // TODO: Expand on ISIN issuance as per scrum board: https://trello.com/b/45EzfvGG/scrum-board
     function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyOwner {
         require (securities[keccak256(abi.encodePacked(_ISIN))].active == false);
         bytes32 keccakIsin = keccak256(abi.encodePacked(_ISIN));
@@ -292,8 +293,9 @@ contract PostTrade {
         uint _buyLegId,
         uint _saleLegId,
         uint _tradeId,
-        address _buyerAddress,
-        address _sellerAddress,
+        uint _settlementDate, // Format YYYYMMDD
+        // address _buyerAddress,
+        // address _sellerAddress,
         address _buyerTradeReportingPartyAddress,
         address _sellerTradeReportingPartyAddress,
         address _buyerCustodianId,
@@ -318,7 +320,7 @@ contract PostTrade {
         buyLegForISINAndId[_hash][_buyLegId] = BuyLeg({
             buyLegId: _buyLegId,
             tradeId: _tradeId,
-            investorAddress: _buyerAddress,
+            // investorAddress: _buyerAddress,
             tradeReportingPartyAddress: _buyerTradeReportingPartyAddress,
             custodianId: _buyerCustodianId,
             amount: _amount,
@@ -330,7 +332,7 @@ contract PostTrade {
         saleLegForISINAndId[_hash][_saleLegId] = SaleLeg({
             saleLegId: _saleLegId,
             tradeId: _tradeId,
-            investorAddress: _sellerAddress,
+            // investorAddress: _sellerAddress,
             tradeReportingPartyAddress: _sellerTradeReportingPartyAddress,
             custodianId: _sellerCustodianId,
             amount: _amount,
@@ -344,7 +346,7 @@ contract PostTrade {
             buyLegId: _buyLegId,
             sellLegId: _saleLegId,
             tradeDate: lastMidnightTime,
-            settlementDeadlineDate: lastMidnightTime + 3 days,
+            settlementDeadlineDate: _settlementDate,
             buyConfirmationDateTime: 0,
             saleConfirmationDateTime: 0
         });
@@ -352,11 +354,11 @@ contract PostTrade {
     }
 
     // Due to stack overflow errors the returns for buys and sales must be split into seperate functions as there are too many fields to return
-    function getBuysPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address, address) {  
+    function getBuysPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address) {  
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
         return (
             buyLegForISINAndId[_hash][_legId].buyLegId,
-            buyLegForISINAndId[_hash][_legId].investorAddress,
+            // buyLegForISINAndId[_hash][_legId].investorAddress,
             buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
             buyLegForISINAndId[_hash][_legId].custodianId
         );
@@ -373,11 +375,11 @@ contract PostTrade {
         );
     }
 
-    function getSalesPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address, address) {  
+    function getSalesPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address) {  
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
         return (
             saleLegForISINAndId[_hash][_legId].saleLegId,
-            saleLegForISINAndId[_hash][_legId].investorAddress,
+            //saleLegForISINAndId[_hash][_legId].investorAddress,
             saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
             saleLegForISINAndId[_hash][_legId].custodianId
         );
@@ -424,7 +426,17 @@ contract PostTrade {
 
         if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
             if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
-                confirmedTradesForISINandId[_hash][matchedTradesForISINandId[_hash][_tradeId].settlementDeadlineDate] = matchedTradesForISINandId[_hash][_tradeId];
+                // Once a perfect match has been made, add the fully confirmed trade to a list of trades to be settled on settlement date.
+                confirmedTradesForISINandSettlementDate[_hash][matchedTradesForISINandId[_hash][_tradeId].settlementDeadlineDate].push(matchedTradesForISINandId[_hash][_tradeId]);
+                
+                //TODO: Add securities netting
+                //  Do reservation for securities 
+                //    Decuct securities from seller
+                //    Add securities from buyer
+                //  Check if buyer has enough cash to do real-time settlement ??? <<<< Confirm with Ganesh / Rudi
+                //  Do cash calculation from 
+                //    Decuct cash from seller CSDP
+                //    Add cash to buyer CSDP
             }
         }
     }
@@ -502,7 +514,7 @@ contract PostTrade {
         PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",500,"0x8ea823e5951243bfa7f1daad4703396260071fb9", {from: "0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8"})});
         PostTrade.deployed().then(function(instance){return instance.getSecurityDetails("ZAE001")});
         PostTrade.deployed().then(function(instance){return instance.getSecuritiesListById(0)});
-        PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade("ZAE001",1234,4321,11223344,"0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B","0x8eA823e5951243bFA7f1Daad4703396260071fB9","0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4","0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721","0x1c6B96De685481c2d9915b606D4AB1277949b4Bc","0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06",100,4444,{from:"0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0"})});
+        PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade("ZAE001",1234,4321,11223344,20180720,"0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4","0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721","0x1c6B96De685481c2d9915b606D4AB1277949b4Bc","0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06",100,4444,{from:"0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0"})});
     */ 
     // ==========================================================================
     // TRUFFLE MNEMONIC: latin bonus invest museum gate buffalo fever demand neglect entire session rail
