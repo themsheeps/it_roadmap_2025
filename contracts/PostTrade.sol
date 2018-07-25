@@ -217,7 +217,7 @@ contract PostTrade {
     // ==========================================================================
 
     // TODO: Expand on ISIN issuance as per scrum board: https://trello.com/b/45EzfvGG/scrum-board
-    function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyOwner {
+    function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public {
         require (securities[keccak256(abi.encodePacked(_ISIN))].active == false);
         bytes32 keccakIsin = keccak256(abi.encodePacked(_ISIN));
         securities[keccakIsin].ISIN = _ISIN;
