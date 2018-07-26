@@ -6,18 +6,34 @@ pragma solidity ^0.4.23;
 
 contract NNA {
 
+    // ==========================================================================
+    // Modifiers : Modifiers are only added when used, the rest are commented out
+    // ==========================================================================
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+
     mapping ( bytes32 => uint ) ISINCounter;
+    address owner;
+
+    constructor () public {
+        owner = msg.sender;
+    }
 
     // function -- ISIN Request
 
-    function issueIsinNumber (string _prefix) public returns (uint _postfix) {
-        uint _return = ISINCounter[keccak256(abi.encodePacked(_prefix))] ++;
-        return _return;
+    function issueIsinNumber (string _prefix) public onlyOwner {
+        ISINCounter[keccak256(abi.encodePacked(_prefix))] ++;
+    }
+
+    function getIsinNumber (string _prefix) public view onlyOwner returns (uint){
+        return ISINCounter[keccak256(abi.encodePacked(_prefix))];
     }
 
     // function -- Deissue ISIN
 
-// ==========================================================================
+    // ==========================================================================
     // Helper Console Scripts:
     // ==========================================================================
 /* 
