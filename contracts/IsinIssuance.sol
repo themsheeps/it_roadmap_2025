@@ -5,7 +5,8 @@ pragma solidity ^0.4.23;
 /** startDate 2018-06-06 */
 
 contract PostTrade {
-    function issueSecurity (string , uint , string , string ) public {}
+    function issueSecurity (string , uint , string , string ) public pure {}
+    // function setIsinIssuanceContractAddress (address) public pure {}
 }
 
 contract IsinIssuance {
@@ -113,14 +114,17 @@ contract IsinIssuance {
         );
     }
 
-    /*
-    IsinIssuance.deployed().then(function(instance){return instance.postTradeContractAddress()});
-    IsinIssuance.deployed().then(function(instance){return instance.captureSecurity("ZAE001",1000,"Anglo American PLC","ANG","0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b")});
-    IsinIssuance.deployed().then(function(instance){return instance.getSecurityToBeVerified(0, {from:"0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b"})});
-    IsinIssuance.deployed().then(function(instance){return instance.verifySecurity(0, {from:"0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b"})});
-    IsinIssuance.deployed().then(function(instance){return instance.getSecurityToBeVerified(0, {from:"0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b"})});
-    PostTrade.deployed().then(function(instance){return instance.getSecurityDetails("ZAE001")});
-    */
+/*
+IsinIssuance.deployed().then(function(instance){return instance.postTradeContractAddress()});
+
+PostTrade.deployed().then(function(instance){return instance.setIsinIssuanceContractAddress(IsinIssuance.address)});
+IsinIssuance.deployed().then(function(instance){return instance.captureSecurity("ZAE001",1000,"Anglo American PLC","ANG","0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b")});
+IsinIssuance.deployed().then(function(instance){return instance.getSecurityToBeVerified(0, {from:"0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b"})});
+IsinIssuance.deployed().then(function(instance){return instance.verifySecurity(0, {from:"0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b"})});
+IsinIssuance.deployed().then(function(instance){return instance.getSecurityToBeVerified(0, {from:"0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b"})});
+PostTrade.deployed().then(function(instance){return instance.getSecurityDetails("ZAE001")});
+    
+*/
 
     // ==========================================================================
     // TRUFFLE MNEMONIC: latin bonus invest museum gate buffalo fever demand neglect entire session rail

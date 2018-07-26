@@ -44,6 +44,11 @@ contract PostTrade {
         _;
     }
 
+    modifier onlyIsinIssuanceContact {
+        require(msg.sender == isinIssuanceContractAddress);
+        _;
+    }
+
     modifier onlySAMOS{
         require(SAMOSs[msg.sender] == true);
         _;
@@ -55,6 +60,7 @@ contract PostTrade {
     }
 
     address owner;
+    address public isinIssuanceContractAddress;
 
     // ==========================================================================
     // Constructor: Prepper for development, will need to be revised for Prod
@@ -217,7 +223,7 @@ contract PostTrade {
     // ==========================================================================
 
     // TODO: Expand on ISIN issuance as per scrum board: https://trello.com/b/45EzfvGG/scrum-board
-    function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public {
+    function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyIsinIssuanceContact {
         require (securities[keccak256(abi.encodePacked(_ISIN))].active == false);
         bytes32 keccakIsin = keccak256(abi.encodePacked(_ISIN));
         securities[keccakIsin].ISIN = _ISIN;
