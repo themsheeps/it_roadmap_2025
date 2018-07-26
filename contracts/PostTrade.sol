@@ -7,7 +7,7 @@ pragma solidity ^0.4.23;
 contract PostTrade {
 
     // ==========================================================================
-    // Modifiers
+    // Modifiers : Modifiers are only added when used, the rest are commented out
     // ==========================================================================
     modifier onlyOwner{
         require(msg.sender == owner);
@@ -19,25 +19,25 @@ contract PostTrade {
         _;
     }
 
-    modifier onlyCSD{
-        require(CSDs[msg.sender] == true);
-        _;
-    }
+    // modifier onlyCSD{
+    //     require(CSDs[msg.sender] == true);
+    //     _;
+    // }
 
-    modifier onlyCustodian{
-        require(Custodians[msg.sender] == true);
-        _;
-    }
+    // modifier onlyCustodian{
+    //     require(Custodians[msg.sender] == true);
+    //     _;
+    // }
 
     modifier onlyCustodianOrTradeReportingParty {
         require(Custodians[msg.sender] == true || TradeReportingParties[msg.sender] == true);
         _;
     }
 
-    modifier onlyETME{
-        require(ETMEs[msg.sender] == true);
-        _;
-    }
+    // modifier onlyETME{
+    //     require(ETMEs[msg.sender] == true);
+    //     _;
+    // }
 
     modifier onlyExchanges{
         require(Exchanges[msg.sender] == true);
@@ -54,10 +54,10 @@ contract PostTrade {
         _;
     }
 
-    modifier onlyTradeReportingParty{
-        require(TradeReportingParties[msg.sender] == true);
-        _;
-    }
+    // modifier onlyTradeReportingParty{
+    //     require(TradeReportingParties[msg.sender] == true);
+    //     _;
+    // }
 
     address private owner;
     address public isinIssuanceContractAddress;
@@ -257,6 +257,13 @@ contract PostTrade {
         balances[keccak256(abi.encodePacked(_ISIN))][owner] += _amount;
     }
 
+    function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true);
+        require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount);
+        securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
+        balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
+    }
+
     function topUpCash (uint _amount) public onlySAMOS {
         require (securities[keccak256(abi.encodePacked("eZAR"))].active == true);
         securities[keccak256(abi.encodePacked("eZAR"))].totalIssuedShareCap += _amount;
@@ -276,12 +283,6 @@ contract PostTrade {
     function getSecuritiesListById (uint _index) public view returns (string, uint) {
         return (securitiesList[_index], securitiesList.length);
     }
-
-    // THIS FUNCTION NEEDS AN EXPERIMENTAL ABI ENCODER
-    // -----------------------------------------------
-    // function getSecuritiesList () public view returns (string[]) {
-    //     return (securitiesList);
-    // }
 
     function getBalanceOfSecAndAccount (string _ISIN, address _accountHolder) public view returns (uint) {
         return balances[keccak256(abi.encodePacked(_ISIN))][_accountHolder];
@@ -458,74 +459,48 @@ contract PostTrade {
     // will be crude, but in productionising the contract this will become
     // a vital role.
     // ==========================================================================
-    function addAdmin(address _adminAddress) public onlyOwnerOrAdmin {
-        Admins[_adminAddress] = true;
+    function addRemoveAdmin(address _adminAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+        Admins[_adminAddress] = _activeFlag;
     }
 
-    function removeAdmin(address _adminAddress) public onlyOwnerOrAdmin {
-        Admins[_adminAddress] = false;
+    function addRemoveCSD(address _CSDAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+        CSDs[_CSDAddress] = _activeFlag;
     }
 
-    function addCSD(address _CSDAddress) public onlyOwnerOrAdmin {
-        CSDs[_CSDAddress] = true;
+    function addRemoveCustodian(address _CustodianAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+        Custodians[_CustodianAddress] = _activeFlag;
     }
 
-    function removeCSD(address _CSDAddress) public onlyOwnerOrAdmin {
-        CSDs[_CSDAddress] = false;
+    function addRemoveETME(address _ETMEAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+        ETMEs[_ETMEAddress] = _activeFlag;
     }
 
-    function addCustodian(address _CustodianAddress) public onlyOwnerOrAdmin {
-        Custodians[_CustodianAddress] = true;
+    function addRemoveExchange(address _ExchangeAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+        Exchanges[_ExchangeAddress] = _activeFlag;
     }
 
-    function removeCustodian(address _CustodianAddress) public onlyOwnerOrAdmin {
-        Custodians[_CustodianAddress] = false;
+    function addRemoveSAMOS(address _SAMOSAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+        SAMOSs[_SAMOSAddress] = _activeFlag;
     }
 
-    function addETME(address _ETMEAddress) public onlyOwnerOrAdmin {
-        ETMEs[_ETMEAddress] = true;
-    }
-
-    function removeETME(address _ETMEAddress) public onlyOwnerOrAdmin {
-        ETMEs[_ETMEAddress] = false;
-    }
-
-    function addExchange(address _ExchangeAddress) public onlyOwnerOrAdmin {
-        Exchanges[_ExchangeAddress] = true;
-    }
-
-    function removeExchange(address _ExchangeAddress) public onlyOwnerOrAdmin {
-        ETMEs[_ExchangeAddress] = false;
-    }
-
-    function addSAMOS(address _SAMOSAddress) public onlyOwnerOrAdmin {
-        SAMOSs[_SAMOSAddress] = true;
-    }
-
-    function removeSAMOS(address _SAMOSAddress) public onlyOwnerOrAdmin {
-        SAMOSs[_SAMOSAddress] = false;
-    }
-
-    function addTradeReportingParty(address _TradeReportingPartyAddress) public onlyOwnerOrAdmin {
-        TradeReportingParties[_TradeReportingPartyAddress] = true;
-    }
-
-    function removeTradeReportingParty(address _TradeReportingPartyAddress) public onlyOwnerOrAdmin {
-        TradeReportingParties[_TradeReportingPartyAddress] = false;
+    function addRemoveTradeReportingParty(address _TradeReportingPartyAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+        TradeReportingParties[_TradeReportingPartyAddress] = _activeFlag;
     }
 
     // ==========================================================================
     // Helper Console Scripts:
     // ==========================================================================
-    /* 
-        PostTrade.deployed().then(function(instance){return instance.issueSecurity("ZAE001",1000,"Anglo American PLC","ANG")});
-        PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndAccount("ZAE001","0x51e63a2E221C782Bfc95f42Cd469D3780a479C15")});
-        PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",600,"0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8")});
-        PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",500,"0x8ea823e5951243bfa7f1daad4703396260071fb9", {from: "0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8"})});
-        PostTrade.deployed().then(function(instance){return instance.getSecurityDetails("ZAE001")});
-        PostTrade.deployed().then(function(instance){return instance.getSecuritiesListById(0)});
-        PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade("ZAE001",1234,4321,11223344,20180720,"0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4","0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721","0x1c6B96De685481c2d9915b606D4AB1277949b4Bc","0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06",100,4444,{from:"0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0"})});
-    */ 
+/* 
+
+PostTrade.deployed().then(function(instance){return instance.issueSecurity("ZAE001",1000,"Anglo American PLC","ANG")});
+PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndAccount("ZAE001","0x51e63a2E221C782Bfc95f42Cd469D3780a479C15")});
+PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",600,"0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8")});
+PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",500,"0x8ea823e5951243bfa7f1daad4703396260071fb9", {from: "0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8"})});
+PostTrade.deployed().then(function(instance){return instance.getSecurityDetails("ZAE001")});
+PostTrade.deployed().then(function(instance){return instance.getSecuritiesListById(0)});
+PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade("ZAE001",1234,4321,11223344,20180720,"0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4","0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721","0x1c6B96De685481c2d9915b606D4AB1277949b4Bc","0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06",100,4444,{from:"0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0"})});
+
+*/ 
     // ==========================================================================
     // TRUFFLE MNEMONIC: latin bonus invest museum gate buffalo fever demand neglect entire session rail
     // [ '0x51e63a2e221c782bfc95f42cd469d3780a479c15',
