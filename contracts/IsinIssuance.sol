@@ -26,6 +26,8 @@ contract IsinIssuance {
         postTradeContractAddress = _postTradeContract;
         postTradeContract = PostTrade(_postTradeContract);
 
+        // postTradeContract.setIsinIssuanceContractAddress(this);
+
         owner = msg.sender;
     }
 

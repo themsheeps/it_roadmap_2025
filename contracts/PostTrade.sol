@@ -59,7 +59,7 @@ contract PostTrade {
         _;
     }
 
-    address owner;
+    address private owner;
     address public isinIssuanceContractAddress;
 
     // ==========================================================================
@@ -445,6 +445,10 @@ contract PostTrade {
                 //    Add cash to buyer CSDP
             }
         }
+    }
+
+    function setIsinIssuanceContractAddress (address _isinIssuanceContractAddress) public onlyOwner {
+        isinIssuanceContractAddress = _isinIssuanceContractAddress;
     }
 
     // ==========================================================================
