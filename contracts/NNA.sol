@@ -3,7 +3,7 @@ pragma solidity ^0.4.23;
 /** @title Post Trade Contract. */
 /** @author Johan Pretorius */
 /** startDate 2018-06-06 */
-
+/** comment: this NNA logic is massively simplified */
 contract NNA {
 
     // ==========================================================================
@@ -14,24 +14,51 @@ contract NNA {
         _;
     }
 
-    mapping ( bytes32 => uint ) ISINCounter;
-    address owner;
-
     constructor () public {
         owner = msg.sender;
     }
 
-    // function -- ISIN Request
+    event IsinIssued (string indexed _prefix, uint _counter, uint indexed _transactionReference);
+    event IsinDelisted (string indexed _prefix, uint _counter);
 
-    function issueIsinNumber (string _prefix) public onlyOwner {
-        ISINCounter[keccak256(abi.encodePacked(_prefix))] ++;
+    address owner;
+    string[] isins;
+
+    // ==========================================================================
+    // Statusses:
+    // 0 = FREE
+    // 1 = ACTIVE
+    // 2 = DELISTED
+    // ==========================================================================
+
+    mapping (bytes32 => mapping (uint => uint)) isinStatusses;
+    mapping ( bytes32 => uint ) ISINCounter;
+
+    function issueIsinNumber (string _prefix, uint _transactionReference) public onlyOwner {
+        bytes32 _hash = keccak256(abi.encodePacked(_prefix));
+        ISINCounter[_hash] ++;
+        isinStatusses[_hash][ISINCounter[_hash]] = 1;
+
+        emit IsinIssued (_prefix, ISINCounter[_hash], _transactionReference);
     }
 
     function getIsinNumber (string _prefix) public view onlyOwner returns (uint){
-        return ISINCounter[keccak256(abi.encodePacked(_prefix))];
+        bytes32 _hash = keccak256(abi.encodePacked(_prefix));
+        return ISINCounter[_hash];
     }
 
-    // function -- Deissue ISIN
+    function delistIsin (string _prefix, uint _counter) public onlyOwner {
+        require (isinStatusses[_hash][_counter] == 1);
+        bytes32 _hash = keccak256(abi.encodePacked(_prefix));
+        isinStatusses[_hash][_counter] = 2;
+
+        emit IsinDelisted (_prefix, _counter);
+    }
+
+    function getIsinStatus (string _prefix, uint _counter) public view returns (uint _status) {
+        bytes32 _hash = keccak256(abi.encodePacked(_prefix));
+        return isinStatusses[_hash][_counter];
+    }
 
     // ==========================================================================
     // Helper Console Scripts:
