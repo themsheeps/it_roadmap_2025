@@ -18,8 +18,8 @@ contract NNA {
         owner = msg.sender;
     }
 
-    event IsinIssued (string indexed _prefix, uint _counter, uint indexed _transactionReference);
-    event IsinDelisted (string indexed _prefix, uint _counter);
+    event IsinIssued (string _prefix, uint _counter, uint indexed _transactionReference);
+    event IsinDelisted (string _prefix, uint _counter);
 
     address owner;
     string[] isins;
@@ -32,12 +32,16 @@ contract NNA {
     // ==========================================================================
 
     mapping (bytes32 => mapping (uint => uint)) isinStatusses;
-    mapping ( bytes32 => uint ) ISINCounter;
+    mapping (bytes32 => uint ) ISINCounter;
+    mapping (uint => uint) ISINTransactionReferences;
 
     function issueIsinNumber (string _prefix, uint _transactionReference) public onlyOwner {
+        require (ISINTransactionReferences[_transactionReference] == 0, "Transaction number already used");
         bytes32 _hash = keccak256(abi.encodePacked(_prefix));
-        ISINCounter[_hash] ++;
+        ISINCounter[_hash] += 1;
         isinStatusses[_hash][ISINCounter[_hash]] = 1;
+
+        ISINTransactionReferences[_transactionReference] = ISINCounter[_hash];
 
         emit IsinIssued (_prefix, ISINCounter[_hash], _transactionReference);
     }
@@ -48,8 +52,8 @@ contract NNA {
     }
 
     function delistIsin (string _prefix, uint _counter) public onlyOwner {
-        require (isinStatusses[_hash][_counter] == 1);
         bytes32 _hash = keccak256(abi.encodePacked(_prefix));
+        require (isinStatusses[_hash][_counter] == 1);
         isinStatusses[_hash][_counter] = 2;
 
         emit IsinDelisted (_prefix, _counter);
@@ -65,7 +69,12 @@ contract NNA {
     // ==========================================================================
 /* 
 
-NNA.deployed().then(function(instance){return instance.issueIsinNumber("ZAE")});
+NNA.deployed().then(function(instance){return instance.issueIsinNumber("ZAE",894735)});
+NNA.deployed().then(function(instance){return instance.getIsinNumber("ZAE")});
+NNA.deployed().then(function(instance){return instance.getIsinStatus("ZAE",1)});
+NNA.deployed().then(function(instance){return instance.delistIsin("ZAE",1)});
+
+// event.watch(function(error, result){ if (!error) console.log(result);});
 
 */ 
     // ==========================================================================
