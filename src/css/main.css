@@ -1,0 +1,34 @@
+  nav.navbar {
+    background: #3030a0;
+    border: 0;
+  }
+  @media (max-width: 767px) {
+    nav.navbar .navbar-collapse {
+      border: 0;
+      box-shadow: none;
+    }
+  }
+  header {
+    background-image: url('https://imgix.ranker.com/user_node_img/101/2012603/original/shanghai-u14?w=650&q=50&fm=jpg&fit=crop&crop=faces');
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+  }
+  header.jumbotron h1 {
+    padding-top: 100px;
+  }
+  header.jumbotron h1,
+  header.jumbotron p {
+    color: white;
+  }
+  left {
+      float: left;
+  }
+
+  right {
+      float: right
+  }
+
+  block {
+    display:inline-block;
+  }
