@@ -10,7 +10,7 @@ contract NNA {
     // Modifiers : Modifiers are only added when used, the rest are commented out
     // ==========================================================================
     modifier onlyOwner {
-        require(msg.sender == owner);
+        require(msg.sender == owner, "Not owner");
         _;
     }
 

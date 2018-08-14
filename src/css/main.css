@@ -1,34 +1,92 @@
-  nav.navbar {
-    background: #3030a0;
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+
+nav.navbar {
+  background: #3030a0;
+  border: 0;
+}
+
+@media (max-width: 767px) {
+  nav.navbar .navbar-collapse {
     border: 0;
+    box-shadow: none;
   }
-  @media (max-width: 767px) {
-    nav.navbar .navbar-collapse {
-      border: 0;
-      box-shadow: none;
-    }
-  }
-  header {
-    background-image: url('https://imgix.ranker.com/user_node_img/101/2012603/original/shanghai-u14?w=650&q=50&fm=jpg&fit=crop&crop=faces');
-    background-size: cover;
-    background-position: center;
-    height: 400px;
-  }
-  header.jumbotron h1 {
-    padding-top: 100px;
-  }
-  header.jumbotron h1,
-  header.jumbotron p {
-    color: white;
-  }
-  left {
-      float: left;
-  }
+}
 
-  right {
-      float: right
-  }
+header {
+  background-image: url('https://imgix.ranker.com/user_node_img/101/2012603/original/shanghai-u14?w=650&q=50&fm=jpg&fit=crop&crop=faces');
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+}
 
-  block {
-    display:inline-block;
-  }
+header.jumbotron h1 {
+  padding-top: 100px;
+}
+
+header.jumbotron h1,
+header.jumbotron p {
+  color: white;
+}
+
+.footer>.container {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px;
+  /* Vertically center the text there */
+  background-color: #3030a0;
+  color: white;
+}
+
+a.active {
+  color: white;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right
+}
+
+.block {
+  display: inline-block;
+}
+
+.odd {
+  background-color: lightgrey;
+  border-radius: 5px;
+}
+
+.form {
+  padding: 15px;
+}
+
+h2 {
+  padding-top: 10px;
+}
+
+.infoBox {
+  width: inherit;
+  background-color: cornflowerblue;
+  border-radius: 5px;
+  color: white;
+}

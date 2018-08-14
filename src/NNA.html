@@ -36,7 +36,7 @@
           <div class="block">
             <!-- <img src="https://www.strate.co.za/sites/default/files/state-logo-dark.svg" class="left" /> -->
             <a class="navbar-brand">
-              Strate Roadmap POC - NNA
+              Strate Roadmap POC
             </a>
           </div>
         </div>
@@ -46,8 +46,8 @@
             <li>
               <a href="/">Home</a>
             </li>
-            <li>
-              <a href="/NNA.html">NNA</a>
+            <li class="active">
+              <a>NNA</a>
             </li>
             <li>
               <a href="/IssueIsin.html">ISIN Issuance</a>
@@ -63,6 +63,7 @@
       </div>
     </nav>
   </div>
+
   <div class="container">
     <div class="row" style="padding-top: 100px">
       <div class="col-xs-12 col-sm-8 col-sm-push-2">
@@ -73,42 +74,84 @@
     </div>
   </div>
   <div class="container">
-    <h2>Get New ISIN Number</h2>
+    <h2 class="text-center">Get New ISIN Number</h2>
     <div class="form">
       <form>
         <div class="form-group">
           <label for="isinPrefix">Isin Prefix</label>
-          <input type="text" class="form-control" id="isinPrefix" placeholder="Isin Prefix, i.e. ZAE">
+          <input type="text" class="form-control" id="isinPrefix1" placeholder="Isin Prefix, i.e. ZAE">
         </div>
         <div class="form-group">
           <label for="transactionReference">Transaction Reference</label>
-          <input type="password" class="form-control" id="transactionReference" placeholder="Unique Transaction Reference">
+          <input type="text" class="form-control" id="transactionReference1" placeholder="Unique Transaction Reference">
         </div>
-        <!-- <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div> -->
         <button type="submit" class="btn btn-primary btn-newIsin">Submit</button>
+        <span class="label label-success" id="isin-issue-label"></span>
+        <br /><br />
+        <div class="infoBox text-center">
+          <p>Last ISIN Issued, Prefix:
+            <span class="label label-primary" id="isin-issue-prefix"></span>
+            , Counter: 
+            <span class="label label-primary" id="isin-issue-counter"></span>
+            , Transaction Ref: 
+            <span class="label label-primary" id="isin-issue-trf"></span>
+          </p>
+        </div>
       </form>
     </div>
     <hr />
-    <h2>Get Current ISIN Number</h2>
-    <div class="form">
+    <div class="odd">
+      <h2 class="text-center">Get Current ISIN Number</h2>
+      <div class="form odd">
         <form>
           <div class="form-group">
             <label for="isinPrefix">Isin Prefix</label>
-            <input type="text" class="form-control" id="isinPrefix" placeholder="Isin Prefix, i.e. ZAE">
+            <input type="text" class="form-control" id="isinPrefix2" placeholder="Isin Prefix, i.e. ZAE">
           </div>
-          <!-- <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-          </div> -->
           <button type="submit" class="btn btn-primary btn-currentIsin">Submit</button>
         </form>
       </div>
-
+    </div>
+    <hr />
+    <h2 class="text-center">Delist ISIN</h2>
+    <div class="form">
+      <form>
+        <div class="form-group">
+          <label for="isinPrefix">Isin Prefix</label>
+          <input type="text" class="form-control" id="isinPrefix3" placeholder="Isin Prefix, i.e. ZAE">
+        </div>
+        <div class="form-group">
+          <label for="isinInteger">ISIN Integer Number</label>
+          <input type="text" class="form-control" id="isinInteger3" placeholder="ISIN Integer Number, i.e. 00107 or 107">
+        </div>
+        <button type="submit" class="btn btn-primary btn-delistIsin">Submit</button>
+      </form>
+    </div>
+    <hr />
+    <div class="odd">
+      <h2 class="text-center">Check ISIN Status</h2>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <label for="isinPrefix">Isin Prefix</label>
+            <input type="text" class="form-control" id="isinPrefix4" placeholder="Isin Prefix, i.e. ZAE">
+          </div>
+          <div class="form-group">
+            <label for="isinInteger">ISIN Integer Number</label>
+            <input type="text" class="form-control" id="isinInteger4" placeholder="ISIN Integer Number, i.e. 00107 or 107">
+          </div>
+          <button type="submit" class="btn btn-primary btn-checkIsin">Submit</button>
+        </form>
+      </div>
+    </div>
   </div>
+  <hr />
 
+  <footer class="footer">
+    <div class="container">
+      <span class="text-center">(c) Strate Ltd. | Creative Commons License</span>
+    </div>
+  </footer>
 
   <!-- <div class="container">
       <div class="row">
@@ -148,7 +191,7 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/web3.min.js"></script>
   <script src="js/truffle-contract.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/nna_app.js"></script>
 </body>
 
 </html>
