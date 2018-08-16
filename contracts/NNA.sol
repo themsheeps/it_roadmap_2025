@@ -53,7 +53,7 @@ contract NNA {
 
     function delistIsin (string _prefix, uint _counter) public onlyOwner {
         bytes32 _hash = keccak256(abi.encodePacked(_prefix));
-        require (isinStatusses[_hash][_counter] == 1);
+        require (isinStatusses[_hash][_counter] == 1, "error");
         isinStatusses[_hash][_counter] = 2;
 
         emit IsinDelisted (_prefix, _counter);

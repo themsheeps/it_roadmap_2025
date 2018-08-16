@@ -15,7 +15,7 @@ contract IsinIssuance {
     // Modifiers
     // ==========================================================================
     modifier onlyOwner{
-        require(msg.sender == owner);
+        require(msg.sender == owner, "Only the owner can call this function");
         _;
     }
 
@@ -105,7 +105,7 @@ contract IsinIssuance {
     }
 
     function verifySecurity (uint _index) public {
-        require (securitiesToBeVerifiedByParty[msg.sender][_index].active == false);
+        require (securitiesToBeVerifiedByParty[msg.sender][_index].active == false, "Security must be inactive");
         securitiesToBeVerifiedByParty[msg.sender][_index].active = true;
 
         postTradeContract.issueSecurity(

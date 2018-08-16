@@ -10,12 +10,12 @@ contract PostTrade {
     // Modifiers : Modifiers are only added when used, the rest are commented out
     // ==========================================================================
     modifier onlyOwner{
-        require(msg.sender == owner);
+        require(msg.sender == owner, "Only Owner");
         _;
     }
 
     modifier onlyOwnerOrAdmin{
-        require(msg.sender == owner || Admins[msg.sender] == true);
+        require(msg.sender == owner || Admins[msg.sender] == true, "Only Owner or Admin");
         _;
     }
 
@@ -30,7 +30,7 @@ contract PostTrade {
     // }
 
     modifier onlyCustodianOrTradeReportingParty {
-        require(Custodians[msg.sender] == true || TradeReportingParties[msg.sender] == true);
+        require(Custodians[msg.sender] == true || TradeReportingParties[msg.sender] == true, "Only Custodian Or TradeReportingParty");
         _;
     }
 
@@ -40,17 +40,17 @@ contract PostTrade {
     // }
 
     modifier onlyExchanges{
-        require(Exchanges[msg.sender] == true);
+        require(Exchanges[msg.sender] == true, "Only Owner or Exchange");
         _;
     }
 
     modifier onlyIsinIssuanceContact {
-        require(msg.sender == isinIssuanceContractAddress);
+        require(msg.sender == isinIssuanceContractAddress, "Only Isin Issuance");
         _;
     }
 
     modifier onlySAMOS{
-        require(SAMOSs[msg.sender] == true);
+        require(SAMOSs[msg.sender] == true, "Only SAMOS");
         _;
     }
 
@@ -224,7 +224,7 @@ contract PostTrade {
 
     // TODO: Expand on ISIN issuance as per scrum board: https://trello.com/b/45EzfvGG/scrum-board
     function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyIsinIssuanceContact {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == false);
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == false, "Security must be active");
         bytes32 keccakIsin = keccak256(abi.encodePacked(_ISIN));
         securities[keccakIsin].ISIN = _ISIN;
         securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
@@ -238,7 +238,7 @@ contract PostTrade {
     }
 
     function issueCash (uint _totalIssuedShareCap) public onlySAMOS {
-        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false);
+        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false, "Security must be active");
         bytes32 keccakIsin = keccak256(abi.encodePacked("eZAR"));
         securities[keccakIsin].ISIN = "eZAR";
         securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
@@ -252,20 +252,20 @@ contract PostTrade {
     }
 
     function topUp (string _ISIN, uint _amount) public onlyOwner {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true);
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "Security must be active");
         securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap += _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][owner] += _amount;
     }
 
     function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true);
-        require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount);
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "Security must be active");
+        require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "Too big");
         securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
     }
 
     function topUpCash (uint _amount) public onlySAMOS {
-        require (securities[keccak256(abi.encodePacked("eZAR"))].active == true);
+        require (securities[keccak256(abi.encodePacked("eZAR"))].active == true, "Security must be active");
         securities[keccak256(abi.encodePacked("eZAR"))].totalIssuedShareCap += _amount;
         balances[keccak256(abi.encodePacked("eZAR"))][owner] += _amount;
     }
@@ -289,7 +289,7 @@ contract PostTrade {
     }
 
     function sendSecurity (string _ISIN, uint _amount, address _receiverAddress) public {
-        require (balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] >= _amount);
+        require (balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] >= _amount, "Too big");
         balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] -= _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][_receiverAddress] += _amount;
     }
@@ -314,7 +314,7 @@ contract PostTrade {
         uint lastMidnightTime;
 
         // Require that the ISIN is valid on the system
-        require(securities[_hash].active);
+        require(securities[_hash].active, "Security must be active");
 
         // Find midnigth time from block.timestamp
         lastMidnightTime = block.timestamp;
@@ -409,13 +409,14 @@ contract PostTrade {
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
         uint _tradeId;
         // Require that the ISIN is valid on the system
-        require(securities[_hash].active);
+        require(securities[_hash].active, "Security must be active");
 
         if (_buyOrSaleIndicator == 0) {
             // check that sender is authorised       
             require(
                 msg.sender == buyLegForISINAndId[_hash][_legId].custodianId ||
-                msg.sender == buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress);
+                msg.sender == buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
+                "Sender not authorised");
 
             _tradeId = buyLegForISINAndId[_hash][_legId].tradeId;
             matchedTradesForISINandId[_hash][_tradeId].buyConfirmationDateTime = block.timestamp;
@@ -423,12 +424,13 @@ contract PostTrade {
             // check that sender is authorised       
             require(
                 msg.sender == saleLegForISINAndId[_hash][_legId].custodianId ||
-                msg.sender == saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress);
+                msg.sender == saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
+                "Sender must be autherised");
 
             _tradeId = saleLegForISINAndId[_hash][_legId].tradeId;
             matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime = block.timestamp;
         } else {
-            revert();
+            revert("ERROR");
         }
 
         if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
@@ -463,17 +465,17 @@ contract PostTrade {
         Admins[_adminAddress] = _activeFlag;
     }
 
-    function addRemoveCSD(address _CSDAddress, bool _activeFlag) public onlyOwnerOrAdmin {
-        CSDs[_CSDAddress] = _activeFlag;
-    }
+    // function addRemoveCSD(address _CSDAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+    //     CSDs[_CSDAddress] = _activeFlag;
+    // }
 
-    function addRemoveCustodian(address _CustodianAddress, bool _activeFlag) public onlyOwnerOrAdmin {
-        Custodians[_CustodianAddress] = _activeFlag;
-    }
+    // function addRemoveCustodian(address _CustodianAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+    //     Custodians[_CustodianAddress] = _activeFlag;
+    // }
 
-    function addRemoveETME(address _ETMEAddress, bool _activeFlag) public onlyOwnerOrAdmin {
-        ETMEs[_ETMEAddress] = _activeFlag;
-    }
+    // function addRemoveETME(address _ETMEAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+    //     ETMEs[_ETMEAddress] = _activeFlag;
+    // }
 
     function addRemoveExchange(address _ExchangeAddress, bool _activeFlag) public onlyOwnerOrAdmin {
         Exchanges[_ExchangeAddress] = _activeFlag;
@@ -483,9 +485,9 @@ contract PostTrade {
         SAMOSs[_SAMOSAddress] = _activeFlag;
     }
 
-    function addRemoveTradeReportingParty(address _TradeReportingPartyAddress, bool _activeFlag) public onlyOwnerOrAdmin {
-        TradeReportingParties[_TradeReportingPartyAddress] = _activeFlag;
-    }
+    // function addRemoveTradeReportingParty(address _TradeReportingPartyAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+    //     TradeReportingParties[_TradeReportingPartyAddress] = _activeFlag;
+    // }
 
     // ==========================================================================
     // Helper Console Scripts:
