@@ -14,7 +14,7 @@ contract PostTrade {
         _;
     }
 
-    modifier onlyOwnerOrAdmin{
+    modifier onlyOwnerOrAdmin {
         require(msg.sender == owner || Admins[msg.sender] == true, "Only Owner or Admin");
         _;
     }
@@ -68,14 +68,14 @@ contract PostTrade {
     constructor () public {
         owner = msg.sender;
         Admins[0x51e63a2E221C782Bfc95f42Cd469D3780a479C15] = true;
-        CSDs[0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8] = true;
+        // CSDs[0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8] = true;
         Custodians[0x1c6B96De685481c2d9915b606D4AB1277949b4Bc] = true;
         Custodians[0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06] = true;
-        ETMEs[0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0] = true;
+        // ETMEs[0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0] = true;
         Exchanges[0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0] = true;
         SAMOSs[0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D] = true;
-        TradeReportingParties[0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4] = true;
-        TradeReportingParties[0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721] = true;
+        // TradeReportingParties[0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4] = true;
+        // TradeReportingParties[0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721] = true;
     }
 
     // ==========================================================================
@@ -199,9 +199,9 @@ contract PostTrade {
     // Role Management for addresses
     // ==========================================================================
     mapping(address => bool) internal Admins;
-    mapping(address => bool) internal CSDs;
+    // mapping(address => bool) internal CSDs;
     mapping(address => bool) internal Custodians;
-    mapping(address => bool) internal ETMEs;
+    // mapping(address => bool) internal ETMEs;
     mapping(address => bool) internal Exchanges;
     mapping(address => bool) internal SAMOSs;
     mapping(address => bool) internal TradeReportingParties;
@@ -282,6 +282,10 @@ contract PostTrade {
 
     function getSecuritiesListById (uint _index) public view returns (string, uint) {
         return (securitiesList[_index], securitiesList.length);
+    }
+
+    function getSecuritiesListLength() public view returns (uint) {
+        return (securitiesList.length);
     }
 
     function getBalanceOfSecAndAccount (string _ISIN, address _accountHolder) public view returns (uint) {

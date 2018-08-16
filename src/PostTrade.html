@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Issue Isin</title>
+  <title>Post Trade</title>
 
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -49,11 +49,11 @@
             <li>
               <a href="/NNA.html">NNA</a>
             </li>
-            <li class="active">
-              <a>ISIN Issuance</a>
-            </li>
             <li>
-              <a href="/PostTrade.html">Post Trade</a>
+              <a href="/IssueIsin.html">ISIN Issuance</a>
+            </li>
+            <li class="active">
+              <a>Post Trade</a>
             </li>
             <!-- <li>
                 <a href="/PlaceBuy.html">Place Buy</a>
@@ -67,103 +67,45 @@
   <div class="container">
     <div class="row" style="padding-top: 100px">
       <div class="col-xs-12 col-sm-8 col-sm-push-2">
-        <h1 class="text-center">Strate POC - Issue Isin</h1>
+        <h1 class="text-center">Strate POC - PostTrade</h1>
         <hr/>
         <br/>
       </div>
     </div>
   </div>
+
   <div class="container">
-    <h2 class="text-center">Capture Security</h2>
+    <h2 class="text-center">Securities List</h2>
     <div class="form">
       <form>
         <div class="form-group">
-          <label for="isinNumber1">Isin Number</label>
-          <input type="text" class="form-control" id="isinNumber1" placeholder="Full Isin Number, i.e. ZAE0001 ">
+          <label for="isin1">ISIN</label>
+          <input type="text" class="form-control" id="isin1" placeholder="I.e. ZAE">
         </div>
-        <div class="form-group">
-          <label for="totalIssuedShareCap1">Total Issued Share Cap</label>
-          <input type="text" class="form-control" id="totalIssuedShareCap1" placeholder="I.e. 1000000">
-        </div>
-        <div class="form-group">
-          <label for="longName1">Long Name</label>
-          <input type="text" class="form-control" id="longName1" placeholder="I.e. South Africa Incorporated, Pty Ltd">
-        </div>
-        <div class="form-group">
-          <label for="ticker1">Ticker (Alpha Code)</label>
-          <input type="text" class="form-control" id="ticker1" placeholder="I.e. SAI">
-        </div>
-        <div class="form-group">
-          <label for="counterParty1">Counter Party (hint: 0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b)</label>
-          <input type="text" class="form-control" id="counterParty1" placeholder="I.e. 0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b">
-        </div>
-        <button type="submit" class="btn btn-primary btn-captureIsin">Submit</button>
-        <span class="label label-success" id="isin-capture-label"></span>
-        <br />
-        <br />
-        <!-- <div class="infoBox text-center">
-          <p>Last NNA Number Issued, Prefix:
-            <span class="label label-primary" id="isin-issue-prefix"></span>
-            , Counter:
-            <span class="label label-primary" id="isin-issue-counter"></span>
-            , Transaction Ref:
-            <span class="label label-primary" id="isin-issue-trf"></span>
-          </p>
-        </div> -->
-      </form>
-    </div>
-    <hr />
-  </div>
-  <div class="container odd">
-    <h2 class="text-center">View ISIN To Be Verified</h2>
-    <div class="form">
-      <form>
-        <div class="form-group">
-          <label for="isinNumber2">Index Number</label>
-          <input type="text" class="form-control" id="isinNumber2" placeholder="I.e. 0">
-        </div>
-        <button type="submit" class="btn btn-primary btn-displayIsin">Submit</button>
-        <span class="label label-success" id="isin-display-label"></span>
-        <span class="label label-warning" id="isin-display-label-error"></span>
-        <br />
-        <br />
-      </form>
-      <div class="container" id="isinDispDiv">
-        ISIN:
-        <span id="isinDisp"></span>
-        <br /> Total Issued Share Cap:
-        <span id="sharecapDisp"></span>
-        <br /> Long Name:
-        <span id="longnameDisp"></span>
-        <br /> Ticker:
-        <span id="tickerDisp"></span>
-        <br /> Counter Party:
-        <span id="counterpartyDisp"></span>
-        <br /> Status:
-        <span id="statusDisp"></span>
-      </div>
-    </div>
-    <hr />
-  </div>
-  <div class="container">
-    <h2 class="text-center">Verify ISIN</h2>
-    <div class="form">
-      <form>
-        <div class="form-group">
-          <label for="isinNumber3">Index Number</label>
-          <input type="text" class="form-control" id="isinNumber3" placeholder="I.e. 0">
-        </div>
-        <button type="submit" class="btn btn-primary btn-verifyIsin">Submit</button>
-        <span class="label label-success" id="isin-verify-label"></span>
-        <span class="label label-warning" id="isin-verify-label-error"></span>
+        <button type="submit" class="btn btn-primary btn-findIsin">Search</button>
+        <span class="label label-success" id="isin-search-label"></span>
+        <span class="label label-warning" id="isin-search-label-error"></span>
         <br />
         <br />
       </form>
     </div>
     <hr />
+    <table class="table table-striped table-responsive table-hover" id="SecuritiesTable">
+        <thead>
+          <tr>
+            <th scope="col">Isin Number</th>
+            <th scope="col">Total Issued Share Cap</th>
+            <th scope="col">Long Name</th>
+            <th scope="col">Ticker</th>
+            <th scope="col">Active</th>
+          </tr>
+        </thead>
+        <tbody id="SecuritiesTableBody">
+          
+        </tbody>
+      </table>
   </div>
-  <br />
-  <br />
+  
 
   <footer class="footer">
     <div class="container text-center">
@@ -209,7 +151,7 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/web3.min.js"></script>
   <script src="js/truffle-contract.js"></script>
-  <script src="js/issue_isin.js"></script>
+  <script src="js/post_trade.js"></script>
 </body>
 
 </html>
