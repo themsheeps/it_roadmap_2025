@@ -9,7 +9,7 @@ contract PostTrade {
     // ==========================================================================
     // Modifiers : Modifiers are only added when used, the rest are commented out
     // ==========================================================================
-    modifier onlyOwner{
+    modifier onlyOwner {
         require(msg.sender == owner, "Only Owner");
         _;
     }
