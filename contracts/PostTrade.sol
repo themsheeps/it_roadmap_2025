@@ -238,7 +238,7 @@ contract PostTrade {
     }
 
     function issueCash (uint _totalIssuedShareCap) public onlySAMOS {
-        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false, "Security must be active");
+        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false, "Security must be inactive");
         bytes32 keccakIsin = keccak256(abi.encodePacked("eZAR"));
         securities[keccakIsin].ISIN = "eZAR";
         securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;

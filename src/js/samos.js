@@ -28,6 +28,8 @@ App = {
       // Set the provider for our contract
       App.contracts.PostTrade.setProvider(App.web3Provider);
 
+      App.initShareCap();
+
       // Watch for events
       // App.contracts.PostTrade.deployed().then(function (instance) {
       // newIsinEvent = instance.IsinIssued();
@@ -63,54 +65,32 @@ App = {
   },
 
   bindEvents: function () {
-    $(document).on('click', '.btn-findIsin', App.findIsin);
-    $(document).on('click', '.btn-clearTableIsin', App.clearTableRowsIsin);
+    // $(document).on('click', '.btn-findIsin', App.findIsin);
+    // $(document).on('click', '.btn-clearTableIsin', App.clearTableRowsIsin);
     // $(document).on('click', '.btn-delistIsin', App.delistIsin);
     // $(document).on('click', '.btn-checkIsin', App.checkIsin);
+    //return App.initShareCap();
   },
 
-  findIsin: function (event) {
-    event.preventDefault();
-    App.clearStatusses();
-    var _index;
-    let PostTradeInstance;
-
+  initShareCap: function () {
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
         console.log(error);
       }
 
       var account = accounts[0];
-      var ISINCheck = document.getElementById("isin1").value;
 
       App.contracts.PostTrade.deployed().then(function (instance) {
         PostTradeInstance = instance;
-        return PostTradeInstance.getSecuritiesListLength({
+        return PostTradeInstance.getSecurityDetails("eZAR", {
           from: account
         });
       }).then(function (result) {
-        document.getElementById("isin-search-label").innerHTML = "SUCCESS!!!";
-        setTimeout(App.fade_out, 2000);
-        console.log("ABC001 " + result);
-        var i;
-        App.clearTableRowsIsin();
-        for (i = 0; i < result; i++) {
-          // GET ISIN Names
-          PostTradeInstance.getSecuritiesListById(i, {
-            from: account
-          }).then(function (_isin) {
-            console.log("ISIN Name: " + _isin[0]);
-            // GET ISIN Details and build the table
-            PostTradeInstance.getSecurityDetails(_isin[0], {
-              from: account
-            }).then(function (_isinDetails) {
-              console.log("ISIN Details: " + _isinDetails);
-              if (_isinDetails[0].startsWith(ISINCheck) || _isinDetails[3].startsWith(ISINCheck)) {
-                App.insertTableRow(_isinDetails[0], _isinDetails[1], _isinDetails[2], _isinDetails[3], _isinDetails[4]);
-              }
-            });
-          });
+        document.getElementById("cashCap").innerHTML = result[1];
+        if (result[1] > 0) {
+          document.getElementById("issueCashContainer").innerHTML = "";
         }
+        console.log("ABC001 " + result);
       }).catch(function (err) {
         document.getElementById("isin-search-label").innerHTML = "ERROR!!!";
         console.log(err.message);
