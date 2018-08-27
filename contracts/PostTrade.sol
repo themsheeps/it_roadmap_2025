@@ -10,12 +10,12 @@ contract PostTrade {
     // Modifiers : Modifiers are only added when used, the rest are commented out
     // ==========================================================================
     modifier onlyOwner {
-        require(msg.sender == owner, "Only Owner");
+        require(msg.sender == owner, "OO");
         _;
     }
 
     modifier onlyOwnerOrAdmin {
-        require(msg.sender == owner || Admins[msg.sender] == true, "Only Owner or Admin");
+        require(msg.sender == owner || Admins[msg.sender] == true, "OA");
         _;
     }
 
@@ -30,7 +30,7 @@ contract PostTrade {
     // }
 
     modifier onlyCustodianOrTradeReportingParty {
-        require(Custodians[msg.sender] == true || TradeReportingParties[msg.sender] == true, "Only Custodian Or TradeReportingParty");
+        require(Custodians[msg.sender] == true || TradeReportingParties[msg.sender] == true, "OC");
         _;
     }
 
@@ -40,17 +40,17 @@ contract PostTrade {
     // }
 
     modifier onlyExchanges{
-        require(Exchanges[msg.sender] == true, "Only Owner or Exchange");
+        require(Exchanges[msg.sender] == true, "OE");
         _;
     }
 
     modifier onlyIsinIssuanceContact {
-        require(msg.sender == isinIssuanceContractAddress, "Only Isin Issuance");
+        require(msg.sender == isinIssuanceContractAddress, "OI");
         _;
     }
 
     modifier onlySAMOS{
-        require(SAMOSs[msg.sender] == true, "Only SAMOS");
+        require(SAMOSs[msg.sender] == true, "OS");
         _;
     }
 
@@ -123,13 +123,13 @@ contract PostTrade {
     // ==========================================================================
     // Structs
     // ==========================================================================
-    struct SecurityOld {
-        string isin;
-        uint issuedShareCap;
-        uint issuedDate;
-        address issuerAddress;
-        string issuerName;
-    }
+    // struct SecurityOld {
+    //     string isin;
+    //     uint issuedShareCap;
+    //     uint issuedDate;
+    //     address issuerAddress;
+    //     string issuerName;
+    // }
 
     struct Security {
         string ISIN;
@@ -152,8 +152,8 @@ contract PostTrade {
     struct BuyLeg {
         uint buyLegId;
         uint tradeId;
-        // address investorAddress;
-        address tradeReportingPartyAddress;
+        address investorAddress;
+        // address tradeReportingPartyAddress;
         address custodianId;
         uint amount;
         uint buyPrice;
@@ -164,8 +164,8 @@ contract PostTrade {
     struct SaleLeg {
         uint saleLegId;
         uint tradeId;
-        // address investorAddress;
-        address tradeReportingPartyAddress;
+        address investorAddress;
+        // address tradeReportingPartyAddress;
         address custodianId;
         uint amount;
         uint salePrice;
@@ -224,7 +224,7 @@ contract PostTrade {
 
     // TODO: Expand on ISIN issuance as per scrum board: https://trello.com/b/45EzfvGG/scrum-board
     function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyIsinIssuanceContact {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == false, "Security must be active");
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == false, "SMA");
         bytes32 keccakIsin = keccak256(abi.encodePacked(_ISIN));
         securities[keccakIsin].ISIN = _ISIN;
         securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
@@ -238,7 +238,7 @@ contract PostTrade {
     }
 
     function issueCash (uint _totalIssuedShareCap) public onlySAMOS {
-        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false, "Security must be inactive");
+        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false, "SMA");
         bytes32 keccakIsin = keccak256(abi.encodePacked("eZAR"));
         securities[keccakIsin].ISIN = "eZAR";
         securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
@@ -252,20 +252,20 @@ contract PostTrade {
     }
 
     function topUp (string _ISIN, uint _amount) public onlyOwner {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "Security must be active");
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
         securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap += _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][owner] += _amount;
     }
 
     function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "Security must be active");
-        require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "Too big");
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
+        require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "TB");
         securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
     }
 
     function topUpCash (uint _amount) public onlySAMOS {
-        require (securities[keccak256(abi.encodePacked("eZAR"))].active == true, "Security must be active");
+        require (securities[keccak256(abi.encodePacked("eZAR"))].active == true, "SMA");
         securities[keccak256(abi.encodePacked("eZAR"))].totalIssuedShareCap += _amount;
         balances[keccak256(abi.encodePacked("eZAR"))][owner] += _amount;
     }
@@ -293,7 +293,7 @@ contract PostTrade {
     }
 
     function sendSecurity (string _ISIN, uint _amount, address _receiverAddress) public {
-        require (balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] >= _amount, "Too big");
+        require (balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] >= _amount, "TB");
         balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] -= _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][_receiverAddress] += _amount;
     }
@@ -305,10 +305,10 @@ contract PostTrade {
         uint _saleLegId,
         uint _tradeId,
         uint _settlementDate, // Format YYYYMMDD
-        // address _buyerAddress,
-        // address _sellerAddress,
-        address _buyerTradeReportingPartyAddress,
-        address _sellerTradeReportingPartyAddress,
+        address _buyerAddress,
+        address _sellerAddress,
+        // address _buyerTradeReportingPartyAddress,
+        // address _sellerTradeReportingPartyAddress,
         address _buyerCustodianId,
         address _sellerCustodianId,
         uint _amount,
@@ -318,7 +318,7 @@ contract PostTrade {
         uint lastMidnightTime;
 
         // Require that the ISIN is valid on the system
-        require(securities[_hash].active, "Security must be active");
+        require(securities[_hash].active, "SMBA");
 
         // Find midnigth time from block.timestamp
         lastMidnightTime = block.timestamp;
@@ -331,8 +331,8 @@ contract PostTrade {
         buyLegForISINAndId[_hash][_buyLegId] = BuyLeg({
             buyLegId: _buyLegId,
             tradeId: _tradeId,
-            // investorAddress: _buyerAddress,
-            tradeReportingPartyAddress: _buyerTradeReportingPartyAddress,
+            investorAddress: _buyerAddress,
+            // tradeReportingPartyAddress: _buyerTradeReportingPartyAddress,
             custodianId: _buyerCustodianId,
             amount: _amount,
             buyPrice: _salePrice,
@@ -343,8 +343,8 @@ contract PostTrade {
         saleLegForISINAndId[_hash][_saleLegId] = SaleLeg({
             saleLegId: _saleLegId,
             tradeId: _tradeId,
-            // investorAddress: _sellerAddress,
-            tradeReportingPartyAddress: _sellerTradeReportingPartyAddress,
+            investorAddress: _sellerAddress,
+            // tradeReportingPartyAddress: _sellerTradeReportingPartyAddress,
             custodianId: _sellerCustodianId,
             amount: _amount,
             salePrice: _salePrice,
@@ -369,8 +369,8 @@ contract PostTrade {
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
         return (
             buyLegForISINAndId[_hash][_legId].buyLegId,
-            // buyLegForISINAndId[_hash][_legId].investorAddress,
-            buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
+            buyLegForISINAndId[_hash][_legId].investorAddress,
+            // buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
             buyLegForISINAndId[_hash][_legId].custodianId
         );
     }
@@ -390,8 +390,8 @@ contract PostTrade {
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
         return (
             saleLegForISINAndId[_hash][_legId].saleLegId,
-            //saleLegForISINAndId[_hash][_legId].investorAddress,
-            saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
+            saleLegForISINAndId[_hash][_legId].investorAddress,
+            // saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
             saleLegForISINAndId[_hash][_legId].custodianId
         );
     }
@@ -413,14 +413,16 @@ contract PostTrade {
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
         uint _tradeId;
         // Require that the ISIN is valid on the system
-        require(securities[_hash].active, "Security must be active");
+        require(securities[_hash].active, "SMBA");
 
         if (_buyOrSaleIndicator == 0) {
             // check that sender is authorised       
             require(
                 msg.sender == buyLegForISINAndId[_hash][_legId].custodianId ||
-                msg.sender == buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
-                "Sender not authorised");
+                msg.sender == buyLegForISINAndId[_hash][_legId].investorAddress,
+                "SNA");
+                // msg.sender == buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
+                // "Sender not authorised");
 
             _tradeId = buyLegForISINAndId[_hash][_legId].tradeId;
             matchedTradesForISINandId[_hash][_tradeId].buyConfirmationDateTime = block.timestamp;
@@ -428,13 +430,15 @@ contract PostTrade {
             // check that sender is authorised       
             require(
                 msg.sender == saleLegForISINAndId[_hash][_legId].custodianId ||
-                msg.sender == saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
-                "Sender must be autherised");
+                msg.sender == buyLegForISINAndId[_hash][_legId].investorAddress,
+                "SNA");
+                // msg.sender == saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
+                // "Sender must be autherised");
 
             _tradeId = saleLegForISINAndId[_hash][_legId].tradeId;
             matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime = block.timestamp;
         } else {
-            revert("ERROR");
+            revert("ERR");
         }
 
         if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
