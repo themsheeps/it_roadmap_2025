@@ -10,12 +10,12 @@ contract PostTrade {
     // Modifiers : Modifiers are only added when used, the rest are commented out
     // ==========================================================================
     modifier onlyOwner {
-        require(msg.sender == owner, "OO");
+        require(msg.sender == owner);
         _;
     }
 
     modifier onlyOwnerOrAdmin {
-        require(msg.sender == owner || Admins[msg.sender] == true, "OA");
+        require(msg.sender == owner || Admins[msg.sender] == true);
         _;
     }
 
@@ -29,28 +29,28 @@ contract PostTrade {
     //     _;
     // }
 
-    modifier onlyCustodianOrTradeReportingParty {
-        require(Custodians[msg.sender] == true || TradeReportingParties[msg.sender] == true, "OC");
-        _;
-    }
+    // modifier onlyCustodianOrTradeReportingParty {
+    //     require(Custodians[msg.sender] == true || TradeReportingParties[msg.sender] == true, "OC");
+    //     _;
+    // }
 
     // modifier onlyETME{
     //     require(ETMEs[msg.sender] == true);
     //     _;
     // }
 
-    modifier onlyExchanges{
-        require(Exchanges[msg.sender] == true, "OE");
-        _;
-    }
+    // modifier onlyExchanges{
+    //     require(Exchanges[msg.sender] == true, "OE");
+    //     _;
+    // }
 
     modifier onlyIsinIssuanceContact {
-        require(msg.sender == isinIssuanceContractAddress, "OI");
+        require(msg.sender == isinIssuanceContractAddress);
         _;
     }
 
     modifier onlySAMOS{
-        require(SAMOSs[msg.sender] == true, "OS");
+        require(SAMOSs[msg.sender] == true);
         _;
     }
 
@@ -60,7 +60,7 @@ contract PostTrade {
     // }
 
     address private owner;
-    address public isinIssuanceContractAddress;
+    address private isinIssuanceContractAddress;
 
     // ==========================================================================
     // Constructor: Prepper for development, will need to be revised for Prod
@@ -69,10 +69,10 @@ contract PostTrade {
         owner = msg.sender;
         Admins[0x51e63a2E221C782Bfc95f42Cd469D3780a479C15] = true;
         // CSDs[0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8] = true;
-        Custodians[0x1c6B96De685481c2d9915b606D4AB1277949b4Bc] = true;
-        Custodians[0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06] = true;
+        // Custodians[0x1c6B96De685481c2d9915b606D4AB1277949b4Bc] = true;
+        // Custodians[0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06] = true;
         // ETMEs[0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0] = true;
-        Exchanges[0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0] = true;
+        // Exchanges[0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0] = true;
         SAMOSs[0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D] = true;
         // TradeReportingParties[0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4] = true;
         // TradeReportingParties[0xA1Ff8eE897ED92E62aE9F30061Ba5f012e804721] = true;
@@ -200,11 +200,11 @@ contract PostTrade {
     // ==========================================================================
     mapping(address => bool) internal Admins;
     // mapping(address => bool) internal CSDs;
-    mapping(address => bool) internal Custodians;
+    // mapping(address => bool) internal Custodians;
     // mapping(address => bool) internal ETMEs;
-    mapping(address => bool) internal Exchanges;
+    // mapping(address => bool) internal Exchanges;
     mapping(address => bool) internal SAMOSs;
-    mapping(address => bool) internal TradeReportingParties;
+    // mapping(address => bool) internal TradeReportingParties;
 
     // ==========================================================================
     // Date stuff: Taken from Piper's library - https://github.com/pipermerriam/ethereum-datetime
@@ -224,7 +224,7 @@ contract PostTrade {
 
     // TODO: Expand on ISIN issuance as per scrum board: https://trello.com/b/45EzfvGG/scrum-board
     function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyIsinIssuanceContact {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == false, "SMA");
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == false);
         bytes32 keccakIsin = keccak256(abi.encodePacked(_ISIN));
         securities[keccakIsin].ISIN = _ISIN;
         securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
@@ -238,7 +238,7 @@ contract PostTrade {
     }
 
     function issueCash (uint _totalIssuedShareCap) public onlySAMOS {
-        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false, "SMA");
+        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false);
         bytes32 keccakIsin = keccak256(abi.encodePacked("eZAR"));
         securities[keccakIsin].ISIN = "eZAR";
         securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
@@ -252,20 +252,20 @@ contract PostTrade {
     }
 
     function topUp (string _ISIN, uint _amount) public onlyOwner {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true);
         securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap += _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][owner] += _amount;
     }
 
-    function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
-        require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "TB");
-        securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
-        balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
-    }
+    // function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
+    //     require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
+    //     require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "TB");
+    //     securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
+    //     balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
+    // }
 
     function topUpCash (uint _amount) public onlySAMOS {
-        require (securities[keccak256(abi.encodePacked("eZAR"))].active == true, "SMA");
+        require (securities[keccak256(abi.encodePacked("eZAR"))].active == true);
         securities[keccak256(abi.encodePacked("eZAR"))].totalIssuedShareCap += _amount;
         balances[keccak256(abi.encodePacked("eZAR"))][owner] += _amount;
     }
@@ -293,7 +293,7 @@ contract PostTrade {
     }
 
     function sendSecurity (string _ISIN, uint _amount, address _receiverAddress) public {
-        require (balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] >= _amount, "TB");
+        require (balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] >= _amount);
         balances[keccak256(abi.encodePacked(_ISIN))][msg.sender] -= _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][_receiverAddress] += _amount;
     }
@@ -312,13 +312,14 @@ contract PostTrade {
         address _buyerCustodianId,
         address _sellerCustodianId,
         uint _amount,
-        uint _salePrice ) public onlyExchanges {
+        // uint _salePrice ) public onlyExchanges {
+        uint _salePrice ) public {
 
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
         uint lastMidnightTime;
 
         // Require that the ISIN is valid on the system
-        require(securities[_hash].active, "SMBA");
+        require(securities[_hash].active);
 
         // Find midnigth time from block.timestamp
         lastMidnightTime = block.timestamp;
@@ -408,19 +409,21 @@ contract PostTrade {
     }
 
     // _buyOrSaleIndicator { 0: BUY Leg, 1: SALE Leg }
-    function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN) public onlyCustodianOrTradeReportingParty {
+    // function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN) public onlyCustodianOrTradeReportingParty {
+    function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN) public {
         
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
         uint _tradeId;
         // Require that the ISIN is valid on the system
-        require(securities[_hash].active, "SMBA");
+        require(securities[_hash].active);
 
         if (_buyOrSaleIndicator == 0) {
-            // check that sender is authorised       
-            require(
-                msg.sender == buyLegForISINAndId[_hash][_legId].custodianId ||
-                msg.sender == buyLegForISINAndId[_hash][_legId].investorAddress,
-                "SNA");
+            // check that sender is authorised  
+
+            // require(
+            //     msg.sender == buyLegForISINAndId[_hash][_legId].custodianId ||
+            //     msg.sender == buyLegForISINAndId[_hash][_legId].investorAddress);
+                
                 // msg.sender == buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
                 // "Sender not authorised");
 
@@ -428,10 +431,10 @@ contract PostTrade {
             matchedTradesForISINandId[_hash][_tradeId].buyConfirmationDateTime = block.timestamp;
         } else if (_buyOrSaleIndicator == 1) {
             // check that sender is authorised       
-            require(
-                msg.sender == saleLegForISINAndId[_hash][_legId].custodianId ||
-                msg.sender == buyLegForISINAndId[_hash][_legId].investorAddress,
-                "SNA");
+            // require(
+            //     msg.sender == saleLegForISINAndId[_hash][_legId].custodianId ||
+            //     msg.sender == buyLegForISINAndId[_hash][_legId].investorAddress);
+
                 // msg.sender == saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
                 // "Sender must be autherised");
 
@@ -443,17 +446,24 @@ contract PostTrade {
 
         if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
             if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
-                // Once a perfect match has been made, add the fully confirmed trade to a list of trades to be settled on settlement date.
-                confirmedTradesForISINandSettlementDate[_hash][matchedTradesForISINandId[_hash][_tradeId].settlementDeadlineDate].push(matchedTradesForISINandId[_hash][_tradeId]);
-                
-                //TODO: Add securities netting
-                //  Do reservation for securities 
-                //    Decuct securities from seller
-                //    Add securities from buyer
-                //  Check if buyer has enough cash to do real-time settlement ??? <<<< Confirm with Ganesh / Rudi
-                //  Do cash calculation from 
-                //    Decuct cash from seller CSDP
-                //    Add cash to buyer CSDP
+
+                if (matchedTradesForISINandId[_hash][_tradeId].settlementDeadlineDate == 0) {
+                    balances[keccak256(abi.encodePacked("eZAR"))][buyLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].buyLegId].investorAddress] -= buyLegForISINAndId[_hash][_legId].buyPrice;
+                    balances[keccak256(abi.encodePacked("eZAR"))][saleLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].sellLegId].investorAddress] += saleLegForISINAndId[_hash][_legId].salePrice;
+                    balances[keccak256(abi.encodePacked(_ISIN))][saleLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].sellLegId].investorAddress] -= saleLegForISINAndId[_hash][_legId].amount;
+                    balances[keccak256(abi.encodePacked(_ISIN))][buyLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].buyLegId].investorAddress] += buyLegForISINAndId[_hash][_legId].amount;
+                } else {
+                    // Once a perfect match has been made, add the fully confirmed trade to a list of trades to be settled on settlement date.
+                    confirmedTradesForISINandSettlementDate[_hash][matchedTradesForISINandId[_hash][_tradeId].settlementDeadlineDate].push(matchedTradesForISINandId[_hash][_tradeId]);
+                    //TODO: Add securities netting
+                    //  Do reservation for securities 
+                    //    Decuct securities from seller
+                    //    Add securities from buyer
+                    //  Check if buyer has enough cash to do real-time settlement ??? <<<< Confirm with Ganesh / Rudi
+                    //  Do cash calculation from 
+                    //    Decuct cash from seller CSDP
+                    //    Add cash to buyer CSDP
+                }
             }
         }
     }
@@ -485,9 +495,9 @@ contract PostTrade {
     //     ETMEs[_ETMEAddress] = _activeFlag;
     // }
 
-    function addRemoveExchange(address _ExchangeAddress, bool _activeFlag) public onlyOwnerOrAdmin {
-        Exchanges[_ExchangeAddress] = _activeFlag;
-    }
+    // function addRemoveExchange(address _ExchangeAddress, bool _activeFlag) public onlyOwnerOrAdmin {
+    //     Exchanges[_ExchangeAddress] = _activeFlag;
+    // }
 
     function addRemoveSAMOS(address _SAMOSAddress, bool _activeFlag) public onlyOwnerOrAdmin {
         SAMOSs[_SAMOSAddress] = _activeFlag;
