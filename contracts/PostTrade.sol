@@ -237,19 +237,19 @@ contract PostTrade {
         balances[keccak256(abi.encodePacked(_ISIN))][owner] += _totalIssuedShareCap;
     }
 
-    function issueCash (uint _totalIssuedShareCap) public onlySAMOS {
-        require (securities[keccak256(abi.encodePacked("eZAR"))].active == false);
-        bytes32 keccakIsin = keccak256(abi.encodePacked("eZAR"));
-        securities[keccakIsin].ISIN = "eZAR";
-        securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
-        securities[keccakIsin].longName = "Sourth African eRand";
-        securities[keccakIsin].ticker = "ZAR";
-        securities[keccakIsin].active = true;
+    // function issueCash (uint _totalIssuedShareCap) public onlySAMOS {
+    //     require (securities[keccak256(abi.encodePacked("eZAR"))].active == false);
+    //     bytes32 keccakIsin = keccak256(abi.encodePacked("eZAR"));
+    //     securities[keccakIsin].ISIN = "eZAR";
+    //     securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
+    //     securities[keccakIsin].longName = "Sourth African eRand";
+    //     securities[keccakIsin].ticker = "ZAR";
+    //     securities[keccakIsin].active = true;
 
-        securitiesList.push("eZAR");
+    //     securitiesList.push("eZAR");
 
-        balances[keccak256(abi.encodePacked("eZAR"))][msg.sender] += _totalIssuedShareCap;
-    }
+    //     balances[keccak256(abi.encodePacked("eZAR"))][msg.sender] += _totalIssuedShareCap;
+    // }
 
     function topUp (string _ISIN, uint _amount) public onlyOwner {
         require (securities[keccak256(abi.encodePacked(_ISIN))].active == true);
@@ -258,18 +258,18 @@ contract PostTrade {
     }
 
     // to save gas cost, rather send securities to 0x0 to burn them.
-    // function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
-    //     require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
-    //     require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "TB");
-    //     securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
-    //     balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
-    // }
-
-    function topUpCash (uint _amount) public onlySAMOS {
-        require (securities[keccak256(abi.encodePacked("eZAR"))].active == true);
-        securities[keccak256(abi.encodePacked("eZAR"))].totalIssuedShareCap += _amount;
-        balances[keccak256(abi.encodePacked("eZAR"))][owner] += _amount;
+    function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
+        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
+        require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "TB");
+        securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
+        balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
     }
+
+    // function topUpCash (uint _amount) public onlySAMOS {
+    //     require (securities[keccak256(abi.encodePacked("eZAR"))].active == true);
+    //     securities[keccak256(abi.encodePacked("eZAR"))].totalIssuedShareCap += _amount;
+    //     balances[keccak256(abi.encodePacked("eZAR"))][owner] += _amount;
+    // }
 
     function getSecurityDetails (string _ISIN) public view returns (string, uint, string, string, bool) {
         return (
@@ -409,12 +409,12 @@ contract PostTrade {
 
     // _buyOrSaleIndicator { 0: BUY Leg, 1: SALE Leg }
     // function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN) public onlyCustodianOrTradeReportingParty {
-    function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN) public {
+    function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, address _party) public {
         
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
         uint _tradeId;
         // Require that the ISIN is valid on the system
-        require(securities[_hash].active);
+        // require(securities[_hash].active);
 
         if (_buyOrSaleIndicator == 0) {
             // check that sender is authorised  
@@ -422,6 +422,7 @@ contract PostTrade {
             // require(
             //     msg.sender == buyLegForISINAndId[_hash][_legId].custodianId ||
             //     msg.sender == buyLegForISINAndId[_hash][_legId].investorAddress);
+            require(_party == buyLegForISINAndId[_hash][_legId].investorAddress);
                 
                 // msg.sender == buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
                 // "Sender not authorised");
@@ -432,7 +433,8 @@ contract PostTrade {
             // check that sender is authorised       
             // require(
             //     msg.sender == saleLegForISINAndId[_hash][_legId].custodianId ||
-            //     msg.sender == buyLegForISINAndId[_hash][_legId].investorAddress);
+            //     msg.sender == saleLegForISINAndId[_hash][_legId].investorAddress);
+            require(_party == saleLegForISINAndId[_hash][_legId].investorAddress);
 
                 // msg.sender == saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
                 // "Sender must be autherised");
@@ -522,14 +524,14 @@ PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndA
 PostTrade.deployed().then(function(instance){return instance.sendSecurity("ZAE001",500,"0x8ea823e5951243bfa7f1daad4703396260071fb9", {from: "0x2AaB2c02Fc5415D23e91CE8Dc230D3A31793CFF8"})});
 // Check Security details (cash or ISINs)
 PostTrade.deployed().then(function(instance){return instance.getSecurityDetails("ZAE001")});
-// Issue Cash from and into SAMOS account
-PostTrade.deployed().then(function(instance){return instance.issueCash(10000000, {from:"0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D"})});
-// Check new SAMOS cash balance
-PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndAccount("eZAR","0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D")});
+//// Issue Cash from and into SAMOS account (OLD - Issue Cash from IsinIssue Contract)
+//// PostTrade.deployed().then(function(instance){return instance.issueCash(10000000, {from:"0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D"})});
+//// Check new SAMOS cash balance
+//// PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndAccount("eZAR","0x51e63a2E221C782Bfc95f42Cd469D3780a479C15")});
 // Check which assets have been issued: 0 => ANG, 1 => eZAR
 PostTrade.deployed().then(function(instance){return instance.getSecuritiesListById(0)});
 // send cash to Buyer
-PostTrade.deployed().then(function(instance){return instance.sendSecurity("eZAR",10000,"0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B", {from: "0x3E7Eaa5Bc0ee36b4308B668050535d411a81585D"})});
+PostTrade.deployed().then(function(instance){return instance.sendSecurity("eZAR",10000,"0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B", {from: "0x51e63a2e221c782bfc95f42cd469d3780a479c15"})});
 
 // Report Pre-matched trade for T+X settlement (_ISIN, _buyLegId, _saleLegId, _tradeId, _settlementDate, _buyerAddress, _sellerAddress, _buyerCustodianId, _sellerCustodianId, _amount, _salePrice)
 PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade("ZAE001",1234,4321,11223344,20180720,"0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B","0x8eA823e5951243bFA7f1Daad4703396260071fB9","0x1c6B96De685481c2d9915b606D4AB1277949b4Bc","0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06",100,5000,{from:"0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0"})});
@@ -537,9 +539,9 @@ PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade(
 PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade("ZAE001",12345,54321,1122334455,0,"0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B","0x8eA823e5951243bFA7f1Daad4703396260071fB9","0x1c6B96De685481c2d9915b606D4AB1277949b4Bc","0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06",100,5000,{from:"0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0"})});
 
 // Confirm Buy leg:
-PostTrade.deployed().then(function(instance){return instance.confirmTradeLeg(0, 12345, "ZAE001")});
+PostTrade.deployed().then(function(instance){return instance.confirmTradeLeg(0, 12345, "ZAE001", "0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B")});
 // Confirm Sell leg:
-PostTrade.deployed().then(function(instance){return instance.confirmTradeLeg(1, 54321, "ZAE001")});
+PostTrade.deployed().then(function(instance){return instance.confirmTradeLeg(1, 54321, "ZAE001", "0x8eA823e5951243bFA7f1Daad4703396260071fB9")});
 
 // Check Buyer's new ANG balance (100)
 PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndAccount("ZAE001","0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B")});

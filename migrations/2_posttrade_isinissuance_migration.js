@@ -1,8 +1,10 @@
 var PostTrade = artifacts.require("./PostTrade.sol");
 var IsinIssuance = artifacts.require("./IsinIssuance.sol");
+var ConfirmationsAndMandates = artifacts.require("./ConfirmationsAndMandates.sol");
 
 module.exports = function(deployer) {
   deployer.deploy(PostTrade).then(function(){
+    deployer.deploy(ConfirmationsAndMandates, PostTrade.address);
     return deployer.deploy(IsinIssuance, PostTrade.address);
   });
 };

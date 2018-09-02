@@ -18,6 +18,13 @@ contract PostTrade {
         uint,
         uint ) public pure {
     }
+
+    function confirmTradeLeg (
+        uint, 
+        uint, 
+        string, 
+        address) public pure {
+    }
 }
 
 contract ConfirmationsAndMandates {
@@ -36,14 +43,16 @@ contract ConfirmationsAndMandates {
     }
 
     address private owner;
-    address public isinIssuanceContractAddress;
+    PostTrade postTradeContract;
+    address public postTradeContractAddress;
 
     // ==========================================================================
     // Constructor: Prepper for development, will need to be revised for Prod
     // ==========================================================================
-    constructor () public {
+    constructor (address _postTradeContract) public {
         owner = msg.sender;        
-        Admins[0x51e63a2E221C782Bfc95f42Cd469D3780a479C15] = true;
+        postTradeContractAddress = _postTradeContract;
+        postTradeContract = PostTrade(_postTradeContract);
     }
 
     enum Statuses {
@@ -62,24 +71,23 @@ contract ConfirmationsAndMandates {
     // Structs
     // ==========================================================================
 
-    struct Trade {
-        uint tradeId;
-        uint buyLegId;
-        uint sellLegId;
-        uint tradeDate;
-        uint settlementDeadlineDate;
-        uint buyConfirmationDateTime;
-        uint saleConfirmationDateTime;
-    }
+    // struct Trade {
+    //     uint tradeId;
+    //     uint buyLegId;
+    //     uint sellLegId;
+    //     uint tradeDate;
+    //     uint settlementDeadlineDate;
+    //     uint buyConfirmationDateTime;
+    //     uint saleConfirmationDateTime;
+    // }
 
 
     // ==========================================================================
     // Variables
     // ==========================================================================
 
-    // Client Address => Authorised Parties Address => authorised bool
-    mapping(address => mapping(address => bool)) Mandates;
-
+    // Client Address => Authorised Party Address => authorised bool
+    mapping(address => address) ClientToSPMandates;
 
     // ==========================================================================
     // Functions
@@ -97,12 +105,34 @@ contract ConfirmationsAndMandates {
         Admins[_adminAddress] = _activeFlag;
     }
 
+    function getAutherisedParty(address _party) public view returns (address){
+        return ClientToSPMandates[_party];
+    }
+
+    // action == 1 => ADD, action == 2 => REMOVE,
+    function addRemoveMandate(uint _action, address _party) public {
+        if (_action == 1){
+            ClientToSPMandates[msg.sender] = _party;
+        } else if (_action == 2){
+            ClientToSPMandates[msg.sender] = 0x0000000000000000000000000000000000000000;
+        } else {
+            revert("8");
+        }
+    }
+
+    function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, address _party) public view {
+        require(msg.sender == ClientToSPMandates[_party] || msg.sender == _party);
+
+        postTradeContract.confirmTradeLeg (_buyOrSaleIndicator, _legId, _ISIN, _party);
+
+    }
 
     // ==========================================================================
     // Helper Console Scripts:
     // ==========================================================================
 /* 
 
+ConfirmationsAndMandates.deployed().then(function(instance){return instance.addRemoveMandate(1, "0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4", {from: "0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B"})});
 
 */ 
     // ==========================================================================
