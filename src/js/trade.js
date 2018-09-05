@@ -63,13 +63,13 @@ App = {
   },
 
   bindEvents: function () {
-    $(document).on('click', '.btn-findIsin', App.findIsin);
-    $(document).on('click', '.btn-clearTableIsin', App.clearTableRowsIsin);
+    $(document).on('click', '.btn-reportTrade', App.reportTrade);
+    // $(document).on('click', '.btn-clearTableIsin', App.clearTableRowsIsin);
     // $(document).on('click', '.btn-delistIsin', App.delistIsin);
     // $(document).on('click', '.btn-checkIsin', App.checkIsin);
   },
 
-  findIsin: function (event) {
+  reportTrade: function (event) {
     event.preventDefault();
     App.clearStatusses();
     var _index;
@@ -81,36 +81,27 @@ App = {
       }
 
       var account = accounts[0];
-      var ISINCheck = document.getElementById("isin1").value;
+      var _isin = document.getElementById("isin1").value;
+      var _buyLegId = document.getElementById("buyLegId1").value;
+      var _saleLegId = document.getElementById("saleLegId1").value;
+      var _tradeId = document.getElementById("tradeId1").value;
+      var _settlementDate = document.getElementById("settlementDate1").value;
+      var _buyerAddress = document.getElementById("buyerAddress1").value;
+      var _sellerAddress = document.getElementById("sellerAddress1").value;
+      var _buyerCustodianAddress = document.getElementById("buyerCustodianAddress1").value;
+      var _sellerCustodianAddress = document.getElementById("sellerCustodianAddress1").value;
+      var _amount = document.getElementById("amount1").value;
+      var _price = document.getElementById("price1").value;  
 
       App.contracts.PostTrade.deployed().then(function (instance) {
         PostTradeInstance = instance;
-        return PostTradeInstance.getSecuritiesListLength({
+        return PostTradeInstance.addPreMatchedTrade(_isin, _buyLegId, _saleLegId, _tradeId, _settlementDate, _buyerAddress, _sellerAddress, _buyerCustodianAddress, _sellerCustodianAddress, _amount, _price ,{
           from: account
         });
       }).then(function (result) {
-        document.getElementById("isin-search-label").innerHTML = "SUCCESS!!!";
+        document.getElementById("reportTrade-label").innerHTML = "SUCCESS!!!";
         setTimeout(App.fade_out, 2000);
         console.log("ABC001 " + result);
-        var i;
-        App.clearTableRowsIsin();
-        for (i = 0; i < result; i++) {
-          // GET ISIN Names
-          PostTradeInstance.getSecuritiesListById(i, {
-            from: account
-          }).then(function (_isin) {
-            console.log("ISIN Name: " + _isin[0]);
-            // GET ISIN Details and build the table
-            PostTradeInstance.getSecurityDetails(_isin[0], {
-              from: account
-            }).then(function (_isinDetails) {
-              console.log("ISIN Details: " + _isinDetails);
-              if (_isinDetails[0].startsWith(ISINCheck) || _isinDetails[3].startsWith(ISINCheck)) {
-                App.insertTableRow(_isinDetails[0], _isinDetails[1], _isinDetails[2], _isinDetails[3], _isinDetails[4]);
-              }
-            });
-          });
-        }
       }).catch(function (err) {
         document.getElementById("isin-search-label").innerHTML = "ERROR!!!";
         console.log(err.message);
@@ -123,8 +114,8 @@ App = {
   },
 
   clearStatusses: function () {
-    // document.getElementById("isin-issue-label").innerHTML = "";
-    // document.getElementById("get-isin-label").innerHTML = "";
+    document.getElementById("reportTrade-label").innerHTML = "";
+    document.getElementById("reportTrade-label-error").innerHTML = "";
     // document.getElementById("delist-isin-label").innerHTML = "";
     // document.getElementById("check-isin-label").innerHTML = "";
   },

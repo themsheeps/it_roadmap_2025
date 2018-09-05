@@ -53,10 +53,10 @@
               <a href="/IssueIsin.html">ISIN Issuance</a>
             </li>
             <li class="active">
-              <a>Post Trade</a>
+              <a>Trade</a>
             </li>
             <li>
-              <a href="/Samos.html">SAMOS</a>
+              <a href="/ConfirmationsAndMandates.html">Confirmations And Mandates</a>
             </li>
           </ul>
         </div>
@@ -67,7 +67,7 @@
   <div class="container">
     <div class="row" style="padding-top: 100px">
       <div class="col-xs-12 col-sm-8 col-sm-push-2">
-        <h1 class="text-center">Strate POC - PostTrade</h1>
+        <h1 class="text-center">Strate POC - Trade Reporting</h1>
         <hr/>
         <br/>
       </div>
@@ -75,37 +75,41 @@
   </div>
 
   <div class="container">
-    <h2 class="text-center">Securities List</h2>
+    <h2 class="text-center">Post Pre-matched Trade</h2>
     <div class="form">
       <form>
         <div class="form-group">
           <label for="isin1">ISIN</label>
-          <input type="text" class="form-control" id="isin1" placeholder="I.e. ZAE">
+          <input type="text" class="form-control" id="isin1" placeholder="I.e. ZAE0001">
+          <label for="buyLegId1">Buy Leg ID</label>
+          <input type="text" class="form-control" id="buyLegId1" placeholder="I.e. 12345">
+          <label for="saleLegId1">Sale Leg ID</label>
+          <input type="text" class="form-control" id="saleLegId1" placeholder="I.e. 54321">
+          <label for="tradeId1">Trade ID</label>
+          <input type="text" class="form-control" id="tradeId1" placeholder="I.e. 1010">
+          <label for="settlementDate1">Settlement Date</label>
+          <input type="text" class="form-control" id="settlementDate1" placeholder="I.e. 0 for T+0, else YYYYMMDD">
+          <label for="buyerAddress1">Buyer ID (Address - hint: 0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B)</label>
+          <input type="text" class="form-control" id="buyerAddress1" placeholder="">
+          <label for="sellerAddress1">Seller ID (Address - hint: 0x8eA823e5951243bFA7f1Daad4703396260071fB9)</label>
+          <input type="text" class="form-control" id="sellerAddress1" placeholder="">
+          <label for="buyerCustodianAddress1">Buyer Custodian ID (Address - hint: 0x1c6B96De685481c2d9915b606D4AB1277949b4Bc)</label>
+          <input type="text" class="form-control" id="buyerCustodianAddress1" placeholder="">
+          <label for="sellerCustodianAddress1">Seller Custodian ID (Address - hint: 0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06)</label>
+          <input type="text" class="form-control" id="sellerCustodianAddress1" placeholder="">         
+          <label for="amount1">Amount of Securities</label>
+          <input type="text" class="form-control" id="amount1" placeholder="I.e. 200">
+          <label for="price1">Price</label>
+          <input type="text" class="form-control" id="price1" placeholder="I.e. 3000">   
         </div>
-        <button type="submit" class="btn btn-primary btn-findIsin">Search</button>
-        <button type="submit" class="btn btn-primary btn-clearTableIsin">Clear Table</button>
-        <span class="label label-success" id="isin-search-label"></span>
-        <span class="label label-warning" id="isin-search-label-error"></span>
+        <button type="submit" class="btn btn-primary btn-reportTrade">Submit</button>
+        <span class="label label-success" id="reportTrade-label"></span>
+        <span class="label label-warning" id="reportTrade-label-error"></span>
         <br />
         <br />
       </form>
     </div>
     <hr />
-    <table class="table table-striped table-responsive table-hover" id="SecuritiesTable">
-        <thead>
-          <tr>
-            <th scope="col">Isin Number</th>
-            <th scope="col">Total Issued Share Cap</th>
-            <th scope="col">Long Name</th>
-            <th scope="col">Ticker</th>
-            <th scope="col">Active</th>
-          </tr>
-        </thead>
-        <tbody id="SecuritiesTableBody">
-          
-        </tbody>
-      </table>
-      <hr />
   </div>
   
 
@@ -153,7 +157,7 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/web3.min.js"></script>
   <script src="js/truffle-contract.js"></script>
-  <script src="js/post_trade.js"></script>
+  <script src="js/trade.js"></script>
 </body>
 
 </html>

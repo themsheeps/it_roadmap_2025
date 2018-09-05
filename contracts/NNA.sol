@@ -38,6 +38,9 @@ contract NNA {
     function issueIsinNumber (string _prefix, uint _transactionReference) public onlyOwner {
         require (ISINTransactionReferences[_transactionReference] == 0, "Transaction number already used");
         bytes32 _hash = keccak256(abi.encodePacked(_prefix));
+        if (ISINCounter[_hash] < 10) {
+            ISINCounter[_hash] = 25673;
+        }
         ISINCounter[_hash] += 1;
         isinStatusses[_hash][ISINCounter[_hash]] = 1;
 

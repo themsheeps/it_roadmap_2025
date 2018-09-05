@@ -32,10 +32,10 @@ contract ConfirmationsAndMandates {
     // ==========================================================================
     // Modifiers : Modifiers are only added when used, the rest are commented out
     // ==========================================================================
-    modifier onlyOwner {
-        require(msg.sender == owner, "Only Owner");
-        _;
-    }
+    // modifier onlyOwner {
+    //     require(msg.sender == owner, "Only Owner");
+    //     _;
+    // }
 
     modifier onlyOwnerOrAdmin {
         require(msg.sender == owner || Admins[msg.sender] == true, "Only Owner or Admin");
@@ -109,17 +109,12 @@ contract ConfirmationsAndMandates {
         return ClientToSPMandates[_party];
     }
 
-    // action == 1 => ADD, action == 2 => REMOVE,
-    function addRemoveMandate(uint _action, address _party) public {
-        if (_action == 1){
-            ClientToSPMandates[msg.sender] = _party;
-        } else if (_action == 2){
-            ClientToSPMandates[msg.sender] = 0x0000000000000000000000000000000000000000;
-        } else {
-            revert("8");
-        }
+    // set to 0x0000000000000000000000000000000000000000 to clear
+    function addRemoveMandate(address _party) public {
+        ClientToSPMandates[msg.sender] = _party;
     }
 
+    // _buyOrSaleIndicator { 0: BUY Leg, 1: SALE Leg }
     function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, address _party) public view {
         require(msg.sender == ClientToSPMandates[_party] || msg.sender == _party);
 
@@ -132,7 +127,8 @@ contract ConfirmationsAndMandates {
     // ==========================================================================
 /* 
 
-ConfirmationsAndMandates.deployed().then(function(instance){return instance.addRemoveMandate(1, "0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4", {from: "0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B"})});
+ConfirmationsAndMandates.deployed().then(function(instance){return instance.addRemoveMandate("0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4", {from: "0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B"})});
+ConfirmationsAndMandates.deployed().then(function(instance){return instance.getAutherisedParty("0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B")});
 
 */ 
     // ==========================================================================

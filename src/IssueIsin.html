@@ -53,10 +53,10 @@
               <a>ISIN Issuance</a>
             </li>
             <li>
-              <a href="/PostTrade.html">Post Trade</a>
+              <a href="/Trade.html">Trade</a>
             </li>
             <li>
-              <a href="/Samos.html">SAMOS</a>
+              <a href="/ConfirmationsAndMandates.html">Confirmations And Mandates</a>
             </li>
           </ul>
         </div>
@@ -98,6 +98,7 @@
           <input type="text" class="form-control" id="counterParty1" placeholder="I.e. 0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b">
         </div>
         <button type="submit" class="btn btn-primary btn-captureIsin">Submit</button>
+        <button type="submit" class="btn btn-primary btn-getIsinFromNNA">Get ISIN from NNA</button>
         <span class="label label-success" id="isin-capture-label"></span>
         <br />
         <br />
@@ -156,6 +157,50 @@
         <button type="submit" class="btn btn-primary btn-verifyIsin">Submit</button>
         <span class="label label-success" id="isin-verify-label"></span>
         <span class="label label-warning" id="isin-verify-label-error"></span>
+        <br />
+        <br />
+      </form>
+    </div>
+    <hr />
+  </div>
+  <div class="container odd">
+    <h2 class="text-center">View Balance</h2>
+    <div class="form">
+      <form>
+        <div class="form-group">
+          <label for="isinNumber4">ISIN Number</label>
+          <input type="text" class="form-control" id="isinNumber4" placeholder="I.e. ZAE0001">
+          <label for="address4">Account Number (Hint: 0x51e63a2e221c782bfc95f42cd469d3780a479c15)</label>
+          <input type="text" class="form-control" id="address4" placeholder="I.e. 0x51e63a2e221c782bfc95f42cd469d3780a479c15">
+        </div>
+        <button type="submit" class="btn btn-primary btn-displayBalance">Submit</button>
+        <span class="label label-success" id="displayBalance-label"></span>
+        <span class="label label-warning" id="displayBalance-label-error"></span>
+        <br />
+        <br />
+      </form>
+      <div class="container" id="balanceDispDiv4">
+        <br /> Balance:
+        <span id="balance4"></span>
+      </div>
+    </div>
+    <hr />
+  </div>
+  <div class="container">
+    <h2 class="text-center">Send Asset</h2>
+    <div class="form">
+      <form>
+        <div class="form-group">
+          <label for="isinNumber5">ISIN Number</label>
+          <input type="text" class="form-control" id="isinNumber5" placeholder="I.e. ZAE0001">
+          <label for="amount5">Amount</label>
+          <input type="text" class="form-control" id="amount5" placeholder="I.e. 100">
+          <label for="address5">Account Number (Hint: 0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b)</label>
+          <input type="text" class="form-control" id="address5" placeholder="I.e. 0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b">
+        </div>
+        <button type="submit" class="btn btn-primary btn-sendIsin">Submit</button>
+        <span class="label label-success" id="sendIsin-label"></span>
+        <span class="label label-warning" id="sendIsin-label-error"></span>
         <br />
         <br />
       </form>

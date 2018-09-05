@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>SAMOS</title>
+  <title>Confirmations And Mandates</title>
 
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -68,55 +68,68 @@
     <div class="row" style="padding-top: 100px">
       <div class="col-xs-12 col-sm-8 col-sm-push-2">
         <h1 class="text-center">Strate POC - Confirmations And Mandates</h1>
-        <hr/>
-        <br/>
+        <hr />
+        <br />
       </div>
     </div>
   </div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12 col-sm-8 col-sm-push-2">
-        <div class="text-center">Total eZAR Issued: <label id="cashCap" class="label label-success">0</label></div>
-        <hr/>
-        <br/>
-      </div>
-    </div>
-  </div>
-
-  <div class="container" id="issueCashContainer">
-    <h2 class="text-center">Issue Cash</h2>
+  <div class="container" id="createMandateContainer">
+    <h2 class="text-center">Create Mandate</h2>
     <div class="form">
       <form>
         <div class="form-group">
-          <label for="eZarIssuance1">Initial Total Issuance</label>
-          <input type="text" class="form-control" id="eZarIssuance1" placeholder="1000000">
+          <label for="mandateAddress1">Mandate Address (hint: 0x51e63a2E221C782Bfc95f42Cd469D3780a479C15)</label>
+          <input type="text" class="form-control" id="mandateAddress1" placeholder="">
         </div>
-        <button type="submit" class="btn btn-primary btn-findIsin">Search</button>
-        <span class="label label-success" id="eZar-issuance-label"></span>
-        <span class="label label-warning" id="eZar-issuance-label-error"></span>
+        <button type="submit" class="btn btn-primary btn-createMandate">Create Mandate</button>
+        <button type="submit" class="btn btn-primary btn-removeMandate">Remove Mandate</button>
+        <span class="label label-success" id="createMandate-label"></span>
+        <span class="label label-warning" id="createMandate-label-error"></span>
         <br />
         <br />
       </form>
     </div>
     <hr />
-    <table class="table table-striped table-responsive table-hover" id="SecuritiesTable">
-        <thead>
-          <tr>
-            <th scope="col">Isin Number</th>
-            <th scope="col">Total Issued Share Cap</th>
-            <th scope="col">Long Name</th>
-            <th scope="col">Ticker</th>
-            <th scope="col">Active</th>
-          </tr>
-        </thead>
-        <tbody id="SecuritiesTableBody">
-          
-        </tbody>
-      </table>
-      <hr />
   </div>
-  
+
+  <div class="container odd" id="checkAuthorisedPartyContainer">
+    <h2 class="text-center">Check Authorised Party</h2>
+    <div class="form">
+      <form>
+        <button type="submit" class="btn btn-primary btn-checkAuthorisedParty">Submit</button>
+        <span class="label label-success" id="checkAuthorisedParty-label"></span>
+        <span class="label label-warning" id="checkAuthorisedParty-label-error"></span>
+        <br />
+        <br />
+      </form>
+    </div>
+    <hr />
+  </div>
+
+  <div class="container" id="confirmTradeLeg">
+    <h2 class="text-center">Confirm Trade Leg</h2>
+    <div class="form">
+      <form>
+        <div class="form-group">
+            <label for="buySaleIndicator3">Buy / Sale Leg Indicator</label>
+            <input type="text" class="form-control" id="buySaleIndicator3" placeholder="0 = Buy, 1 = Sale">
+            <label for="legId3">Leg ID</label>
+            <input type="text" class="form-control" id="legId3" placeholder="">
+            <label for="isin3">ISIN</label>
+            <input type="text" class="form-control" id="isin3" placeholder="">
+            <label for="beneficialHolderAddress3">Beneficial Holder Address</label>
+            <input type="text" class="form-control" id="beneficialHolderAddress3" placeholder="">
+        </div>
+        <button type="submit" class="btn btn-primary btn-confirmLeg">Submit</button>
+        <span class="label label-success" id="confirmLeg-label"></span>
+        <span class="label label-warning" id="confirmLeg-label-error"></span>
+        <br />
+        <br />
+      </form>
+    </div>
+    <hr />
+  </div>
 
   <footer class="footer">
     <div class="container text-center">
@@ -124,45 +137,13 @@
     </div>
   </footer>
 
-  <!-- <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-push-2">
-          <h1 class="text-center">Pete's Pet Shop</h1>
-          <hr/>
-          <br/>
-        </div>
-      </div>
-
-      <div id="petsRow" class="row">
-      </div>
-    </div>
-
-    <div id="petTemplate" style="display: none;">
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="panel panel-default panel-pet">
-          <div class="panel-heading">
-            <h3 class="panel-title">Scrappy</h3>
-          </div>
-          <div class="panel-body">
-            <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://animalso.com/wp-content/uploads/2017/01/Golden-Retriever_6.jpg" data-holder-rendered="true">
-            <br/><br/>
-            <strong>Breed</strong>: <span class="pet-breed">Golden Retriever</span><br/>
-            <strong>Age</strong>: <span class="pet-age">3</span><br/>
-            <strong>Location</strong>: <span class="pet-location">Warren, MI</span><br/><br/>
-            <button class="btn btn-default btn-adopt" type="button" data-id="0">Adopt</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  -->
-
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="js/bootstrap.min.js"></script>
   <script src="js/web3.min.js"></script>
   <script src="js/truffle-contract.js"></script>
-  <script src="js/samos.js"></script>
+  <script src="js/confirmationsAndMandates.js"></script>
 </body>
 
 </html>

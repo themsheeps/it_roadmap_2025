@@ -30,6 +30,26 @@ App = {
       App.contracts.IsinIssuance.setProvider(App.web3Provider);
     });
 
+    $.getJSON('PostTrade.json', function (data2) {
+      // Get the necessary contract artifact file and instantiate it with truffle-contract
+      var PostTradeArtifact = data2;
+      //var newIsinEvent;
+      App.contracts.PostTrade = TruffleContract(PostTradeArtifact);
+
+      // Set the provider for our contract
+      App.contracts.PostTrade.setProvider(App.web3Provider);
+    });
+
+    $.getJSON('NNA.json', function (data3) {
+      // Get the necessary contract artifact file and instantiate it with truffle-contract
+      var NNAArtifact = data3;
+      //var newIsinEvent;
+      App.contracts.NNA = TruffleContract(NNAArtifact);
+
+      // Set the provider for our contract
+      App.contracts.NNA.setProvider(App.web3Provider);
+    });
+
     return App.bindEvents();
   },
 
@@ -37,7 +57,10 @@ App = {
     $(document).on('click', '.btn-captureIsin', App.captureIsin);
     $(document).on('click', '.btn-displayIsin', App.displayIsin);
     $(document).on('click', '.btn-verifyIsin', App.verifyIsin);
-    // $(document).on('click', '.btn-checkIsin', App.checkIsin);
+    $(document).on('click', '.btn-displayBalance', App.displayBalance);
+    $(document).on('click', '.btn-sendIsin', App.sendIsin);
+    $(document).on('click', '.btn-getIsinFromNNA', App.getIsinFromNNA);
+    
   },
 
   captureIsin: function (event) {
@@ -193,13 +216,101 @@ App = {
 
   },
 
+  displayBalance: function (event) {
+    event.preventDefault();
+    App.clearStatusses();
+
+    let _isinNumber = document.getElementById('isinNumber4').value;
+    let _address = document.getElementById('address4').value;
+
+    console.log(_isinNumber, _address);
+
+    let PostTradeInstance;
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+
+      App.contracts.PostTrade.deployed().then(function (instance) {
+        PostTradeInstance = instance;
+
+        // Execute adopt as a transaction by sending account
+        return PostTradeInstance.getBalanceOfSecAndAccount(_isinNumber, _address, {
+          from: account
+        });
+      }).then(function (result) {
+        document.getElementById("balanceDispDiv4").style.display = "block";
+        document.getElementById("balance4").innerHTML = result;
+        document.getElementById("displayBalance-label").innerHTML = "Success";
+        console.log(result);
+
+      }).catch(function (err) {
+        document.getElementById("displayBalance-label-error").innerHTML = "Index out of bounds error";
+        console.log(err.message);
+      });
+    });
+  },
+
+  sendIsin: function (event) {
+    event.preventDefault();
+    App.clearStatusses();
+
+    let _isinNumber = document.getElementById('isinNumber5').value;
+    let _amount = document.getElementById('amount5').value;
+    let _address = document.getElementById('address5').value;
+
+    console.log(_isinNumber, _amount, _address);
+
+    let PostTradeInstance;
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+
+      App.contracts.PostTrade.deployed().then(function (instance) {
+        PostTradeInstance = instance;
+
+        // Execute adopt as a transaction by sending account
+        return PostTradeInstance.sendSecurity(_isinNumber, _amount, _address, {
+          from: account
+        });
+      }).then(function (result) {
+        document.getElementById("sendIsin-label").innerHTML = "Success";
+        console.log(result);
+
+      }).catch(function (err) {
+        document.getElementById("sendIsin-label-error").innerHTML = "ERROR";
+        console.log(err.message);
+      });
+    });
+  },
+
+  getIsinFromNNA: function () {
+    event.preventDefault();
+    let _randomIsin = Math.floor(Math.random() * (999999 - 100000) + 10000);
+    let _additionalPrefix = "";
+    if(document.getElementById("isinNumber1").value == 0){
+      _additionalPrefix = "ZAE";
+    }
+    document.getElementById("isinNumber1").value += _additionalPrefix + "000" + _randomIsin;
+  },
+
   clearStatusses: function () {
     document.getElementById("isin-capture-label").innerHTML = "";
     document.getElementById("isin-display-label").innerHTML = "";
     document.getElementById("isin-display-label-error").innerHTML = "";
     document.getElementById("isin-verify-label").innerHTML = "";
     document.getElementById("isin-verify-label-error").innerHTML = "";
+    document.getElementById("displayBalance-label").innerHTML = "";
+    document.getElementById("displayBalance-label-error").innerHTML = "";
+    document.getElementById("sendIsin-label").innerHTML = "";
+    document.getElementById("sendIsin-label-error").innerHTML = "";
     document.getElementById("isinDispDiv").style.display = "none";
+    document.getElementById("balanceDispDiv4").style.display = "none";
   },
 
   insertTableRow: function (prefixItem, counterItem, transactionRefItem) {
