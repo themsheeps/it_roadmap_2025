@@ -68,8 +68,8 @@
     <div class="row" style="padding-top: 100px">
       <div class="col-xs-12 col-sm-8 col-sm-push-2">
         <h1 class="text-center">Strate POC - Trade Reporting</h1>
-        <hr/>
-        <br/>
+        <hr />
+        <br />
       </div>
     </div>
   </div>
@@ -93,14 +93,16 @@
           <input type="text" class="form-control" id="buyerAddress1" placeholder="">
           <label for="sellerAddress1">Seller ID (Address - hint: 0x8eA823e5951243bFA7f1Daad4703396260071fB9)</label>
           <input type="text" class="form-control" id="sellerAddress1" placeholder="">
-          <label for="buyerCustodianAddress1">Buyer Custodian ID (Address - hint: 0x1c6B96De685481c2d9915b606D4AB1277949b4Bc)</label>
+          <label for="buyerCustodianAddress1">Buyer Custodian ID (Address - hint:
+            0x1c6B96De685481c2d9915b606D4AB1277949b4Bc)</label>
           <input type="text" class="form-control" id="buyerCustodianAddress1" placeholder="">
-          <label for="sellerCustodianAddress1">Seller Custodian ID (Address - hint: 0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06)</label>
-          <input type="text" class="form-control" id="sellerCustodianAddress1" placeholder="">         
+          <label for="sellerCustodianAddress1">Seller Custodian ID (Address - hint:
+            0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06)</label>
+          <input type="text" class="form-control" id="sellerCustodianAddress1" placeholder="">
           <label for="amount1">Amount of Securities</label>
           <input type="text" class="form-control" id="amount1" placeholder="I.e. 200">
           <label for="price1">Price</label>
-          <input type="text" class="form-control" id="price1" placeholder="I.e. 3000">   
+          <input type="text" class="form-control" id="price1" placeholder="I.e. 3000">
         </div>
         <button type="submit" class="btn btn-primary btn-reportTrade">Submit</button>
         <span class="label label-success" id="reportTrade-label"></span>
@@ -111,7 +113,43 @@
     </div>
     <hr />
   </div>
-  
+
+  <div class="container odd">
+    <h2 class="text-center">List Trades</h2>
+    <div class="form">
+      <form>
+        <div class="form-group">
+            <label for="isin2">ISIN</label>
+            <input type="text" class="form-control" id="isin2" placeholder="I.e. ZAE0001">
+        </div>
+          <button type="submit" class="btn btn-primary btn-refreshTrades">Refresh Trades</button>
+          <span class="label label-success" id="refreshTrades-label"></span>
+          <span class="label label-warning" id="refreshTrades-label-error"></span>
+          <br />
+          <br />
+      </form>
+      <table class="table table-striped table-responsive table-hover" id="TradesTable">
+        <thead>
+          <tr>
+            <th scope="col">Trade Id</th>
+            <th scope="col">Buy Leg ID</th>
+            <th scope="col">Sale Leg ID</th>
+            <th scope="col">Trade Date</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <td>one</td>
+          <td>two</td>
+          <td>three</td>
+          <td>four</td>
+          <td>five</td>
+        </tbody>
+      </table>
+    </div>
+    <hr />
+  </div>
+
 
   <footer class="footer">
     <div class="container text-center">

@@ -64,6 +64,7 @@ App = {
 
   bindEvents: function () {
     $(document).on('click', '.btn-reportTrade', App.reportTrade);
+    $(document).on('click', '.btn-refreshTrades', App.refreshTrades);
     // $(document).on('click', '.btn-clearTableIsin', App.clearTableRowsIsin);
     // $(document).on('click', '.btn-delistIsin', App.delistIsin);
     // $(document).on('click', '.btn-checkIsin', App.checkIsin);
@@ -91,11 +92,11 @@ App = {
       var _buyerCustodianAddress = document.getElementById("buyerCustodianAddress1").value;
       var _sellerCustodianAddress = document.getElementById("sellerCustodianAddress1").value;
       var _amount = document.getElementById("amount1").value;
-      var _price = document.getElementById("price1").value;  
+      var _price = document.getElementById("price1").value;
 
       App.contracts.PostTrade.deployed().then(function (instance) {
         PostTradeInstance = instance;
-        return PostTradeInstance.addPreMatchedTrade(_isin, _buyLegId, _saleLegId, _tradeId, _settlementDate, _buyerAddress, _sellerAddress, _buyerCustodianAddress, _sellerCustodianAddress, _amount, _price ,{
+        return PostTradeInstance.addPreMatchedTrade(_isin, _buyLegId, _saleLegId, _tradeId, _settlementDate, _buyerAddress, _sellerAddress, _buyerCustodianAddress, _sellerCustodianAddress, _amount, _price, {
           from: account
         });
       }).then(function (result) {
@@ -103,19 +104,88 @@ App = {
         setTimeout(App.fade_out, 2000);
         console.log("ABC001 " + result);
       }).catch(function (err) {
-        document.getElementById("isin-search-label").innerHTML = "ERROR!!!";
+        document.getElementById("reportTrade-label-error").innerHTML = "ERROR!!!";
+        console.log(err.message);
+      });
+    });
+  },
+
+  refreshTrades: function (event) {
+    event.preventDefault();
+    App.clearStatusses();
+    var _index;
+    let PostTradeInstance;
+
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      var _isin = document.getElementById("isin2").value;
+
+      if (_isin == "") {
+        _isin = "ZAE001";
+      }
+
+      App.clearTableRowsTrades();
+
+      App.contracts.PostTrade.deployed().then(function (instance) {
+        PostTradeInstance = instance;
+        return PostTradeInstance.getMatchedTradesIDs(_isin, {
+          from: account
+        });
+      }).then(function (result) {
+        var _status;
+        console.log("BOB", result);
+
+        for (i = 0; i < result.length; i++) {
+          console.log("BOB1", i);
+          var _results = PostTradeInstance.getMatchedTrades(_isin, result[i], {
+            from: account
+          }).then(function (fields){
+            console.log("BOB2 - tradeId", fields[0]);
+            console.log("BOB2 - buyLegId", fields[1]);
+            console.log("BOB2 - sellLegId", fields[2]);
+            console.log("BOB2 - tradeDate", fields[3]);
+            console.log("BOB2 - buyConfirmationDateTime", fields[4]);
+            console.log("BOB2 - saleConfirmationDateTime", fields[5]);
+            if (fields[4] == 0 && fields[5] == 0) {
+              _status = "Matched";
+            } else if (fields[4] > 0 && fields[5] == 0) {
+              _status = "Confirmed by buyer";
+            } else if (fields[4] == 0 && fields[5] > 0) {
+              _status = "Confirmed by seller";
+            } else {
+              _status = "Settled";
+            }
+            App.insertTableRow(fields[0],fields[1],fields[2],fields[3],_status);
+          });
+        }
+
+        document.getElementById("refreshTrades-label").innerHTML = "SUCCESS!!!";
+        setTimeout(App.fade_out, 2000);
+        console.log("ABC002 " + result);
+
+      }).catch(function (err) {
+        document.getElementById("refreshTrades-label-error").innerHTML = "ERROR!!!";
         console.log(err.message);
       });
     });
   },
 
   fade_out: function () {
-      $("#isin-search-label").fadeOut().empty();
+    $("#reportTrade-label").fadeOut().empty();
+    $("#reportTrade-label-error").fadeOut().empty();
+    $("#refreshTrades-label").fadeOut().empty();
+    $("#refreshTrades-label-error").fadeOut().empty();
   },
 
   clearStatusses: function () {
     document.getElementById("reportTrade-label").innerHTML = "";
     document.getElementById("reportTrade-label-error").innerHTML = "";
+    document.getElementById("refreshTrades-label").innerHTML = "";
+    document.getElementById("refreshTrades-label-error").innerHTML = "";
     // document.getElementById("delist-isin-label").innerHTML = "";
     // document.getElementById("check-isin-label").innerHTML = "";
   },
@@ -126,9 +196,25 @@ App = {
     console.log("Table cleared");
   },
 
-  insertTableRow: function (_ISIN, _totalIssuedShareCap, _longName, _ticker, _active) {
+  clearTableRowsTrades: function () {
+    document.getElementById("TradesTable").innerHTML = "<table class='table table-striped table-responsive table-hover' id='NNATable'><thead><tr><th scope='col'>Trade Id</th><th scope='col'>Buy Leg ID</th><th scope='col'>Sale Leg ID</th><th scope='col'>Trade Date</th><th scope='col'>Status</th></tr></thead><tbody></tbody></table>";
+    console.log("Table cleared");
+  },
+
+  insertTableRow: function (_tradeId, _buyLegId, _saleLegId, _tradeDate, _status) {
     // Find a <table> element with id="SecuritiesTable":
-    var table = document.getElementById("SecuritiesTable");
+    var table = document.getElementById("TradesTable");
+    var _labelType;
+
+    if (_status == "Matched") {
+      _labelType = "label-danger";
+    } else if (_status == "Confirmed by seller") {
+      _labelType = "label-info";
+    } else if (_status == "Confirmed by buyer") {
+      _labelType = "label-warning";
+    } else {
+      _labelType = "label-success";
+    }
 
     // Create an empty <tr> element and add it to the 1st position of the table:
     var row = table.insertRow(1);
@@ -141,11 +227,11 @@ App = {
     var cell5 = row.insertCell(4);
 
     // Add some text to the new cells:
-    cell1.innerHTML = _ISIN;
-    cell2.innerHTML = _totalIssuedShareCap;
-    cell3.innerHTML = _longName;
-    cell4.innerHTML = _ticker;
-    cell5.innerHTML = _active;
+    cell1.innerHTML = _tradeId;
+    cell2.innerHTML = _buyLegId;
+    cell3.innerHTML = _saleLegId;
+    cell4.innerHTML = _tradeDate;
+    cell5.innerHTML = "<span class='label " + _labelType + "'>" + _status + "</span>";
   }
 
 };

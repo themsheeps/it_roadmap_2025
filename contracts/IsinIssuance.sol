@@ -60,17 +60,27 @@ contract IsinIssuance {
         string _longName, 
         string _ticker, 
         address _counterParty) public onlyOwner {
-        securitiesToBeVerifiedByParty[_counterParty].push(
-            Security({
-                ISIN: _ISIN,
-                totalIssuedShareCap: _totalIssuedShareCap,
-                longName: _longName,
-                ticker: _ticker,
-                active: false,
-                issuer: msg.sender,
-                verifier: _counterParty
-            })
-        );
+        
+        if (msg.sender == _counterParty){
+            postTradeContract.issueSecurity(
+            _ISIN,
+            _totalIssuedShareCap,
+            _longName,
+            _ticker
+            );
+        } else {
+            securitiesToBeVerifiedByParty[_counterParty].push(
+                Security({
+                    ISIN: _ISIN,
+                    totalIssuedShareCap: _totalIssuedShareCap,
+                    longName: _longName,
+                    ticker: _ticker,
+                    active: false,
+                    issuer: msg.sender,
+                    verifier: _counterParty
+                })
+            );
+        }
 
         // tempSecurity = Security({
         //     ISIN: _ISIN,

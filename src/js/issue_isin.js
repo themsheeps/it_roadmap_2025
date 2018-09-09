@@ -64,44 +64,6 @@ App = {
   },
 
   captureIsin: function (event) {
-    // event.preventDefault();
-    App.clearStatusses();
-
-    let _isinNumber1 = document.getElementById('isinNumber1').value;
-    let _totalIssuedShareCap1 = document.getElementById('totalIssuedShareCap1').value;
-    let _longName1 = document.getElementById('longName1').value;
-    let _ticker1 = document.getElementById('ticker1').value;
-    let _counterParty1 = document.getElementById('counterParty1').value;
-
-    console.log(_isinNumber1, _totalIssuedShareCap1, _longName1, _ticker1, _counterParty1);
-
-
-    let IsinIssuanceInstance;
-    web3.eth.getAccounts(function (error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-
-      App.contracts.IsinIssuance.deployed().then(function (instance) {
-        IsinIssuanceInstance = instance;
-
-        // Execute adopt as a transaction by sending account
-        return IsinIssuanceInstance.captureSecurity(_isinNumber1, _totalIssuedShareCap1, _longName1, _ticker1, _counterParty1, {
-          from: account
-        });
-      }).then(function (result) {
-        document.getElementById("isin-capture-label").innerHTML = "SUCCESS!!!";
-      }).catch(function (err) {
-        document.getElementById("isin-capture-label").innerHTML = "ERROR!!!";
-        console.log(err.message);
-      });
-    });
-
-  },
-
-  captureIsin: function (event) {
     event.preventDefault();
     App.clearStatusses();
 
@@ -125,6 +87,10 @@ App = {
       App.contracts.IsinIssuance.deployed().then(function (instance) {
         IsinIssuanceInstance = instance;
 
+        if (_counterParty1 == "") {
+          _counterParty1 = account;
+        }
+
         // Execute adopt as a transaction by sending account
         return IsinIssuanceInstance.captureSecurity(_isinNumber1, _totalIssuedShareCap1, _longName1, _ticker1, _counterParty1, {
           from: account
@@ -138,6 +104,43 @@ App = {
     });
 
   },
+
+  // captureIsin: function (event) {
+  //   event.preventDefault();
+  //   App.clearStatusses();
+
+  //   let _isinNumber1 = document.getElementById('isinNumber1').value;
+  //   let _totalIssuedShareCap1 = document.getElementById('totalIssuedShareCap1').value;
+  //   let _longName1 = document.getElementById('longName1').value;
+  //   let _ticker1 = document.getElementById('ticker1').value;
+  //   let _counterParty1 = document.getElementById('counterParty1').value;
+
+  //   console.log(_isinNumber1, _totalIssuedShareCap1, _longName1, _ticker1, _counterParty1);
+
+
+  //   let IsinIssuanceInstance;
+  //   web3.eth.getAccounts(function (error, accounts) {
+  //     if (error) {
+  //       console.log(error);
+  //     }
+
+  //     var account = accounts[0];
+
+  //     App.contracts.IsinIssuance.deployed().then(function (instance) {
+  //       IsinIssuanceInstance = instance;
+
+  //       return IsinIssuanceInstance.captureSecurity(_isinNumber1, _totalIssuedShareCap1, _longName1, _ticker1, _counterParty1, {
+  //         from: account
+  //       });
+  //     }).then(function (result) {
+  //       document.getElementById("isin-capture-label").innerHTML = "SUCCESS!!!";
+  //     }).catch(function (err) {
+  //       document.getElementById("isin-capture-label").innerHTML = "ERROR!!!";
+  //       console.log(err.message);
+  //     });
+  //   });
+
+  // },
 
   displayIsin: function (event) {
     event.preventDefault();
@@ -232,6 +235,10 @@ App = {
       }
 
       var account = accounts[0];
+
+      if (_address == "") {
+        _address = account;
+      }
 
       App.contracts.PostTrade.deployed().then(function (instance) {
         PostTradeInstance = instance;

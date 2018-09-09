@@ -265,6 +265,7 @@ contract PostTrade {
         balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
     }
 
+    // *** DEPRECATED AS CASH IS TREATED AS A SECURITY *** //
     // function topUpCash (uint _amount) public onlySAMOS {
     //     require (securities[keccak256(abi.encodePacked("eZAR"))].active == true);
     //     securities[keccak256(abi.encodePacked("eZAR"))].totalIssuedShareCap += _amount;
@@ -407,6 +408,27 @@ contract PostTrade {
         );
     }
 
+    function getMatchedTrades (string _ISIN, uint id) public view returns (uint, uint, uint, uint, uint, uint) {
+        bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
+
+        return (
+            matchedTradesForISINandId[_hash][id].tradeId,
+            matchedTradesForISINandId[_hash][id].buyLegId,
+            matchedTradesForISINandId[_hash][id].sellLegId,
+            matchedTradesForISINandId[_hash][id].tradeDate,
+            matchedTradesForISINandId[_hash][id].buyConfirmationDateTime,
+            matchedTradesForISINandId[_hash][id].saleConfirmationDateTime
+        );
+    }
+
+    // function getMatchedTradesLength (string _ISIN) public view returns (uint) {
+    //     return matchedTradesIdListForISIN[keccak256(abi.encodePacked(_ISIN))].length;
+    // }
+
+    function getMatchedTradesIDs (string _ISIN) public view returns (uint[]) {
+        return matchedTradesIdListForISIN[keccak256(abi.encodePacked(_ISIN))];
+    }
+
     // _buyOrSaleIndicator { 0: BUY Leg, 1: SALE Leg }
     // function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN) public onlyCustodianOrTradeReportingParty {
     function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, address _party) public {
@@ -542,6 +564,12 @@ PostTrade.deployed().then(function(instance){return instance.sendSecurity("eZAR"
 PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade("ZAE001",1234,4321,11223344,20180720,"0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B","0x8eA823e5951243bFA7f1Daad4703396260071fB9","0x1c6B96De685481c2d9915b606D4AB1277949b4Bc","0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06",100,5000,{from:"0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0"})});
 // Report Pre-matched trade for T+0 settlement (_ISIN, _buyLegId, _saleLegId, _tradeId, _settlementDate, _buyerAddress, _sellerAddress, _buyerCustodianId, _sellerCustodianId, _amount, _salePrice)
 PostTrade.deployed().then(function(instance){return instance.addPreMatchedTrade("ZAE001",12345,54321,1122334455,0,"0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B","0x8eA823e5951243bFA7f1Daad4703396260071fB9","0x1c6B96De685481c2d9915b606D4AB1277949b4Bc","0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06",100,5000,{from:"0x0ef2F9c8845da4c9c34BEf02C3213e0Da1306Da0"})});
+
+*** CZECH TRADE ***
+PostTrade.deployed().then(function(instance){return instance.getMatchedTradesIDs("ZAE001")});
+PostTrade.deployed().then(function(instance){return instance.getMatchedTrades("ZAE001",1122334455)});
+PostTrade.deployed().then(function(instance){return instance.getBuysPartiesForIsin("ZAE001",12345)});
+PostTrade.deployed().then(function(instance){return instance.getBuysForIsin("ZAE001",12345)});
 
 *** INVESTOR or PROXY
 // Confirm Buy leg:
