@@ -96,8 +96,10 @@ App = {
           from: account
         });
       }).then(function (result) {
+        setTimeout(App.fade_out, 2000);
         document.getElementById("isin-capture-label").innerHTML = "SUCCESS!!!";
       }).catch(function (err) {
+        setTimeout(App.fade_out, 2000);
         document.getElementById("isin-capture-label").innerHTML = "ERROR!!!";
         console.log(err.message);
       });
@@ -176,6 +178,7 @@ App = {
         console.log(result);
 
       }).catch(function (err) {
+        setTimeout(App.fade_out, 2000);
         document.getElementById("isin-display-label-error").innerHTML = "Index out of bounds error";
         console.log(err.message);
       });
@@ -207,11 +210,12 @@ App = {
           from: account
         });
       }).then(function (result) {
-        
+        setTimeout(App.fade_out, 2000);
         document.getElementById("isin-verify-label").innerHTML = "success";
         console.log(result);
 
       }).catch(function (err) {
+        setTimeout(App.fade_out, 2000);
         document.getElementById("isin-display-label-error").innerHTML = "Index out of bounds error";
         console.log(err.message);
       });
@@ -250,10 +254,12 @@ App = {
       }).then(function (result) {
         document.getElementById("balanceDispDiv4").style.display = "block";
         document.getElementById("balance4").innerHTML = result;
+        setTimeout(App.fade_out, 2000);
         document.getElementById("displayBalance-label").innerHTML = "Success";
         console.log(result);
 
       }).catch(function (err) {
+        setTimeout(App.fade_out, 2000);
         document.getElementById("displayBalance-label-error").innerHTML = "Index out of bounds error";
         console.log(err.message);
       });
@@ -286,10 +292,12 @@ App = {
           from: account
         });
       }).then(function (result) {
+        setTimeout(App.fade_out, 2000);
         document.getElementById("sendIsin-label").innerHTML = "Success";
         console.log(result);
 
       }).catch(function (err) {
+        setTimeout(App.fade_out, 2000);
         document.getElementById("sendIsin-label-error").innerHTML = "ERROR";
         console.log(err.message);
       });
@@ -306,18 +314,22 @@ App = {
     document.getElementById("isinNumber1").value += _additionalPrefix + "000" + _randomIsin;
   },
 
+  fade_out: function () {
+    $("#isin-capture-label").fadeOut().empty();
+    $("#isin-display-label").fadeOut().empty();
+    $("#isin-display-label-error").fadeOut().empty();
+    $("#isin-verify-label").fadeOut().empty();
+    $("#isin-verify-label-error").fadeOut().empty();
+    $("#displayBalance-label").fadeOut().empty();
+    $("#displayBalance-label-error").fadeOut().empty();
+    $("#sendIsin-label").fadeOut().empty();
+    $("#sendIsin-label-error").fadeOut().empty();
+    $("#isinDispDiv").fadeOut().empty();
+    $("#balanceDispDiv4").fadeOut().empty();
+  },
+
   clearStatusses: function () {
-    document.getElementById("isin-capture-label").innerHTML = "";
-    document.getElementById("isin-display-label").innerHTML = "";
-    document.getElementById("isin-display-label-error").innerHTML = "";
-    document.getElementById("isin-verify-label").innerHTML = "";
-    document.getElementById("isin-verify-label-error").innerHTML = "";
-    document.getElementById("displayBalance-label").innerHTML = "";
-    document.getElementById("displayBalance-label-error").innerHTML = "";
-    document.getElementById("sendIsin-label").innerHTML = "";
-    document.getElementById("sendIsin-label-error").innerHTML = "";
-    document.getElementById("isinDispDiv").style.display = "none";
-    document.getElementById("balanceDispDiv4").style.display = "none";
+    // DEPRECATED
   },
 
   insertTableRow: function (prefixItem, counterItem, transactionRefItem) {

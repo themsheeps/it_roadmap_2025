@@ -28,6 +28,8 @@ App = {
       // Set the provider for our contract
       App.contracts.PostTrade.setProvider(App.web3Provider);
 
+      App.refreshTrades(new Event('initialLoad'));
+
       // Watch for events
       // App.contracts.PostTrade.deployed().then(function (instance) {
       // newIsinEvent = instance.IsinIssued();
@@ -216,6 +218,9 @@ App = {
       _labelType = "label-success";
     }
 
+    var _date = new Date(0); // The 0 there is the key, which sets the date to the epoch
+    _date.setUTCSeconds(_tradeDate);
+
     // Create an empty <tr> element and add it to the 1st position of the table:
     var row = table.insertRow(1);
 
@@ -226,11 +231,13 @@ App = {
     var cell4 = row.insertCell(3);
     var cell5 = row.insertCell(4);
 
+
+
     // Add some text to the new cells:
     cell1.innerHTML = _tradeId;
     cell2.innerHTML = _buyLegId;
     cell3.innerHTML = _saleLegId;
-    cell4.innerHTML = _tradeDate;
+    cell4.innerHTML = _date.toLocaleDateString();
     cell5.innerHTML = "<span class='label " + _labelType + "'>" + _status + "</span>";
   }
 

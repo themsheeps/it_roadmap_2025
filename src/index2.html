@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>DVP on BC</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+    rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic'
+    rel='stylesheet' type='text/css'>
+
+  <!-- Plugin CSS -->
+  <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/creative.min.css" rel="stylesheet">
+  <link href="css/main.2.css" rel="stylesheet">
+
+
+</head>
+
+<body id="page-top">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand js-scroll-trigger" href="#page-top">DVP on BC</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#nna">Asset Number Request</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#assetIssuance">Asset Issuance</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#tradeReporting">Trade Reporting</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#confirmationsAndMandates">Confirmations and Mandates</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="masthead text-center text-white d-flex">
+    <div class="container my-auto">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <h1 class="text-uppercase">
+            <strong class="bb">Testing</strong><strong> DVP on the Ethereum </strong><strong class="bb">blockchain</strong>
+          </h1>
+          <hr>
+        </div>
+        <div class="col-lg-8 mx-auto">
+          <p class="text-faded mb-5">"So blockchains give us a way for two parties to come together, build and sign an
+            exchange transaction, and ensure that it <mark>succeeds or fails as a whole.</mark> This enables delivery
+            versus payment
+            on a shared ledger, <mark>without needing a trusted intermediary to manage the process.</mark> The miners
+            who confirm
+            transactions in blocks still have some power, but it’s much less than a traditional intermediary. The worst
+            they can do is refuse to confirm a particular transaction in its entirety, and this does not violate DvP.
+            Furthermore, if mining is shared between the parties actually creating the transactions, this risk falls
+            away completely, since everyone will get a chance to confirm their own."<br /><br /> <mark>~Gideon
+              Greenspan
+              (Multichain)</mark></p>
+          <a class="btn btn-primary btn-xl js-scroll-trigger" href="https://www.multichain.com/blog/2015/09/delivery-versus-payment-blockchain/"
+            target="_blank">Find Out More</a>
+          <a class="btn btn-primary btn-xl js-scroll-trigger" href="#nna ">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!--#########################################################################################################################################-->
+  <!--#########################################################################################################################################-->
+  <!--#########################################################################################################################################-->
+
+  <section class="bg-dark" id="nna">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <h2 class="section-heading text-white">Asset Number Management</h2>
+          <hr class="my-4">
+          <p class="text-white mb-4">The main proofpoint is the use of events in the creation of a mechanism to share
+            information with an ecosystem <mark>without the reliance of Swift messaging</mark>. Information is always
+            <mark>shared from
+              the golden source</mark> and is accessible at, almost, realtime.</p>
+          <!--a class="btn btn-light btn-xl js-scroll-trigger" href="#services">Get Started!</a-->
+
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x text-primary fa-diamond mb-3 sr-icons"></i>
+              <h3 class="text-white mb-3">New Asset ID</h3>
+              <p class="text-white mb-0">Request for a new asset ID (similar to requesting a new ISIN from the NNA).</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x text-primary fa-stop-circle-o mb-3 sr-icons "></i>
+              <h3 class="text-white mb-3">Deactivate Asset</h3>
+              <p class="text-white mb-0">In case of an error, the asset can be clocked and a new Asset ID be created.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x text-primary fa-user-secret mb-3 sr-icons"></i>
+              <h3 class="text-white mb-3">Authorised Only</h3>
+              <p class="text-white mb-0">Prove that functions can be restricted to authorised users only.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 text-center">
+            <div class="service-box mt-5 mx-auto">
+              <i class="fa fa-4x text-primary fa-bell-o mb-3 sr-icons"></i>
+              <h3 class="text-white mb-3">Listen for Events</h3>
+              <p class="text-white mb-0">Listen for, and display, new Asset ID requests from any source.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container form text-white">
+        <hr class="my-4" /><br />
+        <h2 class="text-center">New Asset Number Request</h2>
+        <form>
+          <div class="form-group">
+            <label for="isinPrefix">Asset Prefix</label>
+            <input type="text" class="form-control" id="isinPrefix1" placeholder="Isin Prefix, i.e. ZAE">
+            <!--/div>
+                <div class="form-group"-->
+            <label for="transactionReference">Transaction Reference</label>
+            <input type="text" class="form-control" id="transactionReference1" placeholder="Unique Transaction Reference">
+          </div>
+          <button type="submit" class="btn btn-light btn-newIsin">Submit</button>
+          <span class="label label-success" id="isin-issue-label"></span>
+          <br />
+          <br />
+          <div class="infoBox text-center">
+            <p class="">Last Asset Number Issued, Prefix:
+              <span class="label label-primary" id="isin-issue-prefix">N/A</span>
+              , Counter:
+              <span class="label label-primary" id="isin-issue-counter">N/A</span>
+              , Transaction Ref:
+              <span class="label label-primary" id="isin-issue-trf">N/A</span>
+            </p>
+          </div>
+          <br />
+        </form>
+      </div>
+
+      <div class="container odd text-white">
+        <br />
+        <h2 class="text-center">Get Current Asset Number</h2>
+        <div class="form">
+          <form>
+            <div class="form-group">
+              <label for="isinPrefix2">Asset Prefix</label>
+              <input type="text" class="form-control" id="isinPrefix2" placeholder="Asset Prefix, i.e. ZAE">
+            </div>
+            <button type="submit" class="btn btn-light btn-currentIsin">Submit</button>
+          </form>
+        </div>
+        <br />
+        <div class="infoBox text-center" id="get-isin-label"></div>
+      </div>
+
+      <div class="text-white">
+        <br />
+        <h2 class="text-center">Check Asset Status</h2>
+        <div class="form">
+          <form>
+            <div class="form-group">
+              <label for="isinPrefix4">Asset Prefix</label>
+              <input type="text" class="form-control" id="isinPrefix4" placeholder="Asset Prefix, i.e. ZAE">
+            </div>
+            <div class="form-group">
+              <label for="isinInteger4">Asset Integer Number</label>
+              <input type="text" class="form-control" id="isinInteger4" placeholder="Asset Integer Number, i.e. 00107 or 107">
+            </div>
+            <button type="submit" class="btn btn-light btn-checkIsin">Submit</button>
+          </form>
+        </div>
+        <br />
+        <div class="infoBox text-center" id="check-isin-label"></div>
+      </div>
+
+      <div class="container odd text-white">
+        <br />
+        <h2 class="text-center">Issued Asset Number List</h2>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover" id="NNATable">
+            <thead>
+              <tr>
+                <th scope="col">Asset Prefix</th>
+                <th scope="col">Asset Number</th>
+                <th scope="col">Transaction Reference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- <tr>
+              <td>ZAE</td>
+              <td>1</td>
+              <td>1247648837</td>
+            </tr> -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!--#########################################################################################################################################-->
+  <!--#########################################################################################################################################-->
+  <!--#########################################################################################################################################-->
+
+  <section id="assetIssuance">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading">Asset Issuance</h2>
+          <hr class="my-4">
+          <p class="mb-4">For asset issuance, is it possible to use one smart contract to manage the issuance of
+            multiple
+            asset classes? Yes it
+            is... it really is! Let us do that now.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa fa-4x fa-plus text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Issuance</h3>
+            <p class="text-muted mb-0">Create a new asset, the recipient will currently be the admin account. Multi
+              asset class creation is supported.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa fa-4x fa-paper-plane text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Send Asset</h3>
+            <p class="text-muted mb-0">Complete an Issuance/IPO flow by sending the newly created assets to the
+              intitial investors.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa far fa-4x fa-eye text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">4 Eye Principle</h3>
+            <p class="text-muted mb-0">Manage workflows where multiple parties, even from different institutions, must
+              verify the asset before issuing an asset.</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa fa-4x fa-money text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Cash Asset</h3>
+            <p class="text-muted mb-0">As this POC is built around assets being bearer tokens, and the smart contracts
+              track asset ownership - cash can be tracked in the same way as any other asset.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+      <br />
+      <hr class="my-4">
+      <h2 class="text-center">Capture Asset</h2>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <label for="isinNumber1">Isin Asset</label>
+            <input type="text" class="form-control" id="isinNumber1" placeholder="Full Asset Number, i.e. ZAE0001 ">
+          </div>
+          <div class="form-group">
+            <label for="totalIssuedShareCap1">Total Issued Share Cap</label>
+            <input type="text" class="form-control" id="totalIssuedShareCap1" placeholder="I.e. 1000000">
+          </div>
+          <div class="form-group">
+            <label for="longName1">Long Name</label>
+            <input type="text" class="form-control" id="longName1" placeholder="I.e. South Africa Incorporated, Pty Ltd">
+          </div>
+          <div class="form-group">
+            <label for="ticker1">Ticker (Alpha Code)</label>
+            <input type="text" class="form-control" id="ticker1" placeholder="I.e. SAI">
+          </div>
+          <div class="form-group">
+            <label for="counterParty1">Counter Party (hint: 0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B)</label>
+            <input type="text" class="form-control" id="counterParty1" placeholder="I.e. 0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B">
+          </div>
+          <button type="submit" class="btn btn-primary btn-captureIsin">Submit</button>
+          <button type="submit" class="btn btn-primary btn-getIsinFromNNA">Get Asset Number</button>
+          <span class="label label-success" id="isin-capture-label"></span>
+          <br />
+          <br />
+        </form>
+      </div>
+    </div>
+
+
+
+    <div class="container odd">
+      <br />
+      <h2 class="text-center">View ISIN To Be Verified</h2>
+      <p class="text-center text-muted"><i>This function lists only ISINs where your account was captured as the
+          counterparty (Inter-Organisational 4-Eye-Principle).</i></p>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <label for="isinNumber2">Index Number</label>
+            <input type="text" class="form-control" id="isinNumber2" placeholder="I.e. 0">
+          </div>
+          <button type="submit" class="btn btn-primary btn-displayIsin">Submit</button>
+          <span class="label label-success" id="isin-display-label"></span>
+          <span class="label label-warning" id="isin-display-label-error"></span>
+          <br />
+          <br />
+        </form>
+        <div class="container" id="isinDispDiv">
+          ISIN:
+          <span id="isinDisp"></span>
+          <br /> Total Issued Share Cap:
+          <span id="sharecapDisp"></span>
+          <br /> Long Name:
+          <span id="longnameDisp"></span>
+          <br /> Ticker:
+          <span id="tickerDisp"></span>
+          <br /> Counter Party:
+          <span id="counterpartyDisp"></span>
+          <br /> Status:
+          <span id="statusDisp"></span>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+      <br />
+      <h2 class="text-center">Verify Asset</h2>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <label for="isinNumber3">Index Number</label>
+            <input type="text" class="form-control" id="isinNumber3" placeholder="I.e. 0">
+          </div>
+          <button type="submit" class="btn btn-primary btn-verifyIsin">Submit</button>
+          <span class="label label-success" id="isin-verify-label"></span>
+          <span class="label label-warning" id="isin-verify-label-error"></span>
+          <br />
+          <br />
+        </form>
+      </div>
+    </div>
+
+
+    <div class="container odd">
+      <br />
+      <h2 class="text-center">View Balance</h2>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <label for="isinNumber4">Asset Number</label>
+            <input type="text" class="form-control" id="isinNumber4" placeholder="I.e. ZAE0001">
+            <label for="address4">Account Number (Hint: 0x51e63a2E221C782Bfc95f42Cd469D3780a479C15)</label>
+            <input type="text" class="form-control" id="address4" placeholder="I.e. 0x51e63a2E221C782Bfc95f42Cd469D3780a479C15">
+          </div>
+          <button type="submit" class="btn btn-primary btn-displayBalance">Submit</button>
+          <span class="label label-success" id="displayBalance-label"></span>
+          <span class="label label-warning" id="displayBalance-label-error"></span>
+          <br />
+          <br />
+        </form>
+        <div class="container" id="balanceDispDiv4">
+          <br /> Balance:
+          <span id="balance4"> Please click submit to see your relevant balance. </span>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+      <br />
+      <h2 class="text-center">Send Asset</h2>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <label for="isinNumber5">Asset Number</label>
+            <input type="text" class="form-control" id="isinNumber5" placeholder="I.e. ZAE0001">
+            <label for="amount5">Amount</label>
+            <input type="text" class="form-control" id="amount5" placeholder="I.e. 100">
+            <label for="address5">Account Number (Hint: 0x8eA823e5951243bFA7f1Daad4703396260071fB9)</label>
+            <input type="text" class="form-control" id="address5" placeholder="I.e. 0x8eA823e5951243bFA7f1Daad4703396260071fB9">
+          </div>
+          <button type="submit" class="btn btn-primary btn-sendIsin">Submit</button>
+          <span class="label label-success" id="sendIsin-label"></span>
+          <span class="label label-warning" id="sendIsin-label-error"></span>
+        </form>
+      </div>
+    </div>
+
+  </section>
+
+  <!--#########################################################################################################################################-->
+  <!--#########################################################################################################################################-->
+  <!--#########################################################################################################################################-->
+
+  <section class="bg-dark text-white" id="tradeReporting">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading">Trade Reporting</h2>
+          <hr class="my-4">
+          <p class="mb-4">For the purposes of this POC, there is an expectation that some other party would
+            bring the buyer and seller together and report the pre-matched trade to the DVP platform. Also, applicable
+            for this test is determining if it is doable to create a simple dashboard for an administrator to track
+            the progression of trades in the system in order to deal with the exceptions.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa fa-4x fa-balance-scale text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Trade Reporting</h3>
+            <p class="text-muted mb-0">We try to prove that an autherised trade reporting party can be used to
+              report trades, but the confirmations must still come from the buyer and seller before an atomic swap
+              is done.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa fa-4x fa-eye text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Trade Tracking</h3>
+            <p class="text-muted mb-0">Can a third party be empowered to monitor the system with a real time view
+              of the progress of the trades in order to proactively deal with exceptions.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa far fa-4x fa-fighter-jet text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Real Time Settlement</h3>
+            <p class="text-muted mb-0">Can real-time settlement be achieved while affording the investors adequate
+              protection. In the future, this can be extendet to T+X if a future settlement date is preferred.
+            </p>
+          </div>
+        </div>
+      </div>
+      <hr class="my-4">
+    </div>
+
+
+    <div class="container">
+      <br />
+      <h2 class="text-center">Post Pre-matched Trade</h2>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <label for="isin1">Asset ID</label>
+            <input type="text" class="form-control" id="isin1" placeholder="I.e. ZAE0001">
+            <label for="buyLegId1">Buy Leg ID</label>
+            <input type="text" class="form-control" id="buyLegId1" placeholder="I.e. 12345">
+            <label for="saleLegId1">Sale Leg ID</label>
+            <input type="text" class="form-control" id="saleLegId1" placeholder="I.e. 54321">
+            <label for="tradeId1">Trade ID</label>
+            <input type="text" class="form-control" id="tradeId1" placeholder="I.e. 1010">
+            <label for="settlementDate1">Settlement Date</label>
+            <input type="text" class="form-control" id="settlementDate1" placeholder="I.e. 0 for T+0, else YYYYMMDD">
+            <label for="buyerAddress1">Buyer ID (hint: 0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B)</label>
+            <input type="text" class="form-control" id="buyerAddress1" placeholder="">
+            <label for="sellerAddress1">Seller ID (hint: 0x8eA823e5951243bFA7f1Daad4703396260071fB9)</label>
+            <input type="text" class="form-control" id="sellerAddress1" placeholder="">
+            <label for="buyerCustodianAddress1">Buyer Custodian ID (hint:
+              0x1c6B96De685481c2d9915b606D4AB1277949b4Bc)</label>
+            <input type="text" class="form-control" id="buyerCustodianAddress1" placeholder="">
+            <label for="sellerCustodianAddress1">Seller Custodian ID (hint:
+              0x2d14d5Ae5E54a22043B1eccD420494DAA9513e06)</label>
+            <input type="text" class="form-control" id="sellerCustodianAddress1" placeholder="">
+            <label for="amount1">Amount of Assets</label>
+            <input type="text" class="form-control" id="amount1" placeholder="I.e. 200">
+            <label for="price1">Price of the Trade</label>
+            <input type="text" class="form-control" id="price1" placeholder="I.e. 3000">
+          </div>
+          <button type="submit" class="btn btn-primary btn-reportTrade">Submit</button>
+          <span class="label label-success" id="reportTrade-label"></span>
+          <span class="label label-warning" id="reportTrade-label-error"></span>
+          <br />
+          <br />
+        </form>
+      </div>
+    </div>
+
+
+    <div class="container odd">
+      <h2 class="text-center">List Trades</h2>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <label for="isin2">ISIN</label>
+            <input type="text" class="form-control" id="isin2" placeholder="I.e. ZAE0001">
+          </div>
+          <button type="submit" class="btn btn-primary btn-refreshTrades">Refresh Trades</button>
+          <span class="label label-success" id="refreshTrades-label"></span>
+          <span class="label label-warning" id="refreshTrades-label-error"></span>
+          <br />
+          <br />
+        </form>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover" id="TradesTable">
+            <thead>
+              <tr>
+                <th scope="col">Trade Id</th>
+                <th scope="col">Buy Leg ID</th>
+                <th scope="col">Sale Leg ID</th>
+                <th scope="col">Trade Date</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody id="TradesTableTbody">
+              <!-- <tr>
+                <td>one</td>
+                <td>two</td>
+                <td>three</td>
+                <td>four</td>
+                <td>five</td>
+              </tr>
+              <tr>
+                <td>one</td>
+                <td>two</td>
+                <td>three</td>
+                <td>four</td>
+                <td>five</td>
+              </tr> -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+
+  <!--#########################################################################################################################################-->
+  <!--#########################################################################################################################################-->
+  <!--#########################################################################################################################################-->
+
+  <section class="" id="confirmationsAndMandates">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <h2 class="section-heading">Confirmations And Mandates</h2>
+          <hr class="my-4">
+          <p class="mb-4">The major proof point is to see if we can give ultimate control of who is allowed to confirm
+            on a beneficial holder's accound back to the beneficial holder to assign, and revoke, mandates as they
+            please.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa fa-4x fa-bolt text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Empower</h3>
+            <p class="text-muted mb-0">Can we create a mechanism where the client has the power to confirm his/her own
+              trades?</p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa fa-4x fa-user-plus text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Entrust</h3>
+            <p class="text-muted mb-0">End investors often do not want the burden of managing their own portfolio, so can we
+              allow for the user to give the role of confirming his trade leg to his service provider of choice?
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa fa-4x fa-user-times text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Revoke</h3>
+            <p class="text-muted mb-0">Even though an investor has allowed his service provider to confirm trade legs on their 
+              behalf, can the investor still retain the ability to revoke the service provider's authority, thus retaining ultimate control?
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 text-center">
+          <div class="service-box mt-5 mx-auto">
+            <i class="fa fa-4x fa-check text-primary mb-3 sr-icons"></i>
+            <h3 class="mb-3">Settlement</h3>
+            <p class="text-muted mb-0">Have we achieved an "All or Nothing" mechanism ensuring the whole trade, or no part of the trade,
+              settles to completion? Yes, with the bonus of a reduced need for intermediaries, less cost for the full trade lifecycle,
+              increased speed, and empowering the investor to a greater extent than the current landscape allows for.
+            </p>
+          </div>
+        </div>
+      </div>
+      <hr class="my-4">
+    </div>
+
+    <div class="container" id="createMandateContainer">
+      <h2 class="text-center">Create Mandate</h2>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <label for="mandateAddress1">Mandate Address (hint: 0x51e63a2E221C782Bfc95f42Cd469D3780a479C15)</label>
+            <input type="text" class="form-control" id="mandateAddress1" placeholder="">
+          </div>
+          <button type="submit" class="btn btn-primary btn-createMandate">Create Mandate</button>
+          <button type="submit" class="btn btn-primary btn-removeMandate">Remove Mandate</button>
+          <span class="label label-success" id="createMandate-label"></span>
+          <span class="label label-warning" id="createMandate-label-error"></span>
+          <br />
+          <br />
+        </form>
+      </div>
+      <br />
+    </div>
+
+
+    <div class="container odd" id="checkAuthorisedPartyContainer">
+      <h2 class="text-center">Check Authorised Party</h2>
+      <div class="form">
+        <form>
+          <button type="submit" class="btn btn-primary btn-checkAuthorisedParty">Submit</button>
+          <span class="label label-success" id="checkAuthorisedParty-label"></span>
+          <span class="label label-warning" id="checkAuthorisedParty-label-error"></span>
+          <br />
+          <br />
+        </form>
+      </div>
+    </div>
+
+
+    <div class="container" id="confirmTradeLeg">
+      <br />
+      <h2 class="text-center">Confirm Trade Leg</h2>
+      <div class="form">
+        <form>
+          <div class="form-group">
+            <div class="form-group">
+              <label for="buySaleIndicator3">Buy / Sell Leg</label>
+              <select class="form-control" id="buySaleIndicator3">
+                <option>make a selection</option>
+                <option>BUY LEG</option>
+                <option>SALE LEG</option>
+              </select>
+            </div>
+            <!--label for="buySaleIndicator3">Buy / Sale Leg Indicator</label-->
+            <!--input type="text" class="form-control" id="buySaleIndicator3" placeholder="0 = Buy, 1 = Sale"-->
+            <label for="legId3">Leg ID</label>
+            <input type="text" class="form-control" id="legId3" placeholder="">
+            <label for="isin3">ISIN</label>
+            <input type="text" class="form-control" id="isin3" placeholder="">
+            <label for="beneficialHolderAddress3">Beneficial Holder Address</label>
+            <input type="text" class="form-control" id="beneficialHolderAddress3" placeholder="">
+          </div>
+          <button type="submit" class="btn btn-primary btn-confirmLeg">Submit</button>
+          <span class="label label-success" id="confirmLeg-label"></span>
+          <span class="label label-warning" id="confirmLeg-label-error"></span>
+          <br />
+          <br />
+        </form>
+      </div>
+    </div>
+
+
+  </section>
+
+  <section class="p-0" id="portfolio">
+    <div class="container-fluid p-0">
+      <div class="row no-gutters popup-gallery">
+        <div class="col-lg-4 col-sm-6">
+          <a class="portfolio-box" href="img/portfolio/fullsize/1.jpg">
+            <img class="img-fluid" src="img/portfolio/thumbnails/1.jpg" alt="">
+            <div class="portfolio-box-caption">
+              <div class="portfolio-box-caption-content">
+                <div class="project-category text-faded">
+                  Website
+                </div>
+                <div class="project-name">
+                  www.strate.co.za
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <a class="portfolio-box" href="img/portfolio/fullsize/2.jpg">
+            <img class="img-fluid" src="img/portfolio/thumbnails/2.jpg" alt="">
+            <div class="portfolio-box-caption">
+              <div class="portfolio-box-caption-content">
+                <div class="project-category text-faded">
+                  Business Owner
+                </div>
+                <div class="project-name">
+                  Rudi Steenkamp
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <a class="portfolio-box" href="img/portfolio/fullsize/3.jpg">
+            <img class="img-fluid" src="img/portfolio/thumbnails/3.jpg" alt="">
+            <div class="portfolio-box-caption">
+              <div class="portfolio-box-caption-content">
+                <div class="project-category text-faded">
+                  Innovation Lead
+                </div>
+                <div class="project-name">
+                  Tanya Knowles
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <a class="portfolio-box" href="img/portfolio/fullsize/4.jpg">
+            <img class="img-fluid" src="img/portfolio/thumbnails/4.jpg" alt="">
+            <div class="portfolio-box-caption">
+              <div class="portfolio-box-caption-content">
+                <div class="project-category text-faded">
+                  Business Support
+                </div>
+                <div class="project-name">
+                  Ganesh Varadarajan
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <a class="portfolio-box" href="img/portfolio/fullsize/5.jpg">
+            <img class="img-fluid" src="img/portfolio/thumbnails/5.jpg" alt="">
+            <div class="portfolio-box-caption">
+              <div class="portfolio-box-caption-content">
+                <div class="project-category text-faded">
+                  Innovation Architect
+                </div>
+                <div class="project-name">
+                  Johan Pretorius
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-lg-4 col-sm-6">
+          <a class="portfolio-box" href="img/portfolio/fullsize/6.jpg">
+            <img class="img-fluid" src="img/portfolio/thumbnails/6.jpg" alt="">
+            <div class="portfolio-box-caption">
+              <div class="portfolio-box-caption-content">
+                <div class="project-category text-faded">
+                  Future Assistance
+                </div>
+                <div class="project-name">
+                  Amit Jha
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-dark text-white">
+    <div class="container text-center">
+      <h2 class="mb-4">Free Download on GitHub!</h2>
+      <a class="btn btn-light btn-xl sr-button" href="https://github.com/themsheeps/it_roadmap_2025">Download Now!</a>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <h2 class="section-heading">Let's Get In Touch!</h2>
+          <hr class="my-4">
+          <p class="mb-5">Ready to start your next project with us? That's great! Give us a call or send us an email
+            and we will get back to you as soon as possible!</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 ml-auto text-center">
+          <i class="fa fa-phone fa-3x mb-3 sr-contact"></i>
+          <p>+27-11-759-5300</p>
+        </div>
+        <div class="col-lg-4 mr-auto text-center">
+          <i class="fa fa-envelope-o fa-3x mb-3 sr-contact"></i>
+          <p>
+            <a href="mailto:johanp@fractalsolutions.io">johanp@fractalsolutions.io</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
+  <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/creative.min.js"></script>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <!-- web3 scripts-->
+  <script src="js/web3.min.js"></script>
+  <script src="js/truffle-contract.js"></script>
+  <!-- <script src="js/confirmationsAndMandates.js"></script>
+    <script src="js/trade.js"></script> -->
+  <script src="js/app.js"></script>
+  <!-- <script src="js/issue_isin.js"></script> -->
+
+</body>
+
+</html>

@@ -1,24 +1,10 @@
 pragma solidity ^0.4.23;
 
-/** @title Pre Trade Contract. */
+/** @title Confirmations and Mandates Contract. */
 /** @author Johan Pretorius */
 /** startDate 2018-06-06 */
 
 contract PostTrade {
-    function addPreMatchedTrade (
-        string,
-        uint,
-        uint,
-        uint,
-        uint,
-        address,
-        address,
-        address,
-        address,
-        uint,
-        uint ) public pure {
-    }
-
     function confirmTradeLeg (
         uint, 
         uint, 
@@ -42,30 +28,19 @@ contract ConfirmationsAndMandates {
         _;
     }
 
-    address private owner;
-    PostTrade postTradeContract;
-    address public postTradeContractAddress;
-
     // ==========================================================================
     // Constructor: Prepper for development, will need to be revised for Prod
     // ==========================================================================
-    constructor (address _postTradeContract) public {
-        owner = msg.sender;        
+    constructor (address _postTradeContract) public {      
         postTradeContractAddress = _postTradeContract;
         postTradeContract = PostTrade(_postTradeContract);
+
+        owner = msg.sender;
     }
 
-    enum Statuses {
-        Acceped,                    // 0
-        Matched,                    // 1
-        Confirmed,                  // 2
-        Cancelled,                  // 3
-        MatchedReadyForSettlement,  // 4
-        Overdue,                    // 5
-        Settled,                    // 6
-        Failed,                     // 7
-        ReadyForFunding             // 8
-    }
+    PostTrade public postTradeContract;
+    address public postTradeContractAddress;
+    address owner;
 
     // ==========================================================================
     // Structs
@@ -118,7 +93,7 @@ contract ConfirmationsAndMandates {
     function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, address _party) public view {
         require(msg.sender == ClientToSPMandates[_party] || msg.sender == _party);
 
-        postTradeContract.confirmTradeLeg (_buyOrSaleIndicator, _legId, _ISIN, _party);
+        postTradeContract.confirmTradeLeg(_buyOrSaleIndicator, _legId, _ISIN, _party);
 
     }
 
@@ -127,8 +102,11 @@ contract ConfirmationsAndMandates {
     // ==========================================================================
 /* 
 
+ConfirmationsAndMandates.deployed().then(function(instance){return instance.postTradeContractAddress()});
+
 ConfirmationsAndMandates.deployed().then(function(instance){return instance.addRemoveMandate("0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4", {from: "0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B"})});
 ConfirmationsAndMandates.deployed().then(function(instance){return instance.getAutherisedParty("0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B")});
+ConfirmationsAndMandates.deployed().then(function(instance){return instance.confirmTradeLeg(1, 54321, "ZAE001", "0x8eA823e5951243bFA7f1Daad4703396260071fB9", {from: "0x8eA823e5951243bFA7f1Daad4703396260071fB9"})});
 
 */ 
     // ==========================================================================

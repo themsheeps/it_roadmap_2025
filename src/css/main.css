@@ -8,6 +8,10 @@ body {
   margin-bottom: 60px;
 }
 
+.blackiconcolor {
+  color:black;
+}
+
 nav.navbar {
   background: #3030a0;
   border: 0;
@@ -86,7 +90,7 @@ h2 {
 
 .infoBox {
   width: inherit;
-  background-color: cornflowerblue;
   border-radius: 5px;
-  color: white;
+  color: black;
+  background-color: gray;
 }

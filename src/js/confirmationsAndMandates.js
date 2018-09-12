@@ -27,36 +27,6 @@ App = {
 
       // Set the provider for our contract
       App.contracts.ConfirmationsAndMandates.setProvider(App.web3Provider);
-
-      // Watch for events
-      // App.contracts.PostTrade.deployed().then(function (instance) {
-      // newIsinEvent = instance.IsinIssued();
-
-      // instance.IsinIssued({}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
-      //   if (error)
-      //     console.log('Error in myEvent event handler: ' + error);
-      //   else
-      //     console.log('myEvent: ' + JSON.stringify(eventResult.args));
-      // });
-
-      // newIsinEvent.watch(function (error, result) {
-      //   if (error) {
-      //     console.log("ERROR - 928357");
-      //     console.log(error);
-      //   } else {
-      //     console.log("REPLY - 09572");
-      //     console.log(result.args);
-      //     document.getElementById("isin-issue-prefix").innerHTML = result.args._prefix;
-      //     document.getElementById("isin-issue-counter").innerHTML = result.args._counter;
-      //     document.getElementById("isin-issue-trf").innerHTML = result.args._transactionReference;
-
-      //     App.insertTableRow(result.args._prefix, result.args._counter, result.args._transactionReference);
-      //   }
-      // });
-      //});
-
-      // Use our contract to retrieve and mark the adopted pets
-      // return App.markAdopted();
     });
 
     return App.bindEvents();
@@ -201,7 +171,13 @@ App = {
           from: account
         });
       }).then(function (result) {
-        document.getElementById("checkAuthorisedParty-label").innerHTML = result;
+        var _message = result;
+        if (result == account || result == "0x0000000000000000000000000000000000000000") {
+          _message = "No party has been autherised."
+        } else {
+          _message = "You have autherised " + result + " to act on your behalf.";
+        }
+        document.getElementById("checkAuthorisedParty-label").innerHTML = _message;
       }).catch(function (err) {
         document.getElementById("checkAuthorisedParty-label-error").innerHTML = "ERROR!!!";
         console.log(err.message);
@@ -215,14 +191,19 @@ App = {
     App.clearStatusses();
 
     let _buySaleIndicator = document.getElementById('buySaleIndicator3').value;
+    // let _buySaleIndicator_1 = document.getElementById('buySaleIndicator3_1').value;
     let _legId = document.getElementById('legId3').value;
     let _isin = document.getElementById('isin3').value;
     let _beneficialHolderAddress = document.getElementById('beneficialHolderAddress3').value;
 
-    console.log(_buySaleIndicator, _legId, _isin, _beneficialHolderAddress);
-
+    if (_buySaleIndicator == "BUY LEG") {
+      _buySaleIndicator = 0;
+    } else if (_buySaleIndicator == "SALE LEG") {
+      _buySaleIndicator = 1;
+    }
 
     let ConfirmationsAndMandatesInstance;
+
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
         console.log(error);
@@ -232,8 +213,12 @@ App = {
 
       if (_beneficialHolderAddress == "") { _beneficialHolderAddress = account; }
 
+      console.log(_buySaleIndicator, _legId, _isin, _beneficialHolderAddress);
+
       App.contracts.ConfirmationsAndMandates.deployed().then(function (instance) {
         ConfirmationsAndMandatesInstance = instance;
+
+        console.log("ASJDHNNCB");
 
         // Execute adopt as a transaction by sending account
         return ConfirmationsAndMandatesInstance.confirmTradeLeg(_buySaleIndicator, _legId, _isin, _beneficialHolderAddress, {

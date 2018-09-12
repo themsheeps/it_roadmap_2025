@@ -574,6 +574,7 @@ PostTrade.deployed().then(function(instance){return instance.getBuysForIsin("ZAE
 *** INVESTOR or PROXY
 // Confirm Buy leg:
 PostTrade.deployed().then(function(instance){return instance.confirmTradeLeg(0, 12345, "ZAE001", "0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B")});
+ConfirmationsAndMandates.deployed().then(function(instance){return instance.confirmTradeLeg(0, 12345, "ZAE001", "0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B")});
 // Confirm Sell leg:
 PostTrade.deployed().then(function(instance){return instance.confirmTradeLeg(1, 54321, "ZAE001", "0x8eA823e5951243bFA7f1Daad4703396260071fB9")});
 
