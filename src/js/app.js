@@ -115,6 +115,9 @@ App = {
     $(document).on('click', '.btn-removeMandate', App.removeMandate);
     $(document).on('click', '.btn-checkAuthorisedParty', App.checkAuthorisedParty);
     $(document).on('click', '.btn-confirmLeg', App.confirmLeg);
+    // RefreshRegister
+    $(document).on('click', '.btn-refreshRegister', App.refreshRegister);
+    $(document).on('click', '.btn-searchRegister', App.searchRegister);
   },
 
   // *************
@@ -669,6 +672,11 @@ App = {
     console.log("Table cleared");
   },
 
+  clearTableRowsRegister: function () {
+    document.getElementById("RegisterTable").innerHTML = "<table class='table table-striped table-responsive table-hover' id='RegisterTable'><thead><tr><th scope='col'>Owner ID</th><th scope='col'>Asset Name</th><th scope='col'>Ticker</th><th scope='col'>Asset ID</th><th scope='col'>Amount</th><th scope='col'>Percentage Ownership</th></tr></thead><tbody></tbody></table>";
+    console.log("Table cleared");
+  },
+
   insertTableRow: function (_tradeId, _buyLegId, _saleLegId, _tradeDate, _status) {
     // Find a <table> element with id="SecuritiesTable":
     var table = document.getElementById("TradesTable").getElementsByTagName('tbody')[0];
@@ -840,7 +848,9 @@ App = {
 
       var account = accounts[0];
 
-      if (_beneficialHolderAddress == "") { _beneficialHolderAddress = account; }
+      if (_beneficialHolderAddress == "") {
+        _beneficialHolderAddress = account;
+      }
 
       console.log(_buySaleIndicator, _legId, _isin, _beneficialHolderAddress);
 
@@ -863,53 +873,116 @@ App = {
 
   },
 
-  // confirmLeg: function (event) {
-  //   event.preventDefault();
-  //   App.clearStatusses();
+  refreshRegister: function (event) {
+    event.preventDefault();
+    App.clearTableRowsRegister();
 
-  //   let _buySaleIndicator = document.getElementById('buySaleIndicator3').value;
-  //   // let _buySaleIndicator_1 = document.getElementById('buySaleIndicator3_1').value;
-  //   let _legId = document.getElementById('legId3').value;
-  //   let _isin = document.getElementById('isin3').value;
-  //   let _beneficialHolderAddress = document.getElementById('beneficialHolderAddress3').value;
+    let PostTradeInstance;
 
-  //   if (_buySaleIndicator == "BUY LEG") {
-  //     _buySaleIndicator = 0;
-  //   } else if (_buySaleIndicator == "SALE LEG") {
-  //     _buySaleIndicator = 1;
-  //   }
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+        console.log(error);
+      }
 
-  //   let ConfirmationsAndMandatesInstance;
+      var account = accounts[0];
 
-  //   web3.eth.getAccounts(function (error, accounts) {
-  //     if (error) {
-  //       console.log(error);
-  //     }
+      // var _isinNumber_tmp;
+      // var _totalIssuedShareCap_tmp;
+      // var _isinName_tmp;
+      // var _isinTicker_tmp;
 
-  //     var account = accounts[0];
+      var userAccounts = {
+        "userAccounts": ["0x51e63a2E221C782Bfc95f42Cd469D3780a479C15",
+          "0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B",
+          "0x8eA823e5951243bFA7f1Daad4703396260071fB9",
+          "0xED646f6B0cf23C2bfC0dC4117dA42Eb5CCf15ee4"
+        ]
+      };
+      var _userAccount_tmp;
 
-  //     if (_beneficialHolderAddress == "") { _beneficialHolderAddress = account; }
+      // console.log(userAccounts.userAccounts.length);
 
-  //     console.log(_buySaleIndicator, _legId, _isin, _beneficialHolderAddress);
+      console.log("accounts:" + accounts[0]);
 
-  //     App.contracts.ConfirmationsAndMandates.deployed().then(function (instance) {
-  //       ConfirmationsAndMandatesInstance = instance;
+      App.contracts.PostTrade.deployed().then(function (instance) {
+        PostTradeInstance = instance;
 
-  //       console.log("ASJDHNNCB");
+        return PostTradeInstance.getSecuritiesListLength({
+          from: account
+        });
+      }).then(function (result) {
+        console.log("Securities List Length: " + result);
+        // for (i = 0; i < result; i++) {
+        var _indexes = [];
+        for (i = 0; i < result; i++) {
+          _indexes.push(i);
+          console.log("ABC: " + _indexes);
+        }
+        // for (i = 0; i < result; i++) {
+        _indexes.forEach(function(item, index){
+          // console.log("Instance " + result + " :" + PostTradeInstance);
+          PostTradeInstance.getSecuritiesListById(item, {
+            from: account
+          }).then(function (securityName) {
+            console.log("Security name " + index + " :" + securityName[0]);
+            PostTradeInstance.getSecurityDetails(securityName[0], {
+              from: account
+            }).then(function (securityDetails) {
+              console.log("Security details " + item + " :" + securityDetails);
+              let _isinNumber_tmp = securityDetails[0];
+              let _totalIssuedShareCap_tmp = securityDetails[1];
+              let _isinName_tmp = securityDetails[2];
+              let _isinTicker_tmp = securityDetails[3];
 
-  //       // Execute adopt as a transaction by sending account
-  //       return ConfirmationsAndMandatesInstance.confirmTradeLeg(_buySaleIndicator, _legId, _isin, _beneficialHolderAddress, {
-  //         from: account
-  //       });
-  //     }).then(function (result) {
-  //       document.getElementById("confirmLeg-label").innerHTML = "SUCCESS!!!";
-  //     }).catch(function (err) {
-  //       document.getElementById("confirmLeg-label-error").innerHTML = "ERROR!!!";
-  //       console.log(err.message);
-  //     });
-  //   });
+              userAccounts.userAccounts.forEach(function (item, index) {
+                PostTradeInstance.getBalanceOfSecAndAccount(_isinNumber_tmp, item, {
+                  from: account
+                }).then(function (balance) {
+                  console.log(_isinNumber_tmp, _totalIssuedShareCap_tmp, _isinName_tmp, _isinTicker_tmp, balance);
+                  if (balance > 0) {
+                    App.insertTableRowRegister(item, _isinName_tmp, _isinTicker_tmp, _isinNumber_tmp, balance, (balance / _totalIssuedShareCap_tmp) * 100);
+                  }
+                });
+              })
 
-  // },
+            });
+          });
+        }); // FOR BRACKET
+      }).catch(function (err) {
+        document.getElementById("confirmLeg-label-error").innerHTML = "ERROR!!!";
+        console.log("BOB 765:" + err.message);
+      });
+    });
+
+  },
+
+  searchRegister: function () {
+    $('#RegisterTable').DataTable();
+  },
+  
+  insertTableRowRegister: function (_ownerID_tmp, _isinName_tmp, _isinTicker_tmp, _isinNumber_tmp, _ownerBalance_tmp, _percentageOwned_tmp) {
+    // Find a <table> element with id="SecuritiesTable":
+    var table = document.getElementById("RegisterTable").getElementsByTagName('tbody')[0];
+
+    // Create an empty <tr> element and add it to the 1st position of the table:
+    var row = table.insertRow(-1);
+
+    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    var cell5 = row.insertCell(4);
+    var cell6 = row.insertCell(5);
+
+    // Add some text to the new cells:
+    cell1.innerHTML = _ownerID_tmp;
+    cell2.innerHTML = _isinName_tmp;
+    cell3.innerHTML = _isinTicker_tmp;
+    cell4.innerHTML = _isinNumber_tmp;
+    cell5.innerHTML = _ownerBalance_tmp;
+    cell6.innerHTML = _percentageOwned_tmp + ' %';
+  },
 
   // ********************
   // GENERAL FUNCTIONS

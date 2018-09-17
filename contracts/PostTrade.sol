@@ -258,12 +258,12 @@ contract PostTrade {
     }
 
     // to save gas cost, rather send securities to 0x0 to burn them.
-    function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
-        require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
-        require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "TB");
-        securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
-        balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
-    }
+    // function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
+    //     require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
+    //     require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "TB");
+    //     securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
+    //     balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
+    // }
 
     // *** DEPRECATED AS CASH IS TREATED AS A SECURITY *** //
     // function topUpCash (uint _amount) public onlySAMOS {
