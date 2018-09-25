@@ -471,6 +471,8 @@ contract PostTrade {
             if (matchedTradesForISINandId[_hash][_tradeId].saleConfirmationDateTime > 0) {
 
                 if (matchedTradesForISINandId[_hash][_tradeId].settlementDeadlineDate == 0) {
+                    require (balances[keccak256(abi.encodePacked("eZAR"))][buyLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].buyLegId].investorAddress] > buyLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].buyLegId].buyPrice);
+                    require (balances[keccak256(abi.encodePacked(_ISIN))][saleLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].sellLegId].investorAddress] > saleLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].sellLegId].amount);
                     balances[keccak256(abi.encodePacked("eZAR"))][buyLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].buyLegId].investorAddress] -= buyLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].buyLegId].buyPrice;
                     balances[keccak256(abi.encodePacked("eZAR"))][saleLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].sellLegId].investorAddress] += saleLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].sellLegId].salePrice;
                     balances[keccak256(abi.encodePacked(_ISIN))][saleLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].sellLegId].investorAddress] -= saleLegForISINAndId[_hash][matchedTradesForISINandId[_hash][_tradeId].sellLegId].amount;

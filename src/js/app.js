@@ -947,7 +947,8 @@ App = {
 
             });
           });
-        }); // FOR BRACKET
+        });
+        // App.searchRegister();
       }).catch(function (err) {
         document.getElementById("confirmLeg-label-error").innerHTML = "ERROR!!!";
         console.log("BOB 765:" + err.message);
