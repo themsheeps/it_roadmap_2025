@@ -11,8 +11,11 @@ I am sure there are more eloquent ways to do this but this is my deployment sequ
 
 * Start Ganache 
 * Start VS Code
-* * In the terminal window (inside of VS Code) run the following commands - Make sure you the project root folder:
-* * truffle console
+* * In the terminal window (inside of VS Code - Make sure you the project root folder) run the following commands:
+```sh
+* * * truffle console
+* * * truffle migrate --reset
+```
 
 
 # Helper commands (all the main functions through the CLI)
