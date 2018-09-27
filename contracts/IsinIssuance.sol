@@ -6,7 +6,6 @@ pragma solidity ^0.4.23;
 
 contract PostTrade {
     function issueSecurity (string , uint , string , string ) public pure {}
-    // function setIsinIssuanceContractAddress (address) public pure {}
 }
 
 contract IsinIssuance {
@@ -25,8 +24,6 @@ contract IsinIssuance {
     constructor (address _postTradeContract) public {
         postTradeContractAddress = _postTradeContract;
         postTradeContract = PostTrade(_postTradeContract);
-
-        // postTradeContract.setIsinIssuanceContractAddress(this);
 
         owner = msg.sender;
     }
@@ -81,16 +78,6 @@ contract IsinIssuance {
                 })
             );
         }
-
-        // tempSecurity = Security({
-        //     ISIN: _ISIN,
-        //     totalIssuedShareCap: _totalIssuedShareCap,
-        //     longName: _longName,
-        //     ticker: _ticker,
-        //     active: false,
-        //     issuer: msg.sender,
-        //     verifier: _counterParty
-        // });
     }
 
     function getSecurityToBeVerified (uint _index) public view returns (

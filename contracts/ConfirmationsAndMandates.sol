@@ -46,22 +46,10 @@ contract ConfirmationsAndMandates {
     // Structs
     // ==========================================================================
 
-    // struct Trade {
-    //     uint tradeId;
-    //     uint buyLegId;
-    //     uint sellLegId;
-    //     uint tradeDate;
-    //     uint settlementDeadlineDate;
-    //     uint buyConfirmationDateTime;
-    //     uint saleConfirmationDateTime;
-    // }
-
-
     // ==========================================================================
     // Variables
     // ==========================================================================
 
-    // Client Address => Authorised Party Address => authorised bool
     mapping(address => address) ClientToSPMandates;
 
     // ==========================================================================
