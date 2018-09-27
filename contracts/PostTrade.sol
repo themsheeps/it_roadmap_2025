@@ -123,13 +123,6 @@ contract PostTrade {
     // ==========================================================================
     // Structs
     // ==========================================================================
-    // struct SecurityOld {
-    //     string isin;
-    //     uint issuedShareCap;
-    //     uint issuedDate;
-    //     address issuerAddress;
-    //     string issuerName;
-    // }
 
     struct Security {
         string ISIN;
@@ -153,7 +146,6 @@ contract PostTrade {
         uint buyLegId;
         uint tradeId;
         address investorAddress;
-        // address tradeReportingPartyAddress;
         address custodianId;
         uint amount;
         uint buyPrice;
@@ -165,7 +157,6 @@ contract PostTrade {
         uint saleLegId;
         uint tradeId;
         address investorAddress;
-        // address tradeReportingPartyAddress;
         address custodianId;
         uint amount;
         uint salePrice;
@@ -199,24 +190,11 @@ contract PostTrade {
     // Role Management for addresses
     // ==========================================================================
     mapping(address => bool) internal Admins;
-    // mapping(address => bool) internal CSDs;
-    // mapping(address => bool) internal Custodians;
-    // mapping(address => bool) internal ETMEs;
-    // mapping(address => bool) internal Exchanges;
-    // mapping(address => bool) internal SAMOSs;
-    // mapping(address => bool) internal TradeReportingParties;
 
     // ==========================================================================
     // Date stuff: Taken from Piper's library - https://github.com/pipermerriam/ethereum-datetime
     // ==========================================================================
     uint constant DAY_IN_SECONDS = 86400;
-    // uint constant YEAR_IN_SECONDS = 31536000;
-    // uint constant LEAP_YEAR_IN_SECONDS = 31622400;
-
-    // uint constant HOUR_IN_SECONDS = 3600;
-    // uint constant MINUTE_IN_SECONDS = 60;
-
-    // uint16 constant ORIGIN_YEAR = 1970;
 
     // ==========================================================================
     // Functions
@@ -237,40 +215,11 @@ contract PostTrade {
         balances[keccak256(abi.encodePacked(_ISIN))][owner] += _totalIssuedShareCap;
     }
 
-    // function issueCash (uint _totalIssuedShareCap) public onlySAMOS {
-    //     require (securities[keccak256(abi.encodePacked("eZAR"))].active == false);
-    //     bytes32 keccakIsin = keccak256(abi.encodePacked("eZAR"));
-    //     securities[keccakIsin].ISIN = "eZAR";
-    //     securities[keccakIsin].totalIssuedShareCap = _totalIssuedShareCap;
-    //     securities[keccakIsin].longName = "Sourth African eRand";
-    //     securities[keccakIsin].ticker = "ZAR";
-    //     securities[keccakIsin].active = true;
-
-    //     securitiesList.push("eZAR");
-
-    //     balances[keccak256(abi.encodePacked("eZAR"))][msg.sender] += _totalIssuedShareCap;
-    // }
-
     function topUp (string _ISIN, uint _amount) public onlyOwner {
         require (securities[keccak256(abi.encodePacked(_ISIN))].active == true);
         securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap += _amount;
         balances[keccak256(abi.encodePacked(_ISIN))][owner] += _amount;
     }
-
-    // to save gas cost, rather send securities to 0x0 to burn them.
-    // function reduceSecurities (string _ISIN, uint _amount) public onlyOwner {
-    //     require (securities[keccak256(abi.encodePacked(_ISIN))].active == true, "SMA");
-    //     require (securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap >= _amount, "TB");
-    //     securities[keccak256(abi.encodePacked(_ISIN))].totalIssuedShareCap -= _amount;
-    //     balances[keccak256(abi.encodePacked(_ISIN))][owner] -= _amount;
-    // }
-
-    // *** DEPRECATED AS CASH IS TREATED AS A SECURITY *** //
-    // function topUpCash (uint _amount) public onlySAMOS {
-    //     require (securities[keccak256(abi.encodePacked("eZAR"))].active == true);
-    //     securities[keccak256(abi.encodePacked("eZAR"))].totalIssuedShareCap += _amount;
-    //     balances[keccak256(abi.encodePacked("eZAR"))][owner] += _amount;
-    // }
 
     function getSecurityDetails (string _ISIN) public view returns (string, uint, string, string, bool) {
         return (
@@ -312,7 +261,6 @@ contract PostTrade {
         address _buyerCustodianId,
         address _sellerCustodianId,
         uint _amount,
-        // uint _salePrice ) public onlyExchanges {
         uint _salePrice ) public {
 
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));
@@ -333,7 +281,6 @@ contract PostTrade {
             buyLegId: _buyLegId,
             tradeId: _tradeId,
             investorAddress: _buyerAddress,
-            // tradeReportingPartyAddress: _buyerTradeReportingPartyAddress,
             custodianId: _buyerCustodianId,
             amount: _amount,
             buyPrice: _salePrice,
@@ -345,7 +292,6 @@ contract PostTrade {
             saleLegId: _saleLegId,
             tradeId: _tradeId,
             investorAddress: _sellerAddress,
-            // tradeReportingPartyAddress: _sellerTradeReportingPartyAddress,
             custodianId: _sellerCustodianId,
             amount: _amount,
             salePrice: _salePrice,
@@ -371,7 +317,6 @@ contract PostTrade {
         return (
             buyLegForISINAndId[_hash][_legId].buyLegId,
             buyLegForISINAndId[_hash][_legId].investorAddress,
-            // buyLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
             buyLegForISINAndId[_hash][_legId].custodianId
         );
     }
@@ -392,7 +337,6 @@ contract PostTrade {
         return (
             saleLegForISINAndId[_hash][_legId].saleLegId,
             saleLegForISINAndId[_hash][_legId].investorAddress,
-            // saleLegForISINAndId[_hash][_legId].tradeReportingPartyAddress,
             saleLegForISINAndId[_hash][_legId].custodianId
         );
     }
@@ -421,16 +365,11 @@ contract PostTrade {
         );
     }
 
-    // function getMatchedTradesLength (string _ISIN) public view returns (uint) {
-    //     return matchedTradesIdListForISIN[keccak256(abi.encodePacked(_ISIN))].length;
-    // }
-
     function getMatchedTradesIDs (string _ISIN) public view returns (uint[]) {
         return matchedTradesIdListForISIN[keccak256(abi.encodePacked(_ISIN))];
     }
 
     // _buyOrSaleIndicator { 0: BUY Leg, 1: SALE Leg }
-    // function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN) public onlyCustodianOrTradeReportingParty {
     function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, address _party) public {
         
         bytes32 _hash = keccak256(abi.encodePacked(_ISIN));

@@ -4,6 +4,12 @@
 powered by: http://www.strate.co.za
 
 # Contract List
+* PostTrade.sol
+** Functions
+* NNA.sol
+* IsinIssuance.sol
+* ConfirmationsAndMandates.sol
+* Migrations.sol
 
 # Deployment Sequence
 
