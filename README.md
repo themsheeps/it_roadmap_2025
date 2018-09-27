@@ -11,27 +11,27 @@ This POC aims to reimagine what post trade services could look like with all par
 * Issuer top-up
 * Tokenised cash to enable pure DvP
 * Free of payment sending of securities
+* DvP
 
 # TODOs
 
 * Back to back linking of transactions
 * Corporate Action processing
-* DvP
 * Test cases
 
 # Scrum Board
 
 |BACKLOG|IN DEV|IN TEST|COMPLETED|
 |---|---|---|---|
-|B2B Links [JP]|Confirmations [JP]||Multi Securities Issuance [JP]|
+|B2B Links [JP]|||Multi Securities Issuance [JP]|
 |CA Processing [JP]|||Issuer Top Up [JP]|
-|DvP [JP]|||Tokenised Cash [JP]|
-|Test Scenarios [JP]|||FoP Sending of Securities [JP]|
-|Web Screen Connection [JP]||||
-|ISIN Confirmations [JP]||||
-|Time with Exchange [RS]||||
-|Time with CSDP [RS]||||
-|User Stories [GV]||||
+|Test Scenarios [JP]|||Tokenised Cash [JP]|
+|Time with Exchange [RS]|||FoP Sending of Securities [JP]|
+|Time with CSDP [RS]|||Confirmations [JP]|
+||||DvP [JP]|
+||||Web Screen Connection [JP]|
+||||ISIN Confirmations [JP]|
+||||User Stories [GV]|
 
 # Tech
 
