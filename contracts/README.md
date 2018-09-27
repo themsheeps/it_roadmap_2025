@@ -5,11 +5,40 @@ powered by: http://www.strate.co.za
 
 # Contract List
 * PostTrade.sol
-** Functions
+* * Functions
+```sh
+function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyIsinIssuanceContact
+function topUp (string _ISIN, uint _amount) public onlyOwner // Should be modified to allow for reductions as well
+function getSecurityDetails (string _ISIN) public view returns (string, uint, string, string, bool)
+function getSecuritiesListById (uint _index) public view returns (string, uint)
+function getSecuritiesListLength() public view returns (uint)
+function getBalanceOfSecAndAccount (string _ISIN, address _accountHolder) public view returns (uint)
+function sendSecurity (string _ISIN, uint _amount, address _receiverAddress) public
+function addPreMatchedTrade ( string _ISIN, uint _buyLegId, uint _saleLegId, uint _tradeId, uint _settlementDate, // Format YYYYMMDD or 0 for instant (T+0) settlement address _buyerAddress, address _sellerAddress, address _buyerCustodianId, address _sellerCustodianId, uint _amount, uint _salePrice ) public
+function getBuysPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address)
+function getBuysForIsin(string _ISIN, uint _legId) public view returns (uint, uint, uint, Statuses, uint)
+function getSalesPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address)
+function getSalesForIsin(string _ISIN, uint _index) public view returns (uint, uint, uint, Statuses, uint)
+function getMatchedTrades (string _ISIN, uint id) public view returns (uint, uint, uint, uint, uint, uint)
+function getMatchedTradesIDs (string _ISIN) public view returns (uint[])
+function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, address _party) public
+function setIsinIssuanceContractAddress (address _isinIssuanceContractAddress) public onlyOwner
+
+```
 * NNA.sol
+* * Functions
+```sh
+```
 * IsinIssuance.sol
+* * Functions
+```sh
+```
 * ConfirmationsAndMandates.sol
+* * Functions
+```sh
+```
 * Migrations.sol
+* * Migrations is the stock standard deployment contract that comes with Truffle projects.
 
 # Deployment Sequence
 
