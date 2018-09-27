@@ -26,7 +26,7 @@ function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, a
 function setIsinIssuanceContractAddress (address _isinIssuanceContractAddress) public onlyOwner
 
 ```
-# NNA.sol
+## NNA.sol
 This contract is un-related to the rest, and is mainly used to showcase how eventing can be used in place of swift messaging to send notifications through the market structures.
 * Functions:
 ```sh
@@ -35,7 +35,7 @@ function getIsinNumber (string _prefix) public view onlyOwner returns (uint)
 function delistIsin (string _prefix, uint _counter) public onlyOwner
 function getIsinStatus (string _prefix, uint _counter) public view returns (uint _status)
 ```
-# IsinIssuance.sol
+## IsinIssuance.sol
 This is the contract that deals with the main asset issuance as well as confirmations required to issue an asset.
 * Functions:
 ```sh
@@ -44,7 +44,7 @@ function getSecurityToBeVerified (uint _index) public view returns ( string _ISI
 function verifySecurity (uint _index) public
 
 ```
-# ConfirmationsAndMandates.sol
+## ConfirmationsAndMandates.sol
 End investors can use this contract to assign a Power of Attorney to another party.
 * Functions:
 ```sh
@@ -52,7 +52,7 @@ function getAutherisedParty(address _party) public view returns (address)
 function addRemoveMandate(address _party) public
 function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, address _party) public view
 ```
-# Migrations.sol
+## Migrations.sol
 Migrations is the stock standard deployment contract that comes with Truffle projects.
 
 # Deployment Sequence
