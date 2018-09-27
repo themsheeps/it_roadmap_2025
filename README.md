@@ -145,11 +145,11 @@ Helper Console Scripts:
     
 ==========================================================================
 TRUFFLE MNEMONIC: latin bonus invest museum gate buffalo fever demand neglect entire session rail
-    [ '0x51e63a2e221c782bfc95f42cd469d3780a479c15',      <<< OWNER and default recipient of initial issue
-      '0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b',      <<< Rudi
-      '0x8ea823e5951243bfa7f1daad4703396260071fb9',      <<< Ganesh
-      '0xed646f6b0cf23c2bfc0dc4117da42eb5ccf15ee4',      <<< Tanya
-      '0xa1ff8ee897ed92e62ae9f30061ba5f012e804721',      <<< Johan
+    [ '0x51e63a2e221c782bfc95f42cd469d3780a479c15',      <<< OWNER / Admin
+      '0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b',      <<< Buyer
+      '0x8ea823e5951243bfa7f1daad4703396260071fb9',      <<< Seller
+      '0xed646f6b0cf23c2bfc0dc4117da42eb5ccf15ee4',      <<< Counterparty / Broker
+      '0xa1ff8ee897ed92e62ae9f30061ba5f012e804721',      
       '0x1c6b96de685481c2d9915b606d4ab1277949b4bc',
       '0x2d14d5ae5e54a22043b1eccd420494daa9513e06',
       '0x0ef2f9c8845da4c9c34bef02c3213e0da1306da0',
