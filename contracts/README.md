@@ -4,7 +4,7 @@
 powered by: http://www.strate.co.za
 
 # Contract List
-# PostTrade.sol
+## PostTrade.sol
 This is the main function where pre-matched trades are reported to, where assets are issued, and account and asset ownership is being tracked.
 * Functions:
 ```sh
