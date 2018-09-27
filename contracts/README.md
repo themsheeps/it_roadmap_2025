@@ -14,7 +14,7 @@ function getSecuritiesListById (uint _index) public view returns (string, uint)
 function getSecuritiesListLength() public view returns (uint)
 function getBalanceOfSecAndAccount (string _ISIN, address _accountHolder) public view returns (uint)
 function sendSecurity (string _ISIN, uint _amount, address _receiverAddress) public
-function addPreMatchedTrade ( string _ISIN, uint _buyLegId, uint _saleLegId, uint _tradeId, uint _settlementDate, // Format YYYYMMDD or 0 for instant (T+0) settlement address _buyerAddress, address _sellerAddress, address _buyerCustodianId, address _sellerCustodianId, uint _amount, uint _salePrice ) public
+function addPreMatchedTrade ( string _ISIN, uint _buyLegId, uint _saleLegId, uint _tradeId, uint _settlementDate, address _buyerAddress, address _sellerAddress, address _buyerCustodianId, address _sellerCustodianId, uint _amount, uint _salePrice ) public
 function getBuysPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address)
 function getBuysForIsin(string _ISIN, uint _legId) public view returns (uint, uint, uint, Statuses, uint)
 function getSalesPartiesForIsin(string _ISIN, uint _legId) public view returns (uint, address, address)
