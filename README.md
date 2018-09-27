@@ -41,6 +41,39 @@ This POC aims to reimagine what post trade services could look like with all par
 * [Node] - Node
 * [HTML5] - HTML5
 
+# Deployment Sequence
+
+I am sure there are more eloquent ways to do this but this is my deployment sequence:
+
+* Start Ganache 
+* Start VS Code
+* * In the terminal window (inside of VS Code - Make sure you the project root folder) run the following commands:
+```sh
+truffle console
+truffle migrate --reset
+
+// To hook up the IsinIssuance contract with the PostTrade contract, run the following:
+PostTrade.deployed().then(function(instance){return instance.setIsinIssuanceContractAddress(IsinIssuance.address)});
+```
+
+* In a terminal window (in the root of the project), run the following command:
+
+```sh
+npm run dev
+```
+
+* make sure your MetaMask plugin is up and running and connected to your Ganache network (http://localhost:7545/)
+
+You should now be good to go to use the web frontend.
+
+If MetaMask throws nonce errors, reset all your MetaMask accounts.
+
+P.s. I tend to add 3 accounts to my metamask account list and label them as follows:
+* Acc 1 - Admin (0x51e63a2e221c782bfc95f42cd469d3780a479c15)
+* Acc 2 - Buyer (0xfb91a2395d9e49b89fca3dca0959b6eb4ea08a0b)
+* Acc 3 - Seller (0x8ea823e5951243bfa7f1daad4703396260071fb9)
+* Acc 4 - Counerpart / Broker (0xed646f6b0cf23c2bfc0dc4117da42eb5ccf15ee4)
+
 # Truffle Console Helper Commands
 
 The following is just a list of commands that I have found useful to test the contract functions from the Truffle Console terminal:
