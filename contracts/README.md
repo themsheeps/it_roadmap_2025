@@ -4,8 +4,9 @@
 powered by: http://www.strate.co.za
 
 # Contract List
-* PostTrade.sol
-* * Functions:
+# PostTrade.sol
+This is the main function where pre-matched trades are reported to, where assets are issued, and account and asset ownership is being tracked.
+* Functions:
 ```sh
 function issueSecurity (string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker) public onlyIsinIssuanceContact
 function topUp (string _ISIN, uint _amount) public onlyOwner // Should be modified to allow for reductions as well
@@ -25,31 +26,34 @@ function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, a
 function setIsinIssuanceContractAddress (address _isinIssuanceContractAddress) public onlyOwner
 
 ```
-* NNA.sol
-* * Functions:
+# NNA.sol
+This contract is un-related to the rest, and is mainly used to showcase how eventing can be used in place of swift messaging to send notifications through the market structures.
+* Functions:
 ```sh
 function issueIsinNumber (string _prefix, uint _transactionReference) public onlyOwner
 function getIsinNumber (string _prefix) public view onlyOwner returns (uint)
 function delistIsin (string _prefix, uint _counter) public onlyOwner
 function getIsinStatus (string _prefix, uint _counter) public view returns (uint _status)
 ```
-* IsinIssuance.sol
-* * Functions:
+# IsinIssuance.sol
+This is the contract that deals with the main asset issuance as well as confirmations required to issue an asset.
+* Functions:
 ```sh
 function captureSecurity ( string _ISIN,  uint _totalIssuedShareCap,  string _longName,  string _ticker,  address _counterParty) public onlyOwner
 function getSecurityToBeVerified (uint _index) public view returns ( string _ISIN, uint _totalIssuedShareCap, string _longName, string _ticker, bool _active, address _issuer, address _verifier)
 function verifySecurity (uint _index) public
 
 ```
-* ConfirmationsAndMandates.sol
-* * Functions:
+# ConfirmationsAndMandates.sol
+End investors can use this contract to assign a Power of Attorney to another party.
+* Functions:
 ```sh
 function getAutherisedParty(address _party) public view returns (address)
 function addRemoveMandate(address _party) public
 function confirmTradeLeg (uint _buyOrSaleIndicator, uint _legId, string _ISIN, address _party) public view
 ```
-* Migrations.sol
-* * Migrations is the stock standard deployment contract that comes with Truffle projects.
+# Migrations.sol
+Migrations is the stock standard deployment contract that comes with Truffle projects.
 
 # Deployment Sequence
 
