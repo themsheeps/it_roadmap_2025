@@ -152,6 +152,5 @@ PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndA
 PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndAccount("ZAE001","0x8eA823e5951243bFA7f1Daad4703396260071fB9")});
 // Check Buyer's new cash balance (5000)
 PostTrade.deployed().then(function(instance){return instance.getBalanceOfSecAndAccount("eZAR","0xFb91a2395d9E49b89fcA3dca0959b6eB4Ea08a0B")});
-*/ 
 
 ```
